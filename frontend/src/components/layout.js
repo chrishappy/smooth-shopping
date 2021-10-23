@@ -13,6 +13,10 @@ import Header from "./header"
 import Footer from "./footer"
 import "./layout.css"
 
+let cart = {
+  creditsRemaining: 60
+};
+
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -26,7 +30,10 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
+      <Header
+        siteTitle={data.site.siteMetadata?.title || `Title`}
+        cart={cart}
+        />
       <div
         style={{
           margin: `0 auto`,
