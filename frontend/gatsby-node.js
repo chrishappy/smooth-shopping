@@ -1,5 +1,7 @@
+const path = require("path")
+
 exports.createPages = async ({ graphql, actions }) => {
-  // const { createPage } = actions
+  const { createPage } = actions
   // createPage({
   //   path: "/using-dsg",
   //   component: require.resolve("./src/templates/using-dsg.js"),
@@ -9,22 +11,24 @@ exports.createPages = async ({ graphql, actions }) => {
   return graphql(`
     {
       allTaxonomyTermProductCategories {
-       edges {
-         node {
-           id
-           name
-         }
-       }
+        edges {
+          node {
+            id
+            path {
+              alias
+            }
+          }
+        }
      }
     }
   `
   ).then(result => {
-    result.data.allNodeArticle.edges.forEach(({ categories }) => {
+    result.data.allTaxonomyTermProductCategories.edges.forEach(({ node }) => {
       createPage({
-        path: `categories/{categories.id}`,
+        path: `${node.path.alias}`.substring(1), // Remove first character
         component: path.resolve(`./src/templates/product-category-page.js`),
         context: {
-          id: node.id,
+          tid: node.id,
         },
       })
     })
