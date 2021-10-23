@@ -1,7 +1,6 @@
 import * as React from "react"
 
 import { graphql } from "gatsby"
-import Layout from "../components/layout"
 import Seo from "../components/seo"
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
@@ -30,8 +29,15 @@ const CartPage = ({ data }) => {
     <>
       <Seo title="Cart Page" />
       <h1>Your Cart</h1>
+      
+      <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
+        { products.length } items
+      </Typography>
+
+      <hr></hr>
+
       {products.map(({ node: product }) => (
-        <Card sx={{ display: 'flex', margin: '0 0 1em' }}>
+        <Card sx={{ display: 'flex', margin: '1em 0' }}>
           <Box sx={{ width: '150px' }}>
             <Img
               fluid={ product.relationships.field_image.localFile.childImageSharp.fluid }
@@ -51,7 +57,6 @@ const CartPage = ({ data }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <div><strong>${ product.field_credit }</strong></div>
-                <div class=""></div>
               </CardContent>
             </Box>
           </Box>
