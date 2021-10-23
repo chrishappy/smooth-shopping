@@ -4,4 +4,10 @@
  * See: https://www.gatsbyjs.com/docs/browser-apis/
  */
 
-// You can delete this file if you're not using it
+// Import the component at the top of the file
+import * as React from "react"
+import Layout from './src/components/layout';
+
+export const wrapPageElement = ({ element, props }) => (
+  <Layout {...props}>{element}</Layout>
+);
