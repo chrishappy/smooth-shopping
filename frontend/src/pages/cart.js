@@ -77,9 +77,11 @@ const CartPage = ({ data }) => {
         </Typography>
       </Box>
 
-      <Button variant="contained">
-        Checkout
-      </Button>
+      <Box sx={{ textAlign: 'center' }}>
+        <Button variant="contained" sx={{ padding: '0.5rem 2rem', fontWeight: 'bold', margin: '2rem 0'}}>
+          Checkout
+        </Button>
+      </Box>
     </Layout>
   );
 }

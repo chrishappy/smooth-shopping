@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HelpIcon from '@mui/icons-material/Help';
-import { height } from "@mui/system";
 
 const Footer = () => (
   <footer style={{
