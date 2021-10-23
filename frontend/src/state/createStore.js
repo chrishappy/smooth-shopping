@@ -1,6 +1,6 @@
-import { createStore } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+const { createStore } = require('redux');
+const { persistStore, persistReducer } = require('redux-persist');
+const AsyncStorage = require('@react-native-async-storage/async-storage').default;
 
 const initialState = {
   cartItems: {}
@@ -17,7 +17,7 @@ function reducer(state = initialState, action) {
 
 			if (!state.cartItems.hasOwnProperty(product.id)) {
 				state.cartItems[product.id] = {
-					quantity: 1
+					quantity: 0
 				};
 			}
 
@@ -34,7 +34,7 @@ function reducer(state = initialState, action) {
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: AsyncStorage,
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 
@@ -44,8 +44,8 @@ const store = createStore(
 );
 const persistor = persistStore(store);
 
-const storeWrapper = () => {
+const getStore = () => {
   return { store, persistor };
 }
 
-export default storeWrapper;
+export default getStore;

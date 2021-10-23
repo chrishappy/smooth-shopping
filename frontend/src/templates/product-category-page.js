@@ -7,13 +7,14 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import Img from "gatsby-image"
-import storeWrapper from "../state/createStore"
+import getStore from "../state/createStore"
 
 const ProductCategories = ({ data }) => {
   const taxonomyTerm = data.taxonomyTermProductCategories;
   const products = data.allNodeProduct.edges;
   
-  const { store } = storeWrapper();
+  const { store } = getStore();
+  // console.log(getStore());
   // const [filters, setfilters] = useState([]);
 
   // const rows = 1;
@@ -72,13 +73,9 @@ export const query = graphql`
           relationships {
             field_image {
               localFile {
-                absolutePath
                 childImageSharp {
                   fluid(cropFocus: NORTH, maxWidth: 250, maxHeight: 180) {
                     ...GatsbyImageSharpFluid
-                  }
-                  fixed(cropFocus: NORTH, width: 250, height: 180) {
-                    ...GatsbyImageSharpFixed
                   }
                 }
               }
