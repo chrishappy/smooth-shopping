@@ -16,6 +16,19 @@
 }
 
 /**
+ * Categories
+ */
+
+.categories-wrap .MuiImageListItem-root {
+  border-radius: 0.5rem;
+}
+
+.categories-wrap .MuiImageListItemBar-title {
+  font-size: 1.3rem;
+  white-space: normal;
+}
+
+/**
  * Footer
  */
  .footer-wrap a,
