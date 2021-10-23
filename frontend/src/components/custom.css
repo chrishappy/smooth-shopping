@@ -1,0 +1,25 @@
+/*=========================================
+   Global
+--=========================================*/
+
+.gatsby-image-wrapper {
+  max-width: 100%;
+}
+
+/* Remove images from Image Lists */
+.MuiImageList-root {
+    margin: 0;
+}
+
+.MuiImageListItemBar-title {
+  white-space: normal;
+}
+
+/**
+ * Footer
+ */
+ .footer-wrap a,
+ .footer-wrap a:visited {
+  color: inherit;
+  text-decoration: none;
+}
