@@ -15,7 +15,8 @@ import "./layout.css"
 import "./custom.css"
 
 let cart = {
-  creditsRemaining: 60
+  creditsRemaining: 100,
+  totalCredits: 100
 };
 
 const Layout = ({ children }) => {

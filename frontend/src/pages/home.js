@@ -11,7 +11,7 @@ import Seo from "../components/seo"
 const HomePage = ({data}) => (
   <>
     <Seo title="Home" />
-    <h1>Start Shopping</h1>
+    <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
     <div className="categories-wrap">
       <ImageList>
         {data.allTaxonomyTermProductCategories.nodes.map((category) => (
@@ -27,15 +27,6 @@ const HomePage = ({data}) => (
                   background: 'rgba(0,0,0,0.6)',
                   fontWeight: 'bold',
                 }}
-
-                // actionIcon={
-                //   <IconButton
-                //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                //     aria-label={`info about ${category.title}`}
-                //   >
-                //     <InfoIcon />
-                //   </IconButton>
-                // }
               />
             </Link>
           </ImageListItem>
@@ -48,7 +39,6 @@ const HomePage = ({data}) => (
 export const query = graphql`
   query HomePageQuery {
     allTaxonomyTermProductCategories {
-      totalCount
       nodes {
         id
         name
