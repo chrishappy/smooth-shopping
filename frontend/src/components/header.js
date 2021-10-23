@@ -1,68 +1,65 @@
 import * as React from "react"
 import PropTypes from "prop-types"
 import { Link } from "gatsby"
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SearchIcon from '@mui/icons-material/Search';
 
-const Header = ({ siteTitle, cart }) => (
+const Header = ({ cart }) => (
   <header
     style={{
-      backgroundColor: `#00497F`
+      backgroundColor: '#00497F',
+      color: 'white',
+      marginBottom: '1.45rem'
     }}
   >
-    <Box sx={{
-        flexGrow: 1,
-        justifyContent: 'center',
-        textAlign: 'center',
-        color: 'white'
-      }}>
-      <Grid container spacing={2}>
-          <Grid item xs={4}></Grid>
-      </Grid>
-    </Box>
-    <IconButton
-      style={{ color: 'white' }}
-      aria-label={`back`}>
-        <ArrowBackIosNewIcon />
-    </IconButton>
-    <Link
-        to="/cart/"
-        style={{
-          color: 'white',
-          textDecoration: `none`
-        }}
-      >
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `1.45rem 1.0875rem`,
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center'
-        }}
-      >
-        <ShoppingCartIcon fontSize="large" />
-        <h3 style={{ margin: 0, color: `#75F348` }}>
-            ${cart.creditsRemaining}
-        </h3>
-        <div style={{ textAlign: 'center' }}>/{cart.totalCredits}<br/>credits</div>
-      </div>
-    </Link>
+    <div style={{
+      padding: '1.45rem 1.0875rem',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between' }}>
+      <IconButton
+        style={{ color: 'white' }}
+        aria-label={'back'}>
+          <ArrowBackIosNewIcon fontSize="large" />
+      </IconButton>
+      <Link
+          to="/cart/"
+          style={{
+            color: 'white',
+            textDecoration: 'none'
+          }}
+        >
+        <div
+          style={{
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}
+        >
+          <ShoppingCartIcon fontSize="large" />
+          <h3 style={{ margin: 0, color: '#75F348' }}>
+              ${cart.creditsRemaining}
+          </h3>
+          <div style={{ textAlign: 'center' }}>/{cart.totalCredits}<br/>credits</div>
+        </div>
+      </Link>
+      <IconButton
+        style={{ color: 'white' }}
+        aria-label={'search'}>
+          <SearchIcon fontSize="large" />
+      </IconButton>
+    </div>
   </header>
 )
 
 Header.propTypes = {
-  siteTitle: PropTypes.string,
   cart: PropTypes.object
 }
 
 Header.defaultProps = {
-  siteTitle: ``,
   cart: { creditsRemaining: -1, totalCredits: 100 }
 }
 
