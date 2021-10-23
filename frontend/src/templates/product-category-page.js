@@ -12,7 +12,7 @@ const ProductCategories = ({ data }) => {
   const taxonomyTerm = data.taxonomyTermProductCategories;
   const products = data.allNodeProduct.edges;
   
-  const { store } = getStore();
+  const { store, persistor } = getStore();
   // console.log(getStore());
   // const [filters, setfilters] = useState([]);
 
@@ -42,8 +42,8 @@ const ProductCategories = ({ data }) => {
                         type: 'addProduct',
                         product
                       });
-
-                      console.log(store.getState());
+                      persistor.flush();
+                      console.log(store.getState().cartItems);
                     }}
                   >
                     <AddIcon />

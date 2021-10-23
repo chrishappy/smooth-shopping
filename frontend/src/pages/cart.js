@@ -11,11 +11,11 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 
 
-// import getStore from "../state/createStore"
+import getStore from "../state/createStore"
 
 const CartPage = ({ data }) => {
-  // const { store } = getStore();
-  // const pids = store.hasOwnProperty("cartItems") ? store.cartItems : {};
+  const { store } = getStore();
+  const pids = store.cartItems;
 
   const products = data.allNodeProduct.edges;
 
@@ -29,6 +29,8 @@ const CartPage = ({ data }) => {
     <>
       <Seo title="Cart Page" />
       <h1>Your Cart</h1>
+
+      <pre>{JSON.stringify(pids, null, 2)}</pre>
       
       <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
         { products.length } items
