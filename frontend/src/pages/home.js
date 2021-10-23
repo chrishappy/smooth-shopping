@@ -1,5 +1,6 @@
 import * as React from "react"
 import { graphql } from "gatsby"
+import { Link } from "gatsby"
 import Img from "gatsby-image"
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -16,21 +17,23 @@ const HomePage = ({data}) => (
     <h1>test:{data.allTaxonomyTermProductCategories.totalCount}</h1>
     <ImageList>
       {data.allTaxonomyTermProductCategories.nodes.map((category) => (
-        <ImageListItem key={category.id}>
-          <Img fluid={ category.relationships.field_image.localFile.childImageSharp.fluid } />
-          <ImageListItemBar
-            title={category.name}
-            subtitle={category.author}
-            actionIcon={
-              <IconButton
-                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                aria-label={`info about ${category.title}`}
-              >
-                <InfoIcon />
-              </IconButton>
-            }
-          />
-      </ImageListItem>
+        <Link to={category.path.alias}>
+          <ImageListItem key={category.id}>
+            <Img fluid={ category.relationships.field_image.localFile.childImageSharp.fluid } />
+            <ImageListItemBar
+              title={category.name}
+              subtitle={category.author}
+              // actionIcon={
+              //   <IconButton
+              //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+              //     aria-label={`info about ${category.title}`}
+              //   >
+              //     <InfoIcon />
+              //   </IconButton>
+              // }
+            />
+        </ImageListItem>
+      </Link>
     ))}
   </ImageList>
   </>

@@ -12,6 +12,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import Footer from "./footer"
 import "./layout.css"
+import "./custom.css"
 
 let cart = {
   creditsRemaining: 60
@@ -39,6 +40,7 @@ const Layout = ({ children }) => {
           margin: `0 auto`,
           maxWidth: 960,
           padding: `0 1.0875rem 5rem`,
+          minHeight: `80vh`
         }}
       >
         <main>{children}</main>
