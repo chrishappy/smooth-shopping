@@ -15,14 +15,15 @@ import getStore from "../state/createStore"
 
 const CartPage = ({ data }) => {
   const { store } = getStore();
-  const pids = store.cartItems;
+  const pids = store.getState().cartItems;
 
   const products = data.allNodeProduct.edges;
+  const productsFiltered = products.filter(({ node: product }) => pids.hasOwnProperty(product.id));
 
   const creditsTotal = 100.0;
 
-  const productTotal = products.reduce((runningTotal, {node: product}) => {
-    return runningTotal += parseFloat(product.field_credit);
+  const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
+    return runningTotal += parseFloat(product.field_credit) * pids[product.id].quantity;
   }, 0);
 
   return (
@@ -33,14 +34,14 @@ const CartPage = ({ data }) => {
       <pre>{JSON.stringify(pids, null, 2)}</pre>
       
       <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
-        { products.length } items
+        { productsFiltered.length } items
       </Typography>
 
       <hr></hr>
 
-      {products.map(({ node: product }) => (
-        <Card sx={{ display: 'flex', margin: '1em 0' }}>
-          <Box sx={{ width: '150px' }}>
+      {productsFiltered.map(({ node: product }) => (
+        <Card sx={{ display: 'flex', margin: '1em 0' }} key="product.id">
+          <Box sx={{ width: '100px' }}>
             <Img
               fluid={ product.relationships.field_image.localFile.childImageSharp.fluid }
             />
@@ -48,7 +49,7 @@ const CartPage = ({ data }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
-                <Typography component="div" variant="h5">
+                <Typography component="div" variant="h6">
                   { product.title }
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -59,6 +60,7 @@ const CartPage = ({ data }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <div><strong>${ product.field_credit }</strong></div>
+                <p>x { pids[product.id].quantity }</p>
               </CardContent>
             </Box>
           </Box>
@@ -96,8 +98,8 @@ const CartPage = ({ data }) => {
 export default CartPage
 
 export const query = graphql`
-query ($pids: [String] = ["91e294c0-20e1-5e35-b289-20338f139cc7", "0e4c3c90-5dab-5029-b0da-a05fcbe89d59"]) {
-  allNodeProduct(filter: {id: {in: $pids}}) {
+query {
+  allNodeProduct {
     edges {
       node {
         id
@@ -108,7 +110,7 @@ query ($pids: [String] = ["91e294c0-20e1-5e35-b289-20338f139cc7", "0e4c3c90-5dab
           field_image {
             localFile {
               childImageSharp {
-                fluid(cropFocus: NORTH, maxWidth: 150, maxHeight: 150) {
+                fluid(cropFocus: NORTH, maxWidth: 100, maxHeight: 100) {
                   ...GatsbyImageSharpFluid
                 }
               }

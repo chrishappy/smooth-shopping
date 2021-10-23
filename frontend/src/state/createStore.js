@@ -4,15 +4,24 @@ const { persistStore, persistReducer } = require('redux-persist');
 // const AsyncStorage = require('@react-native-async-storage/async-storage').default;
 
 
+// Store the state in local storage
+// const LOCALSTORAGE_SESSION_KEY = "custom_store_ss"
+// if (localStorage.getItem(LOCALSTORAGE_SESSION_KEY) !== null) {
+// 	tempState = JSON.parse(localStorage.getItem(LOCALSTORAGE_SESSION_KEY));
+// }
+
+
 const initialState = {
   cartItems: {}
 };
 
+
 function reducer(state = initialState, action) {
+	let tempState = {...state};
+
   switch (action.type) {
-		case 'addProduct':
+		case 'ADD_PRODUCT':
 			const product = action.product;
-			const tempState = {...state};
 
 			if (!tempState.hasOwnProperty('cartItems')) {
 				tempState.cartItems = {};
@@ -25,12 +34,18 @@ function reducer(state = initialState, action) {
 			}
 
 			tempState.cartItems[product.id]['quantity']++;
-			return tempState;
+			break;
+
+		case 'ADD_PRODUCT':
 
 		default:
-			return state;
+			break;
 	}
+
 	
+
+	return tempState;
+
 }
 
 const persistConfig = {
