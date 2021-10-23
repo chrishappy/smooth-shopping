@@ -21,7 +21,7 @@ const ProductCategories = ({ data }) => {
   // const cols = 2;
 
   return (
-    <Layout>
+    <>
       <div>
         <h1>{ taxonomyTerm.name }</h1>
 
@@ -56,7 +56,7 @@ const ProductCategories = ({ data }) => {
         </ImageList>
 
       </div>
-    </Layout>
+    </>
   )
 }
 export default ProductCategories;

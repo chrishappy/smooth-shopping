@@ -27,7 +27,7 @@ const CartPage = ({ data }) => {
   }, 0);
 
   return (
-    <Layout>
+    <>
       <Seo title="Cart Page" />
       <h1>Your Cart</h1>
       {products.map(({ node: product }) => (
@@ -82,7 +82,7 @@ const CartPage = ({ data }) => {
           Checkout
         </Button>
       </Box>
-    </Layout>
+    </>
   );
 }
 
