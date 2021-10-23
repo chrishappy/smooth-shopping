@@ -52,8 +52,9 @@ const ProductCategories = ({ data }) => {
               />
             </ImageListItem>
           ))}
-          { products.length === 0 ? (<p>There are no products.</p>) : ''}
         </ImageList>
+        
+        { products.length === 0 ? (<p>There are currently no products.</p>) : ''}
 
       </div>
     </>
