@@ -23,9 +23,7 @@ const ProductCategories = ({ data }) => {
         <ImageList>
           {products.map(({ node: product }) => (
             <ImageListItem key={product.id}>
-              <div style={{ maxWidth: `250px`, marginBottom: `1rem` }}>
-                <Img fixed={ product.relationships.field_image.localFile.childImageSharp.fixed } />
-              </div>
+              <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
               <ImageListItemBar
                 title={product.title}
                 subtitle={<span>Before BBD</span>}
@@ -54,7 +52,7 @@ export const query = graphql`
               localFile {
                 absolutePath
                 childImageSharp {
-                  fluid(cropFocus: NORTH) {
+                  fluid(cropFocus: NORTH, maxWidth: 250, maxHeight: 180) {
                     ...GatsbyImageSharpFluid
                   }
                   fixed(cropFocus: NORTH, width: 250, height: 180) {
