@@ -72,7 +72,7 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <DialogContent sx={{ minWidth: '25rem' }}>
+        <DialogContent sx={{ minWidth: '20rem', maxWith: '97vw'}}>
         <Stack>
           {selectedProduct.hasOwnProperty('relationships') ?
             <Img fluid={ selectedProduct.relationships.field_image.localFile.childImageSharp.fluid }/>
