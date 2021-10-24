@@ -25,7 +25,8 @@ const helpButtonStyle = {
   color: 'white',
   borderRadius: '20px',
   fontWeight: 'bold',
-  padding: '0 10%'
+  padding: '0.6em 1.5em',
+  margin: '0.5em 0',
 };
 
 const Footer = () => {
@@ -35,9 +36,8 @@ const Footer = () => {
   };
 
   return (
-  <footer style={{
-      backgroundColor: '#00497F',
-      padding: '1rem 2rem 0rem 2rem',
+  <footer
+    style={{
       position: 'fixed',
       bottom: '0',
       left: '0',
@@ -46,9 +46,16 @@ const Footer = () => {
       maxWidth: '400px',
       margin: '0 auto',
       height: '5rem',
+      boxSizing: 'content-box',
     }}
-    className="footer-wrap">
-    <Typography component="div" variant="body2">
+    className="footer-wrap mui-fixed">
+    <Typography
+      component="div"
+      variant="body2"
+      style={{
+        backgroundColor: '#00497F',
+        padding: '1rem 2rem 0rem 2rem',
+      }}>
       <Box sx={{
           flexGrow: 1,
           justifyContent: 'center',
@@ -94,7 +101,7 @@ const Footer = () => {
         spacing: '5'
       }}>
         <LiveHelpIcon fontSize="large" />
-        <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mb: 1 }}>
+        <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mb: 1, margin: '1em' }}>
           Need Help?
         </Typography>
         <Button variant="contained"
@@ -103,13 +110,13 @@ const Footer = () => {
           onClick={() => {
             console.log('todo');
             handleClose();
-          }}><CallIcon />Call</Button>
+          }}><CallIcon sx={{marginRight: '0.3em'}} />Call</Button>
         <Button variant="contained"
           style={helpButtonStyle}
           onClick={() => {
             console.log('todo');
             handleClose();
-          }}><EmailIcon />Send Request</Button>
+          }}><EmailIcon sx={{marginRight: '0.3em'}}/>Send Request</Button>
       </Stack>
       </DialogContent>
     </Dialog>

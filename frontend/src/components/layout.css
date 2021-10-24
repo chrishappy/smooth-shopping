@@ -4,9 +4,6 @@ html {
   font: 112.5%/1.45em georgia, serif, sans-serif;
   box-sizing: border-box;
   overflow-y: scroll;
-  max-width: 400px;
-  margin: 0 auto;
-  background: #ccc;
 }
 body {
   margin: 0;
@@ -21,8 +18,15 @@ body {
   -ms-font-feature-settings: "kern", "liga", "clig", "calt";
   -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
   font-feature-settings: "kern", "liga", "clig", "calt";
+  background: #ccc;
+}
+
+body > div:first-child {
+  max-width: 400px;
+  margin: 0 auto;
   background: #fff;
 }
+
 article,
 aside,
 details,

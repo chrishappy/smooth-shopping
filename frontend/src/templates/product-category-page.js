@@ -52,7 +52,8 @@ const ProductCategories = ({ data, storeDispatch }) => {
               <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
               <ImageListItemBar
                 title={product.title}
-                subtitle={product.field_expired_ ? <span>BBD: <strong>After</strong></span> : <span>BBD: <strong>Before</strong></span>}
+                // subtitle={product.field_expired_ ? <span>BBD: <strong>After</strong></span> : <span>BBD: <strong>Before</strong></span>}
+                subtitle={`$${product.field_credit}`}
                 position="below"
                 actionIcon={
                   <IconButton
@@ -90,10 +91,11 @@ const ProductCategories = ({ data, storeDispatch }) => {
                 <IconButton
                   style={mathButtonStyle}
                   onClick={() => {
-                    setCount(selectedProductCount + 1);
+                    let count = (selectedProductCount-1 < 0)? 0 : selectedProductCount-1;
+                    setCount(count);
                   }}
                   >
-                  <AddIcon />
+                  <RemoveIcon />
                 </IconButton>
                 <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
                   {selectedProductCount}
@@ -101,11 +103,10 @@ const ProductCategories = ({ data, storeDispatch }) => {
                 <IconButton
                   style={mathButtonStyle}
                   onClick={() => {
-                    let count = (selectedProductCount-1 < 0)? 0 : selectedProductCount-1;
-                    setCount(count);
+                    setCount(selectedProductCount + 1);
                   }}
                   >
-                  <RemoveIcon />
+                  <AddIcon />
                 </IconButton>
               </Stack>
               <div style={{marginRight: 'auto'}}></div>

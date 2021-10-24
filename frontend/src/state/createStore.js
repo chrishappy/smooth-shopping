@@ -25,6 +25,15 @@ function reducer(state, action) {
 			const product = action.product;
 			let incrementBy = action.hasOwnProperty('by') ? action.by : 1;
 
+			if (incrementBy === Number.POSITIVE_INFINITY) {
+				if (state.cartItems.hasOwnProperty(product.id)) {
+					incrementBy = state.cartItems[product.id].quantity;
+				}
+				else {
+					incrementBy = 0;
+				}
+			}
+
 			if (action.type === 'decrementProduct') {
 				incrementBy *= -1;
 			}
