@@ -10,9 +10,13 @@ import Img from "gatsby-image"
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import { connect } from 'react-redux';
+import RemoveIcon from '@mui/icons-material/Remove';
+import IconButton from '@mui/material/IconButton';
 
 
-const CartPage = ({ data, appState }) => {
+// TODO Abstract it out
+
+const CartPage = ({ data, storeDispatch, appState }) => {
 
   const cartItems = appState.cartItems;
 
@@ -56,10 +60,26 @@ const CartPage = ({ data, appState }) => {
                 </Typography>
               </CardContent>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
-                <div><strong>${ product.field_credit }</strong></div>
-                <p>x { cartItems[product.id].quantity }</p>
+                <div>
+                  <div><strong>${ product.field_credit }</strong></div>
+                  <div>x { cartItems[product.id].quantity }</div>
+                </div>
+                <div>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      storeDispatch({
+                        type: 'decrementProduct',
+                        product,
+                        by: Number.POSITIVE_INFINITY
+                      });
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </div>
               </CardContent>
             </Box>
           </Box>
@@ -68,22 +88,16 @@ const CartPage = ({ data, appState }) => {
       
       <hr></hr>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography component="div" variant="body1">
-          Total credits used:
-        </Typography>
-        <Typography component="div" variant="body1">
-          <strong>${ productTotal.toFixed(2) }</strong>
-        </Typography>
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography component="div" color="text.secondary"  variant="body1">
-          Total credits remaining:
-        </Typography>
-        <Typography component="div" color="text.secondary"  variant="body1">
-          ${ (creditsTotal - productTotal).toFixed(2) }
-        </Typography>
-      </Box>
+      <Typography component="div" color="text.secondary"  variant="body1">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <p>Total credits used:</p>
+            <p><strong>${ productTotal.toFixed(2) }</strong></p>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <p>Total credits remaining:</p>
+            <p>${ (creditsTotal - productTotal).toFixed(2) }</p>
+        </Box>
+      </Typography>
 
       <Box sx={{ textAlign: 'center' }}>
         <Button variant="contained" sx={{ padding: '0.5rem 2rem', fontWeight: 'bold', margin: '2rem 0'}}>
@@ -96,7 +110,9 @@ const CartPage = ({ data, appState }) => {
 
 export default connect(state => ({
   appState: state
-}), null)(CartPage)
+}), dispatch => ({
+  storeDispatch: dispatch
+}))(CartPage)
 
 export const query = graphql`
 query {

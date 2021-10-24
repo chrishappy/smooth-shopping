@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+// TODO Abstract it out
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
   backgroundColor: 'darkGray',
