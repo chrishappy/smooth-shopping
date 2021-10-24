@@ -64,13 +64,13 @@ const Footer = () => {
         }}>
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <Link to="/" sx={{...toolbarLinkStyle}}>
+            <Link to="/home" sx={{...toolbarLinkStyle}}>
               <StorefrontIcon />
               <p>Home</p>
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Link to="/account/" sx={{...toolbarLinkStyle}}>
+            <Link to="/account" sx={{...toolbarLinkStyle}}>
               <AccountCircleIcon />
               <p>Account</p>
             </Link>
