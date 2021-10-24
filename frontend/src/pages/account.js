@@ -2,12 +2,11 @@ import * as React from "react"
 
 import Seo from "../components/seo"
 import Typography from '@mui/material/Typography';
-import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';// import CardMedia from '@mui/material/CardMedia';
 import { connect } from 'react-redux';
 
-const Account = ({  storeState }) => {
+const Account = ({  appState }) => {
 
-  const userData = storeState.user;
+  const userData = appState.user;
   return (
     <>
       <Seo title="Cart Page" />
@@ -42,7 +41,7 @@ const Account = ({  storeState }) => {
 }
 
 export default connect(state => ({
-  storeState: state
+  appState: state
 }), dispatch => ({
   storeDispatch: dispatch
 }))(Account)
