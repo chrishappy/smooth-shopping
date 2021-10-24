@@ -22,13 +22,13 @@ const Account = ({  appState }) => {
       <hr></hr>
 
       <p>
-        <MonetizationOnOutlinedIcon sx={{ verticalAlign: 'top' }} /> 
-        <strong> Monthly Plan</strong>: ${userData.monthlyAllowance} <Typography component="span" variant="body2">/month</Typography>
+        {/* <MonetizationOnOutlinedIcon sx={{ verticalAlign: 'top' }} />  */}
+        <strong> Monthly Plan</strong>: ${userData.totalCredits} <Typography component="span" variant="body2">/month</Typography>
       </p>
 
       <p>
-        <MonetizationOnOutlinedIcon sx={{ verticalAlign: 'top' }} /> 
-        <strong> Current Balance:</strong> ${userData.creditsRemaining} <Typography component="span" variant="body2">/{userData.totalCredits} credits</Typography>
+        {/* <MonetizationOnOutlinedIcon sx={{ verticalAlign: 'top' }} />  */}
+        <strong> Current Balance:</strong> ${userData.creditsRemaining} <Typography component="span" variant="body2"> of {userData.totalCredits} credits</Typography>
       </p>
       
       <hr></hr>

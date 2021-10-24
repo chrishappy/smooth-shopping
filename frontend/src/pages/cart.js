@@ -59,11 +59,15 @@ const CartPage = ({ data, storeDispatch, appState }) => {
               />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
-                  <h4 className="caity-item__title">
+                  <h4 className="cart-item__title">
                     { product.title }
                   </h4>
+                  <Box sx={{ mb:1, fontSize: '15' }}>
+                    <div>${ product.field_credit }</div>
+                    {/* <div>x { cartItems[product.id].quantity }</div> */}
+                  </Box>
                   {/* <Typography variant="subtitle1" color="text.secondary" component="div">
                     BBD: <strong>{product.field_expired_ ? "After" : "Before"}</strong>
                   </Typography> */}
@@ -71,29 +75,10 @@ const CartPage = ({ data, storeDispatch, appState }) => {
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <CardContent sx={{ flex: '1 0 auto', textAlign: 'center' }}>
-                  <Box sx={{ mb:1 }}>
-                    <div>${ product.field_credit }</div>
-                    {/* <div>x { cartItems[product.id].quantity }</div> */}
-                  </Box>
-                  <Stack direction="row">
+                  <Stack direction="column">
                     <IconButton
                       style={mathButtonStyle}
-                      // sx={{ height: 28 }}
-                      onClick={() => {
-                        storeDispatch({
-                          type: 'decrementProduct',
-                          product: product,
-                        })
-                      }}
-                      >
-                      <RemoveIcon sx={{ fontSize: '1rem', }} />
-                    </IconButton>
-                    <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
-                      {cartItems[product.id].quantity}
-                    </Typography>
-                    <IconButton
-                      style={mathButtonStyle}
-                      // sx={{ height: 28 }}
+                      sx={{ height: 28 }}
                       onClick={() => {
                         storeDispatch({
                           type: 'incrementProduct',
@@ -101,7 +86,21 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                         })
                       }}
                       >
-                      <AddIcon sx={{ fontSize: '1rem', }} />
+                      <AddIcon sx={{ fontSize: 12, }} />
+                    </IconButton>
+                    <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
+                      {cartItems[product.id].quantity}
+                    </Box>
+                    <IconButton
+                      style={mathButtonStyle}
+                      sx={{ height: 28 }}
+                      onClick={() => {
+                        storeDispatch({
+                          type: 'decrementProduct',
+                          product: product,
+                        })
+                      }}>
+                      <RemoveIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                   </Stack>
                 </CardContent>
