@@ -1,10 +1,11 @@
 import * as React from "react"
 
-import Seo from "../components/seo"
-import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
+import { Link } from "gatsby"
+import { Typography, Button } from '@mui/material';
+import Seo from "../components/seo"
 
-const Account = ({  appState }) => {
+const Account = ({  appState, storeDispatch }) => {
 
   const userData = appState.user;
   return (
@@ -36,6 +37,21 @@ const Account = ({  appState }) => {
       <Typography component="div" color="text.secondary"  variant="body2">
         Your credits are renewed on the first of every month. Credits do not roll over.
       </Typography>
+
+      <Button variant="contained" component={Link} to="/"
+        sx={{
+          backgroundColor: 'gray',
+          color: 'black',
+          borderRadius: '20px',
+          fontWeight: 'bold',
+          padding: '0 10%',
+          marginTop: '5rem'
+        }}
+        onClick={() => {
+          storeDispatch({
+            type: 'LOGOUT'
+          });
+        }}>Log out</Button>
     </>
   );
 }
