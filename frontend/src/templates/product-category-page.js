@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { connect } from "react-redux"
 
+// TODO Abstract it out
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
   backgroundColor: 'darkGray',
