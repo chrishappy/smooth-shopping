@@ -26,7 +26,6 @@ const HomePage = ({data}) => (
                   textAlign: 'center',
                   background: 'rgba(0,0,0,0.6)',
                   fontWeight: 'bold',
-                  borderRadius: '20px'
                 }}
               />
             </Link>

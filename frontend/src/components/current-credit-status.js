@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Link } from "gatsby"
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { connect } from "react-redux";
 
 const CurrentCredits = ({ appState }) => {

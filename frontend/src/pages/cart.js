@@ -11,6 +11,8 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import { connect } from 'react-redux';
 import Stack from '@mui/material/Stack';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
@@ -38,6 +40,11 @@ const CartPage = ({ data, storeDispatch, appState }) => {
   const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
     return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
   }, 0);
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <>
@@ -130,11 +137,30 @@ const CartPage = ({ data, storeDispatch, appState }) => {
               color: '#000',
               backgroundColor: '#75F348',
             }}
-            startIcon={<CheckCircleIcon />}>
+            startIcon={<CheckCircleIcon />}
+            onClick={() => {
+              storeDispatch({
+                type: 'CLEAR_CART'
+              });
+              setOpen(true);
+            }}>
             Confirm Order
           </Button>
         </Box>
       </Box>
+
+      
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DialogContent sx={{ minWidth: '25rem' }}>
+          <p>We have received your order.</p>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

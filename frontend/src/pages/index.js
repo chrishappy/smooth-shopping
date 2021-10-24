@@ -25,9 +25,11 @@ const LoginPage = ({ storeDispatch }) => (
         formats={["auto", "webp", "avif"]}
         alt="House of Omeed"
         style={{ marginBottom: `1.45rem` }}
+        sx={{ mt: '3rem'}}
       />
-      <h2>Access code</h2>
-      <TextField id="outlined-basic" placeholder="ABC123" variant="outlined" />
+      <h2 
+        style={{ marginTop: '3rem'}}>Access code</h2>
+      <TextField id="outlined-basic" placeholder="ABC123" variant="outlined" sx={{ background: '#fff', mb: '2rem' }}/>
       <Button variant="contained" component={Link} to="/home"
         sx={{
           backgroundColor: '#75F348',

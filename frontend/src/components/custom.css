@@ -40,7 +40,8 @@ div .product-listings {
  */
 
 .categories-wrap .MuiImageListItem-root {
-  border-radius: 0.5rem;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 .categories-wrap .MuiImageListItemBar-title {

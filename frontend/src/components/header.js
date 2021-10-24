@@ -10,8 +10,6 @@ const Header = ({ appState }) => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const isHome = pathname.replace(/\/$/, '') === '';
 
-  const userData = appState.user;
-
   return (
   <header
     style={{
