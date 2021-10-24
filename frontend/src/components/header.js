@@ -13,7 +13,7 @@ const Header = ({ cart }) => (
       color: 'white',
       marginBottom: '1.45rem'
     }}
-  >
+    >
     <div style={{
       padding: '1.45rem 1.0875rem',
       display: 'flex',
