@@ -39,7 +39,7 @@ const ProductCategories = ({ data }) => {
                     aria-label={`Add a ${product.title} to your cart`}
                     onClick={() => {
                       store.dispatch({
-                        type: 'ADD_PRODUCT',
+                        type: 'addProduct',
                         product
                       });
                       persistor.flush();

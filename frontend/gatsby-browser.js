@@ -7,18 +7,13 @@
 // Import the component at the top of the file
 import * as React from "react"
 import Layout from './src/components/layout';
-import { PersistGate } from 'redux-persist/integration/react'
-import getStore from "./src/state/createStore"
-import { Provider } from 'react-redux'
+// import getStore from "./src/state/createStore"
+// import { Provider } from 'react-redux'
 
 
 export const wrapPageElement = ({ element, props }) => {
-  const { store, persistor } = getStore();
+  // const { store } = getStore();
   
   return (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Layout {...props}>{element}</Layout>
-    </PersistGate>
-  </Provider>
+    <Layout {...props}>{element}</Layout>
 )};

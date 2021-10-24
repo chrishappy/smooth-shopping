@@ -56,13 +56,13 @@ module.exports = {
           ignoreFunction: true,
         },
         // [optional] - if true will clean up after itself on the client, default:
-        cleanupOnClient: true,
+        cleanupOnClient: false,
         // [optional] - name of key on `window` where serialized state will be stored, default:
         windowKey: '__PRELOADED_STATE__',
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    `gatsby-plugin-offline`,
+    // `gatsby-plugin-offline`,
   ],
 }
