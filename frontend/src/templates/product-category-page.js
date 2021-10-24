@@ -149,12 +149,10 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
                   padding: '0 10%'
                 }}
                 onClick={() => {
-                  store.dispatch({
-                    type: 'ADD_PRODUCT',
+                  storeDispatch({
+                    type: 'addProduct',
                     product: selectedProduct
                   });
-                  persistor.flush();
-                  console.log(store.getState().cartItems);
                   handleClose();
                 }}>Add to cart</Button>
             </Box>
