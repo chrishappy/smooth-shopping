@@ -11,8 +11,26 @@
     margin: 0;
 }
 
-.product-list .MuiImageListItemBar-title {
+div .product-listings {
+  overflow: visible;
+}
+
+.product-listing {
+  box-shadow: 0px 2px 2px rgb(0 0 0 / 14%), 0px 3px 1px rgb(0 0 0 / 12%), 0px 1px 5px rgb(0 0 0 / 20%);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.product-listing__content {
+  padding: 0.5em 0.7em;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.product-listing__title {
   white-space: normal;
+  margin: 0 0 0.7rem;
+  font-size: 1.1rem;
 }
 
 /**

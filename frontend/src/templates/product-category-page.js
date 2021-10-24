@@ -3,17 +3,18 @@ import { graphql } from "gatsby"
 import { connect } from "react-redux"
 import Img from "gatsby-image"
 import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import IconButton from '@mui/material/IconButton';
+import CheckoutButton from "../components/checkout";
 
 // TODO Abstract it out
 const mathButtonStyle = {
@@ -25,7 +26,7 @@ const mathButtonStyle = {
   margin: '0 0.3rem'
 }
 
-const ProductCategories = ({ data, storeDispatch }) => {
+const ProductCategories = ({ data, appState, storeDispatch }) => {
   const taxonomyTerm = data.taxonomyTermProductCategories;
   const products = data.allNodeProduct.edges;
 
@@ -44,49 +45,51 @@ const ProductCategories = ({ data, storeDispatch }) => {
 
         <ImageList
           sx={{ margin: '0' }}
-          className="product-list">
+          className="product-listings"
+          gap="8px">
           {products.map(({ node: product }) => (
-            <ImageListItem key={product.id} onClick={() => {
+            <Box key={product.id} onClick={() => {
               setProduct(product);
               setOpen(true);
-            }}>
+            }}  className="product-listing">
               <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
-              <ImageListItemBar
-                title={product.title}
-                // subtitle={product.field_expired_ ? <span>BBD: <strong>After</strong></span> : <span>BBD: <strong>Before</strong></span>}
-                subtitle={`$${product.field_credit}`}
-                position="below"
-                actionIcon={
-                  <IconButton
-                    sx={{ background: 'rgba(255, 255, 255, 0.54)' }}
-                    aria-label={`Add a ${product.title} to your cart`}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
+              <Box className="product-listing__content">
+                <h3 className="product-listing__title">{product.title}</h3>
+                <Box sx={{ textAlign: 'right', }}>
+                {product.field_expired_ ? <WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/> : ''} ${product.field_credit}
+                </Box>
+              </Box>
+            </Box>
           ))}
         </ImageList>
 
+        <Box>
+          <CheckoutButton />
+        </Box>
         <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <DialogContent>
+          <DialogContent sx={{ minWidth: '25rem' }}>
           <Stack>
             {selectedProduct.hasOwnProperty('relationships') ?
               <Img fluid={ selectedProduct.relationships.field_image.localFile.childImageSharp.fluid }/>
               : <img src="https://source.unsplash.com/random" alt="random item"/>
             }
-            <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5 }}>
-              {selectedProduct.title}
-            </Typography>
-            <Typography id="modal-product-description" sx={{ mb: 1 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <Box sx={{ margin: '0.5rem 0 1rem' }}>
+              <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
+                {selectedProduct.title}
+              </Typography>
+              <Typography id="modal-product-description" sx={{ mb: 1 }}>
+                <p>
+                  {selectedProduct.field_expired_
+                    ? <span><WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/>Expired</span>
+                    : <span>Not expired</span>}
+                </p>
+              </Typography>
+            </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Stack direction="row">
                 <IconButton
@@ -133,6 +136,7 @@ const ProductCategories = ({ data, storeDispatch }) => {
         </Dialog>
 
         { products.length === 0 ? (<p>There are currently no products.</p>) : ''}
+
       </div>
     </>
   )
@@ -161,7 +165,7 @@ export const query = graphql`
             field_image {
               localFile {
                 childImageSharp {
-                  fluid(cropFocus: NORTH, maxWidth: 250, maxHeight: 180) {
+                  fluid(cropFocus: NORTH, maxWidth: 250, maxHeight: 210) {
                     ...GatsbyImageSharpFluid
                   }
                 }

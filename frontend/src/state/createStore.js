@@ -7,7 +7,9 @@ const storage = require('./storage').default;
 // const storage = require('redux-persist/lib/storage').default;
 
 const initialState = {
-  cartItems: {},
+  cartItems: {
+		numberOfProducts: 0,
+	},
 	user: {
 		totalCredits: 120.0,
 		creditsRemaining: 120.0,
@@ -19,13 +21,29 @@ const initialState = {
 
 function reducer(state, action) {
 
+
+	const product = action.product;
+
   switch (action.type) {
+
+		case 'removeProduct':
+			if (state.cartItems.hasOwnProperty(product.id)) {
+				const newCartItems = { ...state.cartItems };
+				delete newCartItems[product.id];
+
+				return {
+					...state,
+					cartItems: {
+						numberOfProducts: state.cartItems.numberOfProducts - state.cartItems[product.id].quantity,
+						...newCartItems,
+					}
+				}
+			}
+			break;
 
 		// action.product must have id and field_credit
 		case 'incrementProduct':
 		case 'decrementProduct':
-
-			const product = action.product;
 			let incrementBy = action.hasOwnProperty('by') ? action.by : 1;
 
 			if (incrementBy === Number.POSITIVE_INFINITY) {
@@ -52,6 +70,7 @@ function reducer(state, action) {
 					...state,
 					cartItems: {
 						...state.cartItems,
+						numberOfProducts: state.cartItems.numberOfProducts + incrementBy,
 						[product.id]: {
 							quantity: newQuantity
 						}
@@ -69,6 +88,7 @@ function reducer(state, action) {
 				return {
 					...state,
 					cartItems: {
+						numberOfProducts: state.cartItems.numberOfProducts + incrementBy,
 						...newCartItems,
 					},
 					user: {
