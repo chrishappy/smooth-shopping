@@ -16,11 +16,10 @@ const initialState = {
 		familyName: 'Sample Family Name',
 		numberOfFamilyMembers: 3,
 	},
-	login: false,
+	loggedIn: false,
 };
 
 function reducer(state, action) {
-
 
 	const product = action.product;
 
@@ -29,17 +28,15 @@ function reducer(state, action) {
 		case 'LOGIN':
 			return {
 				...state,
-				login: true,
+				loggedIn: true,
 			}
-			break;
 
 		// Return a copy
 		case 'LOGOUT':
 			return {
 				...state,
-				login: false,
+				loggedIn: false,
 			}
-			break;
 
 		case 'removeProduct':
 			if (state.cartItems.hasOwnProperty(product.id)) {
