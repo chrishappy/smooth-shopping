@@ -46,7 +46,6 @@ const ProductCategories = ({ data, storeDispatch }) => {
           className="product-list">
           {products.map(({ node: product }) => (
             <ImageListItem key={product.id} onClick={() => {
-              console.log(product);
               setProduct(product);
               setOpen(true);
             }}>
