@@ -47,10 +47,12 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
         className="product-listings"
         gap="8px">
         {products.map(({ node: product }) => (
-          <Box key={product.id} onClick={() => {
-            setProduct(product);
-            setOpen(true);
-          }}  className="product-listing">
+          <Box 
+            key={product.id}
+            onClick={() => {
+              setProduct(product);
+              setOpen(true);
+            }}  className="product-listing">
             <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
             <Box className="product-listing__content">
               <h3 className="product-listing__title">{product.title}</h3>

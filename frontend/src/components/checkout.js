@@ -33,7 +33,6 @@ const CheckoutButton = ({ appState }) => {
       right: 0,
       margin: '0 auto',
       bottom: '5rem',
-      top: 0,
     }}>
       <Fab color="primary"
           aria-label="Checkout your items"
@@ -41,8 +40,9 @@ const CheckoutButton = ({ appState }) => {
             color: '#000',
             backgroundColor: '#75F348',
             position: 'absolute',
-            bottom: '1em',
+            bottom: '1.5em',
             right: '1em',
+            pointer: 'cursor',
           }}
           variant="extended"
           size="large"

@@ -11,7 +11,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import { connect } from 'react-redux';
 
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 
 const CartPage = ({ data, storeDispatch, appState }) => {
 
@@ -69,9 +69,8 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                     size="small"
                     onClick={() => {
                       storeDispatch({
-                        type: 'decrementProduct',
+                        type: 'removeProduct',
                         product,
-                        by: Number.POSITIVE_INFINITY
                       });
                     }}
                   >
@@ -104,7 +103,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
             color: '#000',
             backgroundColor: '#75F348',
           }}
-          startIcon={<CheckCircleOutlineIcon />}>
+          startIcon={<CheckCircleIcon />}>
           Confirm Order
         </Button>
       </Box>
