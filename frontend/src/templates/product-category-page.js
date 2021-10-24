@@ -1,5 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
+import { connect } from "react-redux"
 import Img from "gatsby-image"
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -9,15 +10,10 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-// import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-// import DialogContentText from '@mui/material/DialogContentText';
-// import DialogTitle from '@mui/material/DialogTitle';
-// import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { connect } from "react-redux"
 
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -28,14 +24,9 @@ const mathButtonStyle = {
   margin: '0 0.3rem'
 }
 
-const ProductCategories = ({ data, appState, storeDispatch }) => {
+const ProductCategories = ({ data, storeDispatch }) => {
   const taxonomyTerm = data.taxonomyTermProductCategories;
   const products = data.allNodeProduct.edges;
-  
-  // const [filters, setfilters] = useState([]);
-
-  // const rows = 1;
-  // const cols = 2;
 
   const [selectedProduct, setProduct] = React.useState({ title: 'default' });
   const [selectedProductCount, setCount] = React.useState(0);
@@ -61,18 +52,12 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
               <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
               <ImageListItemBar
                 title={product.title}
-                subtitle={<span>BBD: <strong>Before</strong></span>}
+                subtitle={product.field_expired_ ? <span>BBD: <strong>After</strong></span> : <span>BBD: <strong>Before</strong></span>}
                 position="below"
                 actionIcon={
                   <IconButton
                     sx={{ background: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`Add a ${product.title} to your cart`}
-                    onClick={() => {
-                      storeDispatch({
-                        type: 'incrementProduct',
-                        product
-                      });
-                    }}
                   >
                     <AddIcon />
                   </IconButton>
@@ -88,22 +73,6 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          {/* <DialogTitle id="alert-dialog-title">
-            {"Use Google's location service?"}
-          </DialogTitle>
-          <DialogContent>
-            <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
-            <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous
-              location data to Google, even when no apps are running.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
-            <Button onClick={handleClose} autoFocus>
-              Agree
-            </Button>
-          </DialogActions> */}
           <DialogContent>
           <Stack>
             {selectedProduct.hasOwnProperty('relationships') ?
@@ -135,7 +104,7 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
                     let count = (selectedProductCount-1 < 0)? 0 : selectedProductCount-1;
                     setCount(count);
                   }}
-                >
+                  >
                   <RemoveIcon />
                 </IconButton>
               </Stack>
@@ -151,7 +120,8 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
                 onClick={() => {
                   storeDispatch({
                     type: 'incrementProduct',
-                    product: selectedProduct
+                    product: selectedProduct,
+                    by: selectedProductCount
                   });
                   handleClose();
                 }}>Add to cart</Button>
@@ -183,6 +153,7 @@ export const query = graphql`
         node {
           id
           title
+          field_expired_
           relationships {
             field_image {
               localFile {
