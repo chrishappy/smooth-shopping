@@ -12,7 +12,7 @@ import getStore from "./src/state/createStore"
 import { Provider } from 'react-redux'
 
 
-export const wrapPageElement = ({ element, props }) => {
+export const wrapRootElement = ({ element, props }) => {
   const { store, persistor } = getStore();
 
   if (typeof window === "undefined") {

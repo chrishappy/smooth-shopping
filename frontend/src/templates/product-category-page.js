@@ -6,14 +6,12 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import Img from "gatsby-image"
-import getStore from "../state/createStore"
+import { connect } from "react-redux"
 
-const ProductCategories = ({ data }) => {
+const ProductCategories = ({ data, appState, storeDispatch }) => {
   const taxonomyTerm = data.taxonomyTermProductCategories;
   const products = data.allNodeProduct.edges;
   
-  const { store, persistor } = getStore();
-  // console.log(getStore());
   // const [filters, setfilters] = useState([]);
 
   // const rows = 1;
@@ -25,7 +23,8 @@ const ProductCategories = ({ data }) => {
         <h1>{ taxonomyTerm.name }</h1>
 
         <ImageList
-          sx={{ margin: '0' }}>
+          sx={{ margin: '0' }}
+          className="product-list">
           {products.map(({ node: product }) => (
             <ImageListItem key={product.id}>
               <Img fluid={ product.relationships.field_image.localFile.childImageSharp.fluid } />
@@ -38,12 +37,10 @@ const ProductCategories = ({ data }) => {
                     sx={{ background: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`Add a ${product.title} to your cart`}
                     onClick={() => {
-                      store.dispatch({
+                      storeDispatch({
                         type: 'addProduct',
                         product
                       });
-                      persistor.flush();
-                      console.log(store.getState().cartItems);
                     }}
                   >
                     <AddIcon />
@@ -60,7 +57,14 @@ const ProductCategories = ({ data }) => {
     </>
   )
 }
-export default ProductCategories;
+
+export default connect(state => ({
+  appState: state
+}), dispatch => ({
+  storeDispatch: dispatch
+}))(ProductCategories)
+
+
 
 export const query = graphql`
   query ($tid: String!) {

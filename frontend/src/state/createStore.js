@@ -11,49 +11,31 @@ const initialState = {
 };
 
 function reducer(state = initialState, action) {
-	const tempState = {...state};
 
   switch (action.type) {
 		case 'addProduct':
 			const product = action.product;
-
-			// if (!tempState.hasOwnProperty('cartItems')) {
-			// 	tempState.cartItems = {};
-			// }
-
-			if (!tempState.cartItems.hasOwnProperty(product.id)) {
-				tempState.cartItems[product.id] = {
-					quantity: 0
-				};
+			const newQuantity = state.cartItems.hasOwnProperty(product.id) 
+				? state.cartItems[product.id].quantity + 1
+				: 1;
+			
+			
+			return {
+				...state,
+				cartItems: {
+					...state.cartItems,
+					[product.id]: {
+						quantity: newQuantity
+					}
+				}
 			}
 
-			tempState.cartItems[product.id]['quantity']++;
-			break;
-
 		default:
-			break;
+			return state;
 	}
-
-	return tempState;
+	
 
 }
-
-
-// if (typeof localStorage !== 'undefined' && localStorage.getItem(LOCALSTORAGE_SESSION_KEY) !== null) {
-// 	store = JSON.parse(localStorage.getItem(LOCALSTORAGE_SESSION_KEY));
-// }
-// else {
-// 	store = createStore(
-// 		reducer,
-// 		initialState, // initial state
-// 	);
-// }
-
-// if (typeof window !== 'undefined') {
-// 	window.addEventListener('onbeforeunload', () => {
-// 		localStorage.setItem(LOCALSTORAGE_SESSION_KEY, JSON.stringify(store));
-// 	});
-// }
 
 const persistConfig = {
   key: 'root',
@@ -62,14 +44,12 @@ const persistConfig = {
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 
-const store = createStore(
-	persistedReducer,
-	initialState, // initial state
-);
-const persistor = persistStore(store);
-
 const getStore = () => {
+  const store = createStore(
+    persistedReducer
+  );
+  const persistor = persistStore(store);
   return { store, persistor };
-}
+};
 
 export default getStore;
