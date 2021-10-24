@@ -30,7 +30,7 @@ const ProductCategories = ({ data, storeDispatch }) => {
   const products = data.allNodeProduct.edges;
 
   const [selectedProduct, setProduct] = React.useState({ title: 'default' });
-  const [selectedProductCount, setCount] = React.useState(0);
+  const [selectedProductCount, setCount] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -91,7 +91,7 @@ const ProductCategories = ({ data, storeDispatch }) => {
                 <IconButton
                   style={mathButtonStyle}
                   onClick={() => {
-                    let count = (selectedProductCount-1 < 0)? 0 : selectedProductCount-1;
+                    let count = (selectedProductCount-1 < 0) ? 1 : selectedProductCount-1;
                     setCount(count);
                   }}
                   >
