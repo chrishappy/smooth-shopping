@@ -57,7 +57,7 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
             <Box className="product-listing__content">
               <h3 className="product-listing__title">{product.title}</h3>
               <Box sx={{ textAlign: 'right', }}>
-              {product.field_expired_ ? <WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/> : ''} ${product.field_credit}
+              {product.field_expired_ ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${product.field_credit}
               </Box>
             </Box>
           </Box>

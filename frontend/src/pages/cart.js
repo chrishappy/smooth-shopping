@@ -10,8 +10,21 @@ import Img from "gatsby-image"
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import { connect } from 'react-redux';
+import Stack from '@mui/material/Stack';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import IconButton from '@mui/material/IconButton';
+
+const mathButtonStyle = {
+  background: 'rgba(255, 255, 255, 0.54)',
+  backgroundColor: 'darkGray',
+  color: 'black',
+  borderRadius: '20px',
+  fontWeight: 'bold',
+  margin: '0 0.3rem',
+};
 
 const CartPage = ({ data, storeDispatch, appState }) => {
 
@@ -39,73 +52,93 @@ const CartPage = ({ data, storeDispatch, appState }) => {
 
       <hr></hr>
 
-      {productsFiltered.map(({ node: product }) => (
-        <Card sx={{ display: 'flex', margin: '1em 0' }} key={product.id}>
-          <Box sx={{ width: '100px' }}>
-            <Img
-              fluid={ product.relationships.field_image.localFile.childImageSharp.fluid }
-            />
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <CardContent sx={{ flex: '1 0 auto' }}>
-                <Typography component="div" variant="h6">
-                  { product.title }
-                </Typography>
-                {/* <Typography variant="subtitle1" color="text.secondary" component="div">
-                  BBD: <strong>{product.field_expired_ ? "After" : "Before"}</strong>
-                </Typography> */}
-              </CardContent>
+      <Box className="cart-items">
+        {productsFiltered.map(({ node: product }) => (
+          <Card sx={{ display: 'flex', margin: '1em 0' }} key={product.id}>
+            <Box sx={{ width: '100px' }}>
+              <Img
+                fluid={ product.relationships.field_image.localFile.childImageSharp.fluid }
+              />
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <CardContent sx={{ flex: '1 0 auto' }}>
-                <div>
-                  <div><strong>${ product.field_credit }</strong></div>
-                  <div>x { cartItems[product.id].quantity }</div>
-                </div>
-                <div>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => {
-                      storeDispatch({
-                        type: 'removeProduct',
-                        product,
-                      });
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </CardContent>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ flex: '1 0 auto' }}>
+                  <Typography component="div" variant="h6">
+                    { product.title }
+                  </Typography>
+                  {/* <Typography variant="subtitle1" color="text.secondary" component="div">
+                    BBD: <strong>{product.field_expired_ ? "After" : "Before"}</strong>
+                  </Typography> */}
+                </CardContent>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <CardContent sx={{ flex: '1 0 auto' }}>
+                  <div>
+                    <div><strong>${ product.field_credit }</strong></div>
+                    {/* <div>x { cartItems[product.id].quantity }</div> */}
+                  </div>
+                  <div>
+                  <Stack direction="row">
+                    <IconButton
+                      style={mathButtonStyle}
+                      size="small"
+                      onClick={() => {
+                        storeDispatch({
+                          type: 'decrementProduct',
+                          product: product,
+                        })
+                      }}
+                      >
+                      <RemoveIcon sx={{ fontSize: '1rem', }} />
+                    </IconButton>
+                    <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
+                      {cartItems[product.id].quantity}
+                    </Typography>
+                    <IconButton
+                      style={mathButtonStyle}
+                      size="small"
+                      onClick={() => {
+                        storeDispatch({
+                          type: 'incrementProduct',
+                          product: product,
+                        })
+                      }}
+                      >
+                      <AddIcon size="small" />
+                    </IconButton>
+                  </Stack>
+                  </div>
+                </CardContent>
+              </Box>
             </Box>
-          </Box>
-        </Card>
-      ))}
+          </Card>
+        ))}
+      </Box>
       
-      <hr></hr>
+      <Box className="cart-confirm-order">
 
-      <Typography component="div" color="text.secondary"  variant="body1">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p>Total credits used:</p>
-            <p><strong>${ productTotal.toFixed(2) }</strong></p>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p>Total credits remaining:</p>
-            <p>${ (creditsTotal - productTotal).toFixed(2) }</p>
-        </Box>
-      </Typography>
+        <Typography component="div" color="text.secondary"  variant="body1">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>Total credits used:</div>
+              <div><strong>${ productTotal.toFixed(2) }</strong></div>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>Total credits remaining:</div>
+              <div>${ (creditsTotal - productTotal).toFixed(2) }</div>
+          </Box>
+        </Typography>
 
-      <Box sx={{ textAlign: 'center' }}>
-        <Button variant="contained" sx={{
-            padding: '0.5rem 2rem',
-            margin: '2rem 0',
-            color: '#000',
-            backgroundColor: '#75F348',
-          }}
-          startIcon={<CheckCircleIcon />}>
-          Confirm Order
-        </Button>
+        <Box sx={{ textAlign: 'center' }}>
+          <Button variant="contained" sx={{
+              padding: '0.5rem 2rem',
+              margin: '1rem 0',
+              color: '#000',
+              backgroundColor: '#75F348',
+            }}
+            startIcon={<CheckCircleIcon />}>
+            Confirm Order
+          </Button>
+        </Box>
       </Box>
     </>
   );
