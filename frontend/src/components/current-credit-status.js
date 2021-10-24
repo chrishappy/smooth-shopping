@@ -19,15 +19,19 @@ const CurrentCredits = ({ appState }) => {
         style={{
           textAlign: 'center',
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center'
+          alignItems: 'center'
         }}
       >
-        <ShoppingCartIcon fontSize="large" />
-        <h3 style={{ margin: 0, color: '#75F348' }}>
+        {/* <ShoppingCartIcon fontSize="large" /> */}
+        <h3 style={{ margin: 0, color: '#75F348', fontSize: '2rem' }}>
             ${userData.creditsRemaining}
         </h3>
-        <div style={{ textAlign: 'center' }}>/{userData.totalCredits}<br/>credits</div>
+        <div style={{
+          textAlign: 'left',
+          fontSize: '0.8em',
+          lineHeight: 1,
+          marginLeft: '0.5em'
+        }}>/{userData.totalCredits}<br/>credits</div>
       </div>
     </Link>
   );

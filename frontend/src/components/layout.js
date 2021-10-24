@@ -20,7 +20,7 @@ let cart = {
   totalCredits: 100
 };
 
-const Layout = ({ children, appState }) => {
+const Layout = ({ children, storeState }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -32,7 +32,7 @@ const Layout = ({ children, appState }) => {
   `)
 
   return (
-    appState.loggedIn ?
+    storeState.loggedIn ?
     <>
       <Header
         siteTitle={data.site.siteMetadata?.title || `Title`}
@@ -72,5 +72,5 @@ Layout.propTypes = {
 }
 
 export default connect(state => ({
-  appState: state
+  storeState: state
 }),  null)(Layout)

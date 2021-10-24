@@ -8,9 +8,9 @@ import { styled } from '@mui/material/styles';
 import { Fab } from "@mui/material";
 import { Box } from "@mui/system";
 
-const CheckoutButton = ({ appState }) => {
+const CheckoutButton = ({ storeState }) => {
 
-  const cartItems = appState.cartItems;
+  const cartItems = storeState.cartItems;
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -73,5 +73,5 @@ const CheckoutButton = ({ appState }) => {
 }
 
 export default connect(state => ({
-  appState: state
+  storeState: state
 }), null)(CheckoutButton)

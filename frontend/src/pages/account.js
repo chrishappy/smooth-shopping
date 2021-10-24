@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';// import CardMedia from '@mui/material/CardMedia';
 import { connect } from 'react-redux';
 
-const Account = ({  appState }) => {
+const Account = ({  storeState }) => {
 
-  const userData = appState.user;
+  const userData = storeState.user;
   return (
     <>
       <Seo title="Cart Page" />
@@ -42,7 +42,7 @@ const Account = ({  appState }) => {
 }
 
 export default connect(state => ({
-  appState: state
+  storeState: state
 }), dispatch => ({
   storeDispatch: dispatch
 }))(Account)
