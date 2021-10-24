@@ -1,8 +1,10 @@
-import storage from 'redux-persist/lib/storage';
+// import storage from 'redux-persist/lib/storage';
 const { createStore } = require('redux');
 const { persistStore, persistReducer } = require('redux-persist');
 // const AsyncStorage = require('@react-native-async-storage/async-storage').default;
 
+const storage = require('./storage').default;
+// const storage = require('redux-persist/lib/storage').default;
 
 const initialState = {
   cartItems: {}
@@ -15,9 +17,9 @@ function reducer(state = initialState, action) {
 		case 'addProduct':
 			const product = action.product;
 
-			if (!tempState.hasOwnProperty('cartItems')) {
-				tempState.cartItems = {};
-			}
+			// if (!tempState.hasOwnProperty('cartItems')) {
+			// 	tempState.cartItems = {};
+			// }
 
 			if (!tempState.cartItems.hasOwnProperty(product.id)) {
 				tempState.cartItems[product.id] = {

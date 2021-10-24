@@ -27,7 +27,7 @@ const Footer = () => (
       margin: '0 auto',
       height: '5rem',
     }}
-    class="footer-wrap">
+    className="footer-wrap">
     <Typography component="div" variant="body2">
       <Box sx={{
           flexGrow: 1,
