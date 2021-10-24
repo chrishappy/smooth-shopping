@@ -33,6 +33,7 @@ const ProductCategories = ({ data, storeDispatch }) => {
   const [selectedProductCount, setCount] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
+    setCount(1); // Revert to one
     setOpen(false);
   };
 
