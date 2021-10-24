@@ -1,4 +1,6 @@
-import storage from 'redux-persist/lib/storage';
+// import storage from 'redux-persist/lib/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const { createStore } = require('redux');
 const { persistStore, persistReducer } = require('redux-persist');
 // const AsyncStorage = require('@react-native-async-storage/async-storage').default;
@@ -36,7 +38,11 @@ function reducer(state = initialState, action) {
 			tempState.cartItems[product.id]['quantity']++;
 			break;
 
-		case 'ADD_PRODUCT':
+		case 'GET_TOTAL_CREDITS':
+			break;
+
+		case '':
+			break;
 
 		default:
 			break;
@@ -50,8 +56,8 @@ function reducer(state = initialState, action) {
 
 const persistConfig = {
   key: 'root',
-  // storage: AsyncStorage,
-  storage: storage,
+  storage: AsyncStorage,
+  // storage: storage,
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 
