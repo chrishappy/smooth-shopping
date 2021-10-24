@@ -10,31 +10,52 @@ const initialState = {
   cartItems: {}
 };
 
-function reducer(state = initialState, action) {
+function reducer(state, action) {
 
   switch (action.type) {
-		case 'addProduct':
+		case 'incrementProduct':
+		case 'decrementProduct':
+
 			const product = action.product;
+			let incrementBy = action.hasOwnProperty('by') ? action.by : 1;
+
+			if (action.type === 'decrementProduct') {
+				incrementBy *= -1;
+			}
+
 			const newQuantity = state.cartItems.hasOwnProperty(product.id) 
-				? state.cartItems[product.id].quantity + 1
-				: 1;
-			
-			
-			return {
-				...state,
-				cartItems: {
-					...state.cartItems,
-					[product.id]: {
-						quantity: newQuantity
+				? state.cartItems[product.id].quantity + incrementBy
+				: incrementBy;
+
+			if (newQuantity > 0) {
+				return {
+					...state,
+					cartItems: {
+						...state.cartItems,
+						[product.id]: {
+							quantity: newQuantity
+						}
 					}
 				}
 			}
+			else if (state.cartItems.hasOwnProperty(product.id)) {
+				const newCartItems = { ...state.cartItems };
+				delete newCartItems[product.id];
+
+				return {
+					...state,
+					cartItems: {
+						...newCartItems,
+					}
+				}
+			}
+			break;
 
 		default:
-			return state;
+			break;
 	}
 	
-
+	return state;
 }
 
 const persistConfig = {
@@ -46,7 +67,8 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 const getStore = () => {
   const store = createStore(
-    persistedReducer
+    persistedReducer,
+		initialState
   );
   const persistor = persistStore(store);
   return { store, persistor };

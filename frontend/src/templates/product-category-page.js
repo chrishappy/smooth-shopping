@@ -69,7 +69,7 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
                     aria-label={`Add a ${product.title} to your cart`}
                     onClick={() => {
                       storeDispatch({
-                        type: 'addProduct',
+                        type: 'incrementProduct',
                         product
                       });
                     }}
@@ -150,7 +150,7 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
                 }}
                 onClick={() => {
                   storeDispatch({
-                    type: 'addProduct',
+                    type: 'incrementProduct',
                     product: selectedProduct
                   });
                   handleClose();

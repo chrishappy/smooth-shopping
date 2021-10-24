@@ -1,17 +1,7 @@
 const path = require("path");
-// const getStore = require("./src/state/createStore");
 
 exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions
-
-  // const { store } = getStore();
-
-  // createPage({ // Remove first character
-  //   component: path.resolve(`./src/templates/cart-page.js`),
-  //   context: {
-  //     pids: store.hasOwnProperty("cartItems") ? store.cartItems.keys() : [],
-  //   },
-  // })
+  const { createPage } = actions;
 
   // Create Product Category pages
   return graphql(`
