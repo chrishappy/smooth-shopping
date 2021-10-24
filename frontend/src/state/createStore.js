@@ -11,6 +11,9 @@ const initialState = {
 	user: {
 		totalCredits: 120.0,
 		creditsRemaining: 120.0,
+		monthlyAllowance: 150.0,
+		familyName: 'Sample Family Name',
+		numberOfFamilyMembers: 3,
 	}
 };
 

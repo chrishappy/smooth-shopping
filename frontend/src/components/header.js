@@ -15,6 +15,8 @@ const Header = ({ location, appState }) => {
     alert('It works');
   }
 
+  const userData = appState.user;
+
   return (
   <header
     style={{
@@ -51,9 +53,9 @@ const Header = ({ location, appState }) => {
         >
           <ShoppingCartIcon fontSize="large" />
           <h3 style={{ margin: 0, color: '#75F348' }}>
-              ${appState.user.creditsRemaining}
+              ${userData.creditsRemaining}
           </h3>
-          <div style={{ textAlign: 'center' }}>/{appState.user.totalCredits}<br/>credits</div>
+          <div style={{ textAlign: 'center' }}>/{userData.totalCredits}<br/>credits</div>
         </div>
       </Link>
       <IconButton
