@@ -16,7 +16,8 @@ const initialState = {
 		monthlyAllowance: 150.0,
 		familyName: 'Sample Family Name',
 		numberOfFamilyMembers: 3,
-	}
+	},
+	login: false,
 };
 
 function reducer(state, action) {
@@ -25,6 +26,21 @@ function reducer(state, action) {
 	const product = action.product;
 
   switch (action.type) {
+
+		case 'LOGIN':
+			return {
+				...state,
+				login: true,
+			}
+			break;
+
+		// Return a copy
+		case 'LOGOUT':
+			return {
+				...state,
+				login: false,
+			}
+			break;
 
 		case 'removeProduct':
 			if (state.cartItems.hasOwnProperty(product.id)) {

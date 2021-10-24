@@ -89,7 +89,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                         })
                       }}
                       >
-                      <RemoveIcon sx={{ fontSize: '1rem', }} />
+                      <RemoveIcon sx={{ fontSize: '16px', }} />
                     </IconButton>
                     <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
                       {cartItems[product.id].quantity}
@@ -104,7 +104,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                         })
                       }}
                       >
-                      <AddIcon size="small" />
+                      <AddIcon sx={{ fontSize: '16px', }} />
                     </IconButton>
                   </Stack>
                   </div>

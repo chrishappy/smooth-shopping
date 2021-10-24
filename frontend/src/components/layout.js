@@ -13,13 +13,14 @@ import Header from "./header"
 import Footer from "./footer"
 import "./layout.css"
 import "./custom.css"
+import { connect } from "react-redux"
 
 let cart = {
   creditsRemaining: 100,
   totalCredits: 100
 };
 
-const Layout = ({ children }) => {
+const Layout = ({ children, appState, storeDispatch }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -55,4 +56,8 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default Layout
+export default connect(state => ({
+  appState: state
+}),  dispatch => ({
+  storeDispatch: dispatch
+}))(Layout)
