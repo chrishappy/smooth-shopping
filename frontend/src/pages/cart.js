@@ -43,8 +43,6 @@ const CartPage = ({ data, storeDispatch, appState }) => {
     <>
       <Seo title="Cart Page" />
       <h1>Your Cart</h1>
-
-      <pre>{JSON.stringify(cartItems, null, 2)}</pre>
       
       <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
         { productsFiltered.length } items
@@ -55,7 +53,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
       <Box className="cart-items">
         {productsFiltered.map(({ node: product }) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={product.id}>
-            <Box sx={{ width: '100px' }}>
+            <Box sx={{ minWidth: '100px' }}>
               <Img
                 fluid={ product.relationships.field_image.localFile.childImageSharp.fluid }
               />
@@ -63,25 +61,24 @@ const CartPage = ({ data, storeDispatch, appState }) => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
-                  <Typography component="div" variant="h6">
+                  <h4 className="caity-item__title">
                     { product.title }
-                  </Typography>
+                  </h4>
                   {/* <Typography variant="subtitle1" color="text.secondary" component="div">
                     BBD: <strong>{product.field_expired_ ? "After" : "Before"}</strong>
                   </Typography> */}
                 </CardContent>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <CardContent sx={{ flex: '1 0 auto' }}>
-                  <div>
-                    <div><strong>${ product.field_credit }</strong></div>
+                <CardContent sx={{ flex: '1 0 auto', textAlign: 'center' }}>
+                  <Box sx={{ mb:1 }}>
+                    <div>${ product.field_credit }</div>
                     {/* <div>x { cartItems[product.id].quantity }</div> */}
-                  </div>
-                  <div>
+                  </Box>
                   <Stack direction="row">
                     <IconButton
                       style={mathButtonStyle}
-                      size="small"
+                      // sx={{ height: 28 }}
                       onClick={() => {
                         storeDispatch({
                           type: 'decrementProduct',
@@ -89,14 +86,14 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                         })
                       }}
                       >
-                      <RemoveIcon sx={{ fontSize: '16px', }} />
+                      <RemoveIcon sx={{ fontSize: '1rem', }} />
                     </IconButton>
                     <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
                       {cartItems[product.id].quantity}
                     </Typography>
                     <IconButton
                       style={mathButtonStyle}
-                      size="small"
+                      // sx={{ height: 28 }}
                       onClick={() => {
                         storeDispatch({
                           type: 'incrementProduct',
@@ -104,10 +101,9 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                         })
                       }}
                       >
-                      <AddIcon sx={{ fontSize: '16px', }} />
+                      <AddIcon sx={{ fontSize: '1rem', }} />
                     </IconButton>
                   </Stack>
-                  </div>
                 </CardContent>
               </Box>
             </Box>

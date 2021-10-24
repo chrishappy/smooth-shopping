@@ -6,13 +6,9 @@ import { navigate } from "gatsby";
 import { connect } from "react-redux";
 import CurrentCreditStatus from "./current-credit-status";
 
-const Header = ({ location, appState }) => {
+const Header = ({ appState }) => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const isHome = pathname.replace(/\/$/, '') === '';
-
-  if (typeof location !== 'undefined') {
-    alert('It works');
-  }
 
   const userData = appState.user;
 
