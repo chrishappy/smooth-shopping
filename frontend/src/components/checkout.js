@@ -44,10 +44,15 @@ const CheckoutButton = ({ appState }) => {
             bottom: '1em',
             right: '1em',
           }}
-          size="large">
-          <StyledBadge badgeContent={cartItems.numberOfProducts} color="primary">
+          variant="extended"
+          size="large"
+          onClick={() => {
+            navigate('/cart');
+          }}>
+          <StyledBadge badgeContent={cartItems.numberOfProducts} color="primary" sx={{ mr: 1 }}>
             <ShoppingCartOutlinedIcon  className="checkout__icon" sx={{ verticalAlign: 'top'}} />
           </StyledBadge>
+          Checkout
       </Fab>
     </Box>
     // <Box>
