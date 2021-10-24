@@ -75,7 +75,9 @@ function reducer(state, action) {
 				? state.cartItems[product.id].quantity + incrementBy
 				: incrementBy;
 
-			const newCreditRemaining = state.user.creditsRemaining + (parseFloat(product.field_credit) * -incrementBy);
+			const newCreditRemaining = product.hasOwnProperty('field_credit') && product.field_credit !== null
+        ? state.user.creditsRemaining + (parseFloat(product.field_credit) * -incrementBy)
+        : state.user.creditsRemaining;
 
 			if (newQuantity > 0) {
 				return {
