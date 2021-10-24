@@ -15,14 +15,6 @@ import IconButton from '@mui/material/IconButton';
 
 
 // TODO Abstract it out
-const mathButtonStyle = {
-  background: 'rgba(255, 255, 255, 0.54)',
-  backgroundColor: 'darkGray',
-  color: 'black',
-  borderRadius: '20px',
-  fontWeight: 'bold',
-  margin: '0 0.3rem'
-}
 
 const CartPage = ({ data, storeDispatch, appState }) => {
 
@@ -71,12 +63,12 @@ const CartPage = ({ data, storeDispatch, appState }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <div>
-                  <p><strong>${ product.field_credit }</strong></p>
-                  <p>x { cartItems[product.id].quantity }</p>
+                  <div><strong>${ product.field_credit }</strong></div>
+                  <div>x { cartItems[product.id].quantity }</div>
                 </div>
                 <div>
-                  <IconButton
-                    style={mathButtonStyle}
+                  <Button
+                    variant="outlined"
                     onClick={() => {
                       storeDispatch({
                         type: 'decrementProduct',
@@ -85,8 +77,8 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                       });
                     }}
                   >
-                    <RemoveIcon />
-                  </IconButton>
+                    Remove
+                  </Button>
                 </div>
               </CardContent>
             </Box>
