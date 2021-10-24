@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 import CheckoutButton from "../components/checkout";
+import CurrentCreditStatus from "../components/current-credit-status";
 
 // TODO Abstract it out
 const mathButtonStyle = {
@@ -95,7 +96,7 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
               <IconButton
                 style={mathButtonStyle}
                 onClick={() => {
-                  let count = (selectedProductCount-1 < 0) ? 1 : selectedProductCount-1;
+                  let count = (selectedProductCount-1 < 1) ? 1 : selectedProductCount-1;
                   setCount(count);
                 }}
                 >
@@ -134,6 +135,8 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
         </Stack>
         </DialogContent>
       </Dialog>
+
+      <CurrentCreditStatus></CurrentCreditStatus>
 
       { products.length === 0 ? (<p>There are currently no products.</p>) : ''}
     </>

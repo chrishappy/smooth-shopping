@@ -1,11 +1,10 @@
 import * as React from "react"
-import { Link } from "gatsby"
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import { navigate } from "gatsby";
 import { connect } from "react-redux";
+import CurrentCreditStatus from "./current-credit-status";
 
 const Header = ({ location, appState }) => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
@@ -36,28 +35,7 @@ const Header = ({ location, appState }) => {
         onClick={() => navigate(-1)}>
           <ArrowBackIosNewIcon fontSize="medium" />
       </IconButton>
-      <Link
-          to="/cart/"
-          style={{
-            color: 'white',
-            textDecoration: 'none'
-          }}
-        >
-        <div
-          style={{
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center'
-          }}
-        >
-          <ShoppingCartIcon fontSize="large" />
-          <h3 style={{ margin: 0, color: '#75F348' }}>
-              ${userData.creditsRemaining}
-          </h3>
-          <div style={{ textAlign: 'center' }}>/{userData.totalCredits}<br/>credits</div>
-        </div>
-      </Link>
+      <CurrentCreditStatus />
       <IconButton
         style={{ color: 'white' }}
         aria-label={'search'}>

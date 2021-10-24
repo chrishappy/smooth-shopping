@@ -18,7 +18,7 @@ export const wrapRootElement = ({ element, props }) => {
   if (typeof window === "undefined") {
     return (
       <Provider store={store}>
-        <Layout {...props}>{element}</Layout>
+        {element}
       </Provider>
     );
   }
@@ -26,8 +26,15 @@ export const wrapRootElement = ({ element, props }) => {
   return (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <Layout {...props}>{element}</Layout>
+      {element}
     </PersistGate>
   </Provider>
+  )
+};
+
+// Allow Header to use State properly
+export const wrapPageElement = ({ element, props }) => {
+  return (
+      <Layout {...props}>{element}</Layout>
   )
 };
