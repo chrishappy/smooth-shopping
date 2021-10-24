@@ -10,11 +10,6 @@ import Img from "gatsby-image"
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import { connect } from 'react-redux';
-import RemoveIcon from '@mui/icons-material/Remove';
-import IconButton from '@mui/material/IconButton';
-
-
-// TODO Abstract it out
 
 const CartPage = ({ data, storeDispatch, appState }) => {
 
@@ -23,7 +18,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
   const products = data.allNodeProduct.edges;
   const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
 
-  const creditsTotal = 100.0;
+  const creditsTotal = appState.user.totalCredits;
 
   const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
     return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
@@ -55,9 +50,9 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                 <Typography component="div" variant="h6">
                   { product.title }
                 </Typography>
-                <Typography variant="subtitle1" color="text.secondary" component="div">
+                {/* <Typography variant="subtitle1" color="text.secondary" component="div">
                   BBD: <strong>{product.field_expired_ ? "After" : "Before"}</strong>
-                </Typography>
+                </Typography> */}
               </CardContent>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

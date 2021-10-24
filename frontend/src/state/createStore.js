@@ -7,12 +7,18 @@ const storage = require('./storage').default;
 // const storage = require('redux-persist/lib/storage').default;
 
 const initialState = {
-  cartItems: {}
+  cartItems: {},
+	user: {
+		totalCredits: 120.0,
+		creditsRemaining: 120.0,
+	}
 };
 
 function reducer(state, action) {
 
   switch (action.type) {
+
+		// action.product must have id and field_credit
 		case 'incrementProduct':
 		case 'decrementProduct':
 
@@ -27,6 +33,8 @@ function reducer(state, action) {
 				? state.cartItems[product.id].quantity + incrementBy
 				: incrementBy;
 
+			const newCreditRemaining = state.user.creditsRemaining + (parseFloat(product.field_credit) * -incrementBy);
+
 			if (newQuantity > 0) {
 				return {
 					...state,
@@ -35,6 +43,10 @@ function reducer(state, action) {
 						[product.id]: {
 							quantity: newQuantity
 						}
+					},
+					user: {
+						...state.user,
+						creditsRemaining: newCreditRemaining,
 					}
 				}
 			}
@@ -46,6 +58,10 @@ function reducer(state, action) {
 					...state,
 					cartItems: {
 						...newCartItems,
+					},
+					user: {
+						...state.user,
+						creditsRemaining: newCreditRemaining,
 					}
 				}
 			}

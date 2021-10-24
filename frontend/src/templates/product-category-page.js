@@ -184,6 +184,7 @@ export const query = graphql`
         node {
           id
           title
+          field_credit
           relationships {
             field_image {
               localFile {
