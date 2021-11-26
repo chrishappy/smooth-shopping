@@ -36,6 +36,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
   const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
 
   const creditsTotal = appState.user.totalCredits;
+  const creditsRemaining = appState.user.creditsRemaining;
 
   const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
     return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
@@ -87,10 +88,15 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                       style={mathButtonStyle}
                       sx={{ height: 28 }}
                       onClick={() => {
-                        storeDispatch({
-                          type: 'incrementProduct',
-                          product: product,
-                        })
+                        if (creditsRemaining >= product.field_credit) {
+                          storeDispatch({
+                            type: 'incrementProduct',
+                            product: product,
+                          })
+                        }
+                        else {
+                          console.log("not enough credit"); // TODO show a pop-up/ notify in UI
+                        }
                       }}
                       >
                       <AddIcon sx={{ fontSize: 12, }} />

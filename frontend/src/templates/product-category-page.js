@@ -29,8 +29,9 @@ const mathButtonStyle = {
 const ProductCategories = ({ data, appState, storeDispatch }) => {
   const taxonomyTerm = data.taxonomyTermProductCategories;
   const products = data.allNodeProduct.edges;
+  const creditsRemaining = appState.user.creditsRemaining;
 
-  const [selectedProduct, setProduct] = React.useState({ title: 'default' });
+  const [selectedProduct, setProduct] = React.useState({});
   const [selectedProductCount, setCount] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
@@ -123,12 +124,17 @@ const ProductCategories = ({ data, appState, storeDispatch }) => {
                 padding: '0 10%'
               }}
               onClick={() => {
-                storeDispatch({
-                  type: 'incrementProduct',
-                  product: selectedProduct,
-                  by: selectedProductCount
-                });
-                handleClose();
+                if (creditsRemaining >= (selectedProduct.field_credit * selectedProductCount)) {
+                  storeDispatch({
+                    type: 'incrementProduct',
+                    product: selectedProduct,
+                    quantity: selectedProductCount
+                  });
+                  handleClose();
+                }
+                else {
+                  console.log("not enough credit"); // TODO show a pop-up/ notify in UI
+                }
               }}>Add to cart</Button>
           </Box>
         </Stack>
