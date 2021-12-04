@@ -1,15 +1,14 @@
 import * as React from "react"
-// import { Link } from "gatsby"
-import Link from '@mui/material/Link';
-// import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { currentUserVar } from "../cache";
 
-const CurrentCredits = ({ appState }) => {
+const CurrentCredits = () => {
 
-  const userData = appState.user;
+  const userData = currentUserVar();
 
   return (
     <Link
-        href="/cart/"
+        to="/cart/"
         style={{
           color: 'white',
           textDecoration: 'none'

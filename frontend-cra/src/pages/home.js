@@ -3,7 +3,7 @@ import * as React from "react"
 // import { Link } from "gatsby"
 // import Img from "gatsby-image"
 import { useQuery, gql } from "@apollo/client";
-import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -28,13 +28,14 @@ function Categories() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
+    console.log(data.taxonomyTermQuery.entities);
+
   return data.taxonomyTermQuery.entities.map((category) => (
     <ImageListItem key={category.entityId} variant="masonry">
-      <Link href={category.entityUrl.path}>
-        {/* <Img fluid={ category.relationships.field_image.localFile.childImageSharp.fluid } /> */}
+      <Link to={category.entityUrl.path}>
+        <img src={category.fieldImage.derivative.url} alt="" />
         <ImageListItemBar
           title={category.entityLabel}
-          // subtitle={category.author}
           sx={{
             top: 0,
             textAlign: 'center',
@@ -49,7 +50,10 @@ function Categories() {
 
 const CATEGORIES = gql`
   query GetCategories {
-    taxonomyTermQuery {
+    taxonomyTermQuery(filter: {
+    conditions: [
+      {operator: EQUAL, field: "vid", value: ["product_categories"]},
+    ]}) {
       count
       entities {
         entityId
@@ -59,34 +63,18 @@ const CATEGORIES = gql`
         entityUrl {
           path
         }
+        ... on TaxonomyTermProductCategories {
+          fieldImage {
+            derivative(style: PRODUCTCATEGORY) {
+              url
+            }
+            alt
+            title
+          }
+        }
       }
     }
   }
 `;
-
-// export const query = graphql`
-//   query {
-//     allTaxonomyTermProductCategories {
-//       nodes {
-//         id
-//         name
-//         path {
-//           alias
-//         }
-//         relationships {
-//           field_image {
-//             localFile {
-//               childImageSharp {
-//                 fluid(cropFocus: NORTH, maxWidth: 180, maxHeight: 180) {
-//                   ...GatsbyImageSharpFluid
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
 
 export default HomePage;

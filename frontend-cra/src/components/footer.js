@@ -1,6 +1,5 @@
 import * as React from "react"
-// import { Link } from "gatsby"
-import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
@@ -65,19 +64,19 @@ const Footer = () => {
         }}>
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <Link href="/home" sx={{...toolbarLinkStyle}}>
+            <Link to="/" sx={{...toolbarLinkStyle}}>
               <StorefrontIcon />
               <p>Home</p>
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Link href="/account" sx={{...toolbarLinkStyle}}>
+            <Link to="/account" sx={{...toolbarLinkStyle}}>
               <AccountCircleIcon />
               <p>Account</p>
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Link href="#" sx={{...toolbarLinkStyle}} onClick={() => {
+            <Link to="#" sx={{...toolbarLinkStyle}} onClick={() => {
               setOpen(true);
             }}>
               <HelpIcon />

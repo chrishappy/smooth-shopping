@@ -16,6 +16,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
+import { currentUserVar } from "../cache";
 
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -26,14 +27,16 @@ const mathButtonStyle = {
   margin: '0 0.3rem',
 };
 
-const CartPage = ({ data, storeDispatch, appState }) => {
+const CartPage = () => {
 
-  const cartItems = appState.cartItems;
+  const date = [];
 
-  const products = data.allNodeProduct.edges;
+  const cartItems = [];
+
+  const products = [];
   const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
 
-  const creditsTotal = appState.user.totalCredits;
+  const { totalCredits } = currentUserVar();
 
   const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
     return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
@@ -83,10 +86,10 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                       style={mathButtonStyle}
                       sx={{ height: 28 }}
                       onClick={() => {
-                        storeDispatch({
-                          type: 'incrementProduct',
-                          product: product,
-                        })
+                        // storeDispatch({
+                        //   type: 'incrementProduct',
+                        //   product: product,
+                        // })
                       }}
                       >
                       <AddIcon sx={{ fontSize: 12, }} />
@@ -98,10 +101,10 @@ const CartPage = ({ data, storeDispatch, appState }) => {
                       style={mathButtonStyle}
                       sx={{ height: 28 }}
                       onClick={() => {
-                        storeDispatch({
-                          type: 'decrementProduct',
-                          product: product,
-                        })
+                        // storeDispatch({
+                        //   type: 'decrementProduct',
+                        //   product: product,
+                        // })
                       }}>
                       <RemoveIcon sx={{ fontSize: 12, }} />
                     </IconButton>
@@ -122,7 +125,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>Total credits remaining:</div>
-              <div>${ (creditsTotal - productTotal).toFixed(2) }</div>
+              <div>${ (totalCredits - productTotal).toFixed(2) }</div>
           </Box>
         </Typography>
 
@@ -135,9 +138,9 @@ const CartPage = ({ data, storeDispatch, appState }) => {
             }}
             startIcon={<CheckCircleIcon />}
             onClick={() => {
-              storeDispatch({
-                type: 'CLEAR_CART'
-              });
+              // storeDispatch({
+              //   type: 'CLEAR_CART'
+              // });
               setOpen(true);
             }}>
             Confirm Order

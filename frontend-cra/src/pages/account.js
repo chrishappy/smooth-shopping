@@ -1,13 +1,13 @@
 import * as React from "react"
 
-// import { connect } from 'react-redux';
-// import { Link } from "gatsby"
+import { Link } from "react-router-dom";
 import { Typography, Button } from '@mui/material';
 import Seo from "../components/seo"
+import { currentUserVar, loggedInVar } from "../cache";
 
-const Account = ({  appState, storeDispatch }) => {
+const Account = () => {
 
-  const userData = appState.user;
+  const userData = currentUserVar();
   return (
     <>
       <Seo title="Cart Page" />
@@ -38,7 +38,7 @@ const Account = ({  appState, storeDispatch }) => {
         Your credits are renewed on the first of every month. Credits do not roll over.
       </Typography>
 
-      <Button variant="contained" to="/"
+      <Button variant="contained" component={Link} to="/"
         sx={{
           backgroundColor: 'gray',
           color: 'black',
@@ -48,9 +48,7 @@ const Account = ({  appState, storeDispatch }) => {
           marginTop: '5rem'
         }}
         onClick={() => {
-          storeDispatch({
-            type: 'LOGOUT'
-          });
+          loggedInVar(false)
         }}>Log out</Button>
     </>
   );
