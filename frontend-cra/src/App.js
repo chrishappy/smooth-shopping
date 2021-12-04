@@ -1,13 +1,28 @@
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  gql
+} from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
+
 // import logo from './logo.svg';
 import './App.css';
 import Layout from './components/layout';
 import LoginPage from './pages/login';
+import HomePage from './pages/home';
+
+const client = new ApolloClient({
+  uri: 'https://ss.albernirentals.com/graphql',
+  cache: new InMemoryCache()
+});
 
 function App() {
   return (
-    <Layout>
-      <LoginPage/>
-    </Layout>
+    <ApolloProvider client={client}>
+      <Layout>
+        <LoginPage/>
+      </Layout>
+    </ApolloProvider>
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />

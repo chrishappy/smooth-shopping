@@ -46,7 +46,7 @@ const LoginPage = ({ storeDispatch }) => (
           });
         }}
       >
-          SUBMIT
+        SUBMIT
       </Button>
     </Stack>
   </>
