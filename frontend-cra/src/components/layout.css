@@ -13,15 +13,14 @@ body {
   font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: normal;
   word-wrap: break-word;
-  font-kerning: normal;
-  -moz-font-feature-settings: "kern", "liga", "clig", "calt";
+  -webkit-font-kerning: normal;
+          font-kerning: normal;
   -ms-font-feature-settings: "kern", "liga", "clig", "calt";
-  -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
   font-feature-settings: "kern", "liga", "clig", "calt";
   background: #ccc;
 }
 
-body > div:first-child {
+.page {
   max-width: 400px;
   margin: 0 auto;
   background: #fff;
@@ -126,7 +125,6 @@ img {
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1.45rem;
 }
 svg:not(:root) {
   overflow: hidden;
