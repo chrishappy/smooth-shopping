@@ -1,7 +1,7 @@
 import * as React from "react"
 
 // import { connect } from 'react-redux';
-import { Link } from "gatsby"
+// import { Link } from "gatsby"
 import { Typography, Button } from '@mui/material';
 import Seo from "../components/seo"
 
@@ -38,7 +38,7 @@ const Account = ({  appState, storeDispatch }) => {
         Your credits are renewed on the first of every month. Credits do not roll over.
       </Typography>
 
-      <Button variant="contained" component={Link} to="/"
+      <Button variant="contained" to="/"
         sx={{
           backgroundColor: 'gray',
           color: 'black',

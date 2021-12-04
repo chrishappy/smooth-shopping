@@ -1,6 +1,7 @@
 import * as React from "react"
 // import { connect } from "react-redux"
 // import { Link } from "gatsby"
+import Layout from '../components/layout';
 import Link from '@mui/material/Link';
 // import { StaticImage } from "gatsby-plugin-image"
 import { Stack, TextField, Button } from "@mui/material"
@@ -9,7 +10,8 @@ import { Stack, TextField, Button } from "@mui/material"
 
 
 const LoginPage = ({ storeDispatch }) => (
-  <>
+  
+  <Layout>
     {/* <Seo title="login" /> */}
     <Stack
       sx={{
@@ -49,7 +51,7 @@ const LoginPage = ({ storeDispatch }) => (
           SUBMIT
       </Button>
     </Stack>
-  </>
+  </Layout>
 )
 
 export default LoginPage;

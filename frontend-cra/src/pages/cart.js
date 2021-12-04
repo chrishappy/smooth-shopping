@@ -1,12 +1,10 @@
 import * as React from "react"
 
-import { graphql } from "gatsby"
 import Seo from "../components/seo"
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 // import CardMedia from '@mui/material/CardMedia';
-import Img from "gatsby-image"
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 // import { connect } from 'react-redux';
@@ -61,9 +59,7 @@ const CartPage = ({ data, storeDispatch, appState }) => {
         {productsFiltered.map(({ node: product }) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={product.id}>
             <Box sx={{ minWidth: '100px' }}>
-              <Img
-                fluid={ product.relationships.field_image.localFile.childImageSharp.fluid }
-              />
+              <img src="" />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -172,28 +168,28 @@ export default CartPage;
 //   storeDispatch: dispatch
 // }))(CartPage)
 
-export const query = graphql`
-query {
-  allNodeProduct {
-    edges {
-      node {
-        id
-        title
-        field_credit
-        field_expired_
-        relationships {
-          field_image {
-            localFile {
-              childImageSharp {
-                fluid(cropFocus: NORTH, maxWidth: 100, maxHeight: 100) {
-                  ...GatsbyImageSharpFluid
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`;
+// export const query = graphql`
+// query {
+//   allNodeProduct {
+//     edges {
+//       node {
+//         id
+//         title
+//         field_credit
+//         field_expired_
+//         relationships {
+//           field_image {
+//             localFile {
+//               childImageSharp {
+//                 fluid(cropFocus: NORTH, maxWidth: 100, maxHeight: 100) {
+//                   ...GatsbyImageSharpFluid
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+// `;
