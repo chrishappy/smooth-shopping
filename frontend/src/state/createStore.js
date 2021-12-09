@@ -26,12 +26,12 @@ function reducer(state, action) {
   switch (action.type) {
 
 		case 'LOGIN':
+		// Return a copy; note that ...someState should always PRECEDE the values you want to change
 			return {
 				...state,
 				loggedIn: true,
 			}
 
-		// Return a copy
 		case 'LOGOUT':
 			return {
 				...state,
@@ -46,8 +46,8 @@ function reducer(state, action) {
 				return {
 					...state,
 					cartItems: {
-						numberOfProducts: state.cartItems.numberOfProducts - state.cartItems[product.id].quantity,
 						...newCartItems,
+						numberOfProducts: state.cartItems.numberOfProducts - state.cartItems[product.id].quantity,
 					}
 				}
 			}
@@ -56,27 +56,27 @@ function reducer(state, action) {
 		// action.product must have id and field_credit
 		case 'incrementProduct':
 		case 'decrementProduct':
-			let incrementBy = action.hasOwnProperty('by') ? action.by : 1;
+			let quantityChange = action.hasOwnProperty('quantity') ? action.quantity : 1;
 
-			if (incrementBy === Number.POSITIVE_INFINITY) {
+			if (quantityChange === Number.POSITIVE_INFINITY) {
 				if (state.cartItems.hasOwnProperty(product.id)) {
-					incrementBy = state.cartItems[product.id].quantity;
+					quantityChange = state.cartItems[product.id].quantity;
 				}
 				else {
-					incrementBy = 0;
+					quantityChange = 0;
 				}
 			}
 
 			if (action.type === 'decrementProduct') {
-				incrementBy *= -1;
+				quantityChange *= -1;
 			}
 
 			const newQuantity = state.cartItems.hasOwnProperty(product.id) 
-				? state.cartItems[product.id].quantity + incrementBy
-				: incrementBy;
+				? state.cartItems[product.id].quantity + quantityChange
+				: quantityChange;
 
 			const newCreditRemaining = product.hasOwnProperty('field_credit') && product.field_credit !== null
-        ? state.user.creditsRemaining + (parseFloat(product.field_credit) * -incrementBy)
+        ? state.user.creditsRemaining + (parseFloat(product.field_credit) * -quantityChange)
         : state.user.creditsRemaining;
 
 			if (newQuantity > 0) {
@@ -84,7 +84,7 @@ function reducer(state, action) {
 					...state,
 					cartItems: {
 						...state.cartItems,
-						numberOfProducts: state.cartItems.numberOfProducts + incrementBy,
+						numberOfProducts: state.cartItems.numberOfProducts + quantityChange,
 						[product.id]: {
 							quantity: newQuantity
 						}
@@ -102,8 +102,8 @@ function reducer(state, action) {
 				return {
 					...state,
 					cartItems: {
-						numberOfProducts: state.cartItems.numberOfProducts + incrementBy,
 						...newCartItems,
+						numberOfProducts: state.cartItems.numberOfProducts + quantityChange,
 					},
 					user: {
 						...state.user,

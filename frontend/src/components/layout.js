@@ -7,7 +7,6 @@
 
 import * as React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
 import { connect } from "react-redux"
 
 import Header from "./header"
@@ -15,29 +14,12 @@ import Footer from "./footer"
 import "./layout.css"
 import "./custom.css"
 
-let cart = {
-  creditsRemaining: 100,
-  totalCredits: 100
-};
-
 const Layout = ({ children, appState }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
 
   return (
     appState.loggedIn ?
     <>
-      <Header
-        siteTitle={data.site.siteMetadata?.title || `Title`}
-        cart={cart}
-        />
+      <Header/>
       <div
         style={{
           margin: `0 auto`,
