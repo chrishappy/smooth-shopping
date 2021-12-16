@@ -24,7 +24,7 @@ const LoginPage = ({ storeDispatch }) => {
           direction: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          spacing: '3'
+          spacing: '3',
         }}
       >
         <img
@@ -60,8 +60,3 @@ const LoginPage = ({ storeDispatch }) => {
 }
 
 export default LoginPage;
-// export default connect(state => ({
-//   appState: state
-// }), dispatch => ({
-//   storeDispatch: dispatch
-// }))(LoginPage)

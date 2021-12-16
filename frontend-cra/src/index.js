@@ -20,27 +20,21 @@ import NotFoundPage from './pages/404';
 import Layout from './components/layout';
 
 import {
-  ApolloClient,
   ApolloProvider,
   gql
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
-import { cache, loggedInVar } from './cache';
+import { client as apolloClient, loggedInVar } from './cache';
 import CategoryTemp from './pages/categories/category_temp';
-
-const client = new ApolloClient({
-  uri: 'https://ss.albernirentals.com/graphql',
-  cache: cache
-});
 
 ReactDOM.render(
   <BrowserRouter>
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <Routes>
-        <Route path="/login" element={<Layout />}>
+        <Route path="/login" element={<Layout />}> {/* Wrapper element */}
           <Route index element={<LoginPage />} />
         </Route>
-        <Route path="/" element={<Layout />}>
-          <Route element={<RequireAuth />}>
+        <Route path="/" element={<Layout />}> {/* Wrapper element */}
+          <Route element={<RequireAuth />}>  {/* Authentication guard */}
             <Route index element={<App />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="account" element={<AccountPage />} />
