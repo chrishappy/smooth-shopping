@@ -1,6 +1,6 @@
 ### Fetch for `page/cart.js`
 
-```
+```js
 const query = `
 query page_cart($productIds:[String!], $limit:Int!, $offset:Int!) {
   nodeQuery(limit: $limit, offset: $offset, filter: {
@@ -57,7 +57,7 @@ fetch(
 
 ### For `page/home.js`
 
-```
+```js
 const query = `
 query page_home {
   taxonomyTermQuery {
@@ -101,3 +101,31 @@ fetch(
   .then(response => response.json())
   .then(data => console.log(data))
   ```
+
+### For login
+
+```js
+const query = `
+query Login($username:String!, $password:String!) {
+  JwtToken(username: $username, password: $password) {
+    jwt
+  }
+}
+`
+const variables = JSON.stringify({
+  username: 'Dummy for GraphQL Query',
+  password: '',
+});
+
+fetch(
+  `https://ss.albernirentals.com/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer %ACCESS_TOKEN%`,
+      "content-type": "application/json",
+    },
+  },)
+  .then(response => response.json())
+  .then(data => console.log(data))
+```

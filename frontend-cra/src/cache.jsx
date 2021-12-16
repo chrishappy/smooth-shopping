@@ -7,6 +7,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 
 
+
 export const cartItemsVar = makeVar([]);
 
 // TODO: Replace later?
@@ -46,9 +47,12 @@ const httpLink = createHttpLink({
   uri: 'https://ss.albernirentals.com/graphql',
 });
 
+export const LOCAL_STORAGE_JWT_TOKEN = 'JW_TOKEN_VALUE';
+
+// Set up authenication
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('jwt_val');
+  const token = localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN);
   // return the headers to the context so httpLink can read them
   return {
     headers: {

@@ -1,7 +1,8 @@
 import * as React from "react"
 import { Link, useLocation, Navigate } from "react-router-dom";
-import { Stack, TextField, Button } from "@mui/material"
-import { loggedInVar } from "../cache";
+import { Stack, TextField, Button, FormControl  } from "@mui/material"
+import { LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "../cache";
+import { gql, useQuery } from "@apollo/client";
 
 // import Seo from "../components/seo"
 
@@ -9,6 +10,36 @@ import { loggedInVar } from "../cache";
 const LoginPage = ({ storeDispatch }) => {
 
   let location = useLocation();
+
+  
+  const useLogin = () => {
+    
+    const { loading, error, data } = useQuery(GET_JWT, {
+      variables: {
+        username: '',
+        password: '',
+      }
+    });
+
+    if (loading) {
+      console.log('loading');
+      return;
+    }
+
+    if (error) {
+      console.error('Error');
+      return;
+    }
+
+    if (data.JwtToken !== null && data.JwtToken !== undefined) {
+      localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, data.JwtToken.jwt)
+      console.log("Login");
+      loggedInVar(true);
+    }
+    else {
+      console.log("Can't login");
+    }
+  }
   
   if (loggedInVar()) {
     return (
@@ -38,7 +69,17 @@ const LoginPage = ({ storeDispatch }) => {
         />
         <h2 
           style={{ marginTop: '3rem'}}>Access code</h2>
-        <TextField id="outlined-basic" placeholder="ABC123" variant="outlined" sx={{ background: '#fff', mb: '2rem' }}/>
+        <TextField 
+          id="login__username" 
+          variant="outlined"
+          label="Username"
+          sx={{ background: '#fff', mb: '2rem' }} />
+        <TextField 
+          id="login__password" 
+          type="password"
+          variant="outlined" 
+          label="Password"
+          sx={{ background: '#fff', mb: '2rem' }} />
         <Button variant="contained" component={Link} to="/"
           sx={{
             backgroundColor: '#75F348',
@@ -47,10 +88,7 @@ const LoginPage = ({ storeDispatch }) => {
             fontWeight: 'bold',
             padding: '0.3rem 10%'
           }}
-          onClick={() => {
-            console.log("Login");
-            loggedInVar(true);
-          }}
+          onClick={useLogin}
         >
           SUBMIT
         </Button>
@@ -58,5 +96,16 @@ const LoginPage = ({ storeDispatch }) => {
     </>
   )
 }
+
+
+
+const GET_JWT = gql`
+query Login($username:String!, $password:String!) {
+  JwtToken(username: $username, password: $password) {
+    jwt
+  }
+}
+`;
+
 
 export default LoginPage;

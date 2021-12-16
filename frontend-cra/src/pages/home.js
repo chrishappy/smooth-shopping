@@ -28,7 +28,7 @@ function Categories() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-    console.log(data.taxonomyTermQuery.entities);
+    console.log(data);
 
   return data.taxonomyTermQuery.entities.map((category) => (
     <ImageListItem key={category.entityId} variant="masonry">
