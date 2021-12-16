@@ -23,7 +23,7 @@ import {
   ApolloProvider,
   gql
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
-import { client as apolloClient, loggedInVar } from './cache';
+import { apolloClient, loggedInVar } from './cache';
 import CategoryTemp from './pages/categories/category_temp';
 
 ReactDOM.render(

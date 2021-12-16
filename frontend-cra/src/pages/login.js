@@ -1,46 +1,47 @@
 import * as React from "react"
 import { Link, useLocation, Navigate } from "react-router-dom";
-import { Stack, TextField, Button, FormControl  } from "@mui/material"
-import { LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "../cache";
-import { gql, useQuery } from "@apollo/client";
+import { Box, Stack, TextField  } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
+import { apolloClient, LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "../cache";
+import { gql } from "@apollo/client";
 
-// import Seo from "../components/seo"
-
-
-const LoginPage = ({ storeDispatch }) => {
+const LoginPage = () => {
 
   let location = useLocation();
 
+  // Form elements
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  // Loading state
+  const [isLoading, setIsLoading] = React.useState(false);
   
-  const useLogin = () => {
+  const submitLoginForm = async (e) => {
+    // e.preventDefault();
+    setIsLoading(true);
     
-    const { loading, error, data } = useQuery(GET_JWT, {
+    const { data } = await apolloClient.query({
+      query: GET_JWT,
       variables: {
-        username: '',
-        password: '',
+        username,
+        password,
       }
     });
-
-    if (loading) {
-      console.log('loading');
-      return;
-    }
-
-    if (error) {
-      console.error('Error');
-      return;
-    }
-
-    if (data.JwtToken !== null && data.JwtToken !== undefined) {
+  
+    console.log(data);
+  
+    if (data && data.JwtToken) {
       localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, data.JwtToken.jwt)
       console.log("Login");
-      loggedInVar(true);
+      loggedInVar(true); 
     }
     else {
       console.log("Can't login");
+      setIsLoading(false);
+      e.preventDefault();
     }
   }
-  
+
   if (loggedInVar()) {
     return (
       <Navigate to="/" state={{ from: location }} />
@@ -49,12 +50,12 @@ const LoginPage = ({ storeDispatch }) => {
 
   return (
     <>
-      {/* <Seo title="login" /> */}
       <Stack
         sx={{
           direction: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          textAlign: 'center',
           spacing: '3',
         }}
       >
@@ -69,34 +70,43 @@ const LoginPage = ({ storeDispatch }) => {
         />
         <h2 
           style={{ marginTop: '3rem'}}>Access code</h2>
-        <TextField 
-          id="login__username" 
-          variant="outlined"
-          label="Username"
-          sx={{ background: '#fff', mb: '2rem' }} />
-        <TextField 
-          id="login__password" 
-          type="password"
-          variant="outlined" 
-          label="Password"
-          sx={{ background: '#fff', mb: '2rem' }} />
-        <Button variant="contained" component={Link} to="/"
-          sx={{
-            backgroundColor: '#75F348',
-            color: 'black',
-            borderRadius: '20px',
-            fontWeight: 'bold',
-            padding: '0.3rem 10%'
-          }}
-          onClick={useLogin}
-        >
-          SUBMIT
-        </Button>
+        <Box
+          component="form"
+          noValidate>
+          <TextField 
+            id="login__username" 
+            variant="filled"
+            label="Username"
+            sx={{ background: '#fff', mb: '2rem' }}
+            onInput={(e) => setUsername(e.target.value)} />
+          <TextField 
+            id="login__password" 
+            type="password"
+            variant="filled" 
+            label="Password"
+            sx={{ background: '#fff', mb: '2rem' }} 
+            onInput={(e) => setPassword(e.target.value)}/>
+          <LoadingButton 
+            variant="contained" 
+            loading={isLoading}
+            component={Link}
+            to="/"
+            sx={{
+              backgroundColor: '#75F348',
+              color: 'black',
+              borderRadius: '20px',
+              fontWeight: 'bold',
+              padding: '0.3rem 10%'
+            }}
+            onClick={submitLoginForm}
+          >
+            SUBMIT
+          </LoadingButton>
+        </Box>
       </Stack>
     </>
   )
 }
-
 
 
 const GET_JWT = gql`
