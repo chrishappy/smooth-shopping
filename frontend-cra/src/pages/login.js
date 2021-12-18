@@ -3,7 +3,7 @@ import { Link, useLocation, Navigate } from "react-router-dom";
 import { Stack, TextField, Button } from "@mui/material"
 import { loggedInVar } from "../cache";
 
-// import Seo from "../components/seo"
+import Seo from "../components/seo"
 
 
 const LoginPage = ({ storeDispatch }) => {
@@ -18,7 +18,7 @@ const LoginPage = ({ storeDispatch }) => {
 
   return (
     <>
-      {/* <Seo title="login" /> */}
+      <Seo title="Login" />
       <Stack
         sx={{
           direction: 'column',
