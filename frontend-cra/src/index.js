@@ -19,12 +19,9 @@ import AccountPage from './pages/account';
 import NotFoundPage from './pages/404';
 import Layout from './components/layout';
 
-import {
-  ApolloProvider,
-  gql
-} from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
+import { ApolloProvider } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
 import { client as apolloClient, loggedInVar } from './cache';
-import CategoryTemp from './pages/categories/category_temp';
+import CategoryTemp from './pages/categories/category';
 
 ReactDOM.render(
   <BrowserRouter>

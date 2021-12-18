@@ -8,11 +8,11 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
-// import Seo from "../components/seo"
+import Seo from "../components/seo"
 
 const HomePage = () => (
   <>
-    {/* <Seo title="Home" /> */}
+    <Seo title="Home" />
     <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
     <div className="categories-wrap">
       <ImageList>
@@ -26,13 +26,15 @@ function Categories() {
   const { loading, error, data } = useQuery(CATEGORIES);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (error) {
+    console.log(error);
+    return <p>{error.message}</p>;
+  }
 
-    console.log(data.taxonomyTermQuery.entities);
-
+  // console.log(data.taxonomyTermQuery.entities);
   return data.taxonomyTermQuery.entities.map((category) => (
     <ImageListItem key={category.entityId} variant="masonry">
-      <Link to={category.entityUrl.path}>
+      <Link to={category.entityUrl.path} state={{ title: category.entityLabel }}>
         <img src={category.fieldImage.derivative.url} alt="" />
         <ImageListItemBar
           title={category.entityLabel}
