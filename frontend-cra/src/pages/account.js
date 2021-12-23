@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Typography, Button } from '@mui/material';
 import Seo from "../components/seo"
 import { currentUserVar, loggedInVar } from "../cache";
+import { logout } from "../helpers/login";
 
 const Account = () => {
 
@@ -48,7 +49,7 @@ const Account = () => {
           marginTop: '5rem'
         }}
         onClick={() => {
-          loggedInVar(false)
+          logout();
         }}>Log out</Button>
     </>
   );

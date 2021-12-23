@@ -21,10 +21,10 @@ import Layout from './components/layout';
 
 import {
   ApolloProvider,
-  gql
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
-import { apolloClient, loggedInVar } from './cache';
+import { apolloClient } from './helpers/cache';
 import CategoryTemp from './pages/categories/category_temp';
+import { isLoggedIn } from './helpers/login';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -56,10 +56,10 @@ ReactDOM.render(
 reportWebVitals();
 
 function RequireAuth({ children }){
-  let auth = loggedInVar();
   let location = useLocation();
 
-  if (!auth) {
+  if (!isLoggedIn()) {
+    console.log('Not logged In');
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience

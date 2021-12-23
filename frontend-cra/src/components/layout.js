@@ -12,7 +12,7 @@ import Footer from "./footer"
 import "./layout.css"
 import "./custom.css"
 import { Outlet } from "react-router"
-import { loggedInVar } from "../cache"
+import { loggedInVar } from "../helpers/cache"
 
 const Layout = () => {
 

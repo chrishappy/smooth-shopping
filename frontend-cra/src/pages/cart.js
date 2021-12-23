@@ -16,7 +16,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
-import { currentUserVar } from "../cache";
+import { currentUserVar } from "../helpers/cache";
 
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',

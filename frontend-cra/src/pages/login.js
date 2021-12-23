@@ -2,9 +2,8 @@ import * as React from "react"
 import { Link, useLocation, Navigate } from "react-router-dom";
 import { Box, Stack, TextField  } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { apolloClient, LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "../cache";
-import { gql } from "@apollo/client";
 import Seo from "../components/seo"
+import { isLoggedIn } from "../helpers/login";
 
 const LoginPage = () => {
 
@@ -17,33 +16,38 @@ const LoginPage = () => {
   // Loading state
   const [isLoading, setIsLoading] = React.useState(false);
   
-  const submitLoginForm = async (e) => {
+  const submitLoginForm = (e) => {
     // e.preventDefault();
     setIsLoading(true);
-    
-    const { data } = await apolloClient.query({
-      query: GET_JWT,
-      variables: {
-        username,
-        password,
-      }
-    });
-  
-    console.log(data);
-  
-    if (data && data.JwtToken) {
-      localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, data.JwtToken.jwt)
-      console.log("Login");
-      loggedInVar(true); 
-    }
-    else {
+
+    if (username.length > 0 && password.length > 0) {
       console.log("Can't login");
       setIsLoading(false);
       e.preventDefault();
     }
+    
+    // const { data } = await apolloClient.query({
+    //   query: GET_JWT,
+    //   variables: {
+    //     username,
+    //     password,
+    //   }
+    // });
+  
+    // console.log(data);
+  
+    // if (data && data.JwtToken) {
+      console.log("Login");
+      return true;
+    // }
+    // else {
+    //   console.log("Can't login");
+    //   setIsLoading(false);
+    //   e.preventDefault();
+    // }
   }
 
-  if (loggedInVar()) {
+  if (isLoggedIn()) {
     return (
       <Navigate to="/" state={{ from: location }} />
     );
@@ -109,15 +113,5 @@ const LoginPage = () => {
     </>
   )
 }
-
-
-const GET_JWT = gql`
-query Login($username:String!, $password:String!) {
-  JwtToken(username: $username, password: $password) {
-    jwt
-  }
-}
-`;
-
 
 export default LoginPage;
