@@ -4,6 +4,7 @@ import { Box, Stack, TextField  } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { apolloClient, LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "../cache";
 import { gql } from "@apollo/client";
+import Seo from "../components/seo"
 
 const LoginPage = () => {
 
@@ -50,6 +51,7 @@ const LoginPage = () => {
 
   return (
     <>
+      <Seo title="Login" />
       <Stack
         sx={{
           direction: 'column',

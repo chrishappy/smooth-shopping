@@ -1,3 +1,5 @@
-import HomePage from '../home'
+// Is this a useless file we can remove?
 
-export default HomePage
+// import HomePage from '../home'
+
+// export default HomePage

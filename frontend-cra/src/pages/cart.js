@@ -29,7 +29,7 @@ const mathButtonStyle = {
 
 const CartPage = () => {
 
-  const date = [];
+  // const date = [];
 
   const cartItems = [];
 
@@ -62,7 +62,7 @@ const CartPage = () => {
         {productsFiltered.map(({ node: product }) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={product.id}>
             <Box sx={{ minWidth: '100px' }}>
-              <img src="" />
+              <img src="" alt="" />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
