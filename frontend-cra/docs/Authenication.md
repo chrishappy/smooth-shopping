@@ -21,10 +21,14 @@ I'm thinking of implentation the following workflow to login a user.
 
 ### Logout User if Drupal server returns 401/403 error
 
-See https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-response-logic
+Done! For more details, see https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-response-logic
 
-### Migrate to GraphQL v4?
+### We're only allowing one role
 
 We're only going to allow authenicated users execute arbitrary GraphQL commands. This prevents us from having more than one role, but I think that'll okay for this functional prototype.
 
 (We don't need to allow anonymous users to execute arbitary GraphQL queries, since we're authenicating the user separate from Apollo)
+
+### Migrate to GraphQL v4?
+
+Right now, we're using GraphQL v3 because it requires less work to set up. However, it means that authenticated users may not be able view more information than they're supposed to.
