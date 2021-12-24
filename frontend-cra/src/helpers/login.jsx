@@ -46,3 +46,5 @@ export const logout = () => {
 };
 
 export const isLoggedIn = () => loggedInVar();
+
+export const getJwtString = () => localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN) || null;
