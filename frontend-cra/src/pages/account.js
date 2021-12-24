@@ -3,7 +3,7 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { Typography, Button } from '@mui/material';
 import Seo from "../components/seo"
-import { currentUserVar, loggedInVar } from "../cache";
+import { currentUserVar } from "../helpers/cache";
 import { logout } from "../helpers/login";
 
 const Account = () => {

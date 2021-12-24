@@ -3,7 +3,7 @@ import { Link, useLocation, Navigate } from "react-router-dom";
 import { Box, Stack, TextField  } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Seo from "../components/seo"
-import { isLoggedIn } from "../helpers/login";
+import { isLoggedIn, loginAsync } from "../helpers/login";
 
 const LoginPage = () => {
 
@@ -16,35 +16,19 @@ const LoginPage = () => {
   // Loading state
   const [isLoading, setIsLoading] = React.useState(false);
   
-  const submitLoginForm = (e) => {
-    // e.preventDefault();
+  const submitLoginForm = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
 
-    if (username.length > 0 && password.length > 0) {
-      console.log("Can't login");
-      setIsLoading(false);
-      e.preventDefault();
+    if (username.length === 0 && password.length === 0) {
+      console.log("Can't login: inputs are empty");
     }
-    
-    // const { data } = await apolloClient.query({
-    //   query: GET_JWT,
-    //   variables: {
-    //     username,
-    //     password,
-    //   }
-    // });
-  
-    // console.log(data);
-  
-    // if (data && data.JwtToken) {
+    else {
       console.log("Login");
-      return true;
-    // }
-    // else {
-    //   console.log("Can't login");
-    //   setIsLoading(false);
-    //   e.preventDefault();
-    // }
+      await loginAsync(username, password);
+    }
+
+    setIsLoading(false);
   }
 
   if (isLoggedIn()) {
