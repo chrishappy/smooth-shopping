@@ -23,7 +23,7 @@ import {
   ApolloProvider,
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
 import { apolloClient } from './helpers/cache';
-import CategoryTemp from './pages/categories/category_temp';
+import Category from './pages/categories/category';
 import { isLoggedIn } from './helpers/login';
 
 ReactDOM.render(
@@ -39,7 +39,7 @@ ReactDOM.render(
             <Route path="cart" element={<CartPage />} />
             <Route path="account" element={<AccountPage />} />
             <Route path="categories">
-              <Route path=":categorySlug" element={<CategoryTemp />} />
+              <Route path=":categorySlug" element={<Category />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Route>
