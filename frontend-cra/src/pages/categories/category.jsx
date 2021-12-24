@@ -16,8 +16,9 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 // import CheckoutButton from "../../components/checkout";
 // import gql from "graphql-tag";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useLocation } from 'react-router-dom'
+import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
 
 // TODO Abstract it out
 const mathButtonStyle = {
@@ -127,7 +128,7 @@ const ProductCategories = () => {
 // }))(ProductCategories)
 
 function Products({ category, setProduct, setOpen }) {
-  const { loading, error, data } = useQuery(PRODUCTS, {
+  const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { category },
   });
 
@@ -163,41 +164,5 @@ function Products({ category, setProduct, setOpen }) {
       </ImageList>
   );
 }
-
-const PRODUCTS = gql`
-  # Get the products in a category
-  query GetCategoryProducts($category:String) {
-    nodeQuery(filter: {
-      conditions: [
-        {operator: EQUAL, field: "type", value: ["product"]},
-        {operator: EQUAL, field: "field_categories.entity.name", value: [$category]},
-      ]}
-    ) {
-      entities {
-        entityUuid
-        entityId
-        entityLabel
-        ... on NodeProduct {
-          fieldCategories {
-            targetId
-            entity {
-              name
-              entityLabel
-            }
-          }
-          fieldCredit
-          fieldExpired
-          fieldImage {
-            entity {
-              ... on File {
-                url
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
 
 export default ProductCategories;

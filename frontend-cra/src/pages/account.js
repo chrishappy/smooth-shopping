@@ -46,7 +46,7 @@ const Account = () => {
           borderRadius: '20px',
           fontWeight: 'bold',
           padding: '0 10%',
-          marginTop: '5rem'
+          marginTop: '3rem'
         }}
         onClick={() => {
           logout();

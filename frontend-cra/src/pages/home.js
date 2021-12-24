@@ -2,7 +2,7 @@ import * as React from "react"
 // import { graphql } from "gatsby"
 // import { Link } from "gatsby"
 // import Img from "gatsby-image"
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -10,6 +10,7 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 import Seo from "../components/seo"
 import { CircularProgress } from "@mui/material";
+import { GET_PRODUCT_CATEGORIES } from "../helpers/queries";
 
 const HomePage = () => (
   <>
@@ -22,7 +23,7 @@ const HomePage = () => (
 );
 
 function Categories() {
-  const { loading, error, data } = useQuery(CATEGORIES);
+  const { loading, error, data } = useQuery(GET_PRODUCT_CATEGORIES);
 
   if (loading) {
     return <>
@@ -59,33 +60,5 @@ function Categories() {
   </ImageList>
 }
 
-const CATEGORIES = gql`
-  query GetCategories {
-    taxonomyTermQuery(filter: {
-    conditions: [
-      {operator: EQUAL, field: "vid", value: ["product_categories"]},
-    ]}) {
-      count
-      entities {
-        entityId
-        entityUuid
-        entityLabel
-        entityType
-        entityUrl {
-          path
-        }
-        ... on TaxonomyTermProductCategories {
-          fieldImage {
-            derivative(style: PRODUCTCATEGORY) {
-              url
-            }
-            alt
-            title
-          }
-        }
-      }
-    }
-  }
-`;
 
 export default HomePage;

@@ -6,7 +6,6 @@ import {
   makeVar,
   from,
 } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logout } from './login';
 

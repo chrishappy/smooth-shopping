@@ -26,7 +26,7 @@ const Layout = () => {
         <div
           style={{
             margin: `0 auto`,
-            padding: `0 1.0875rem 5rem`,
+            padding: `1.5rem 1.0875rem 5rem`,
             maxWidth: 960,
             minHeight: `80vh`
           }}

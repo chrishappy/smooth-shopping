@@ -76,7 +76,8 @@ const LoginPage = () => {
             label="Password"
             sx={{ background: '#fff', mb: '2rem' }} 
             onInput={(e) => setPassword(e.target.value)}/>
-          <LoadingButton 
+          <LoadingButton
+            type="submit"
             variant="contained" 
             loading={isLoading}
             component={Link}

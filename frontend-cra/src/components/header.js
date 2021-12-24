@@ -15,7 +15,6 @@ const Header = ({ appState }) => {
     style={{
       backgroundColor: '#00497F',
       color: 'white',
-      marginBottom: '1.45rem'
     }}
     >
     <div style={{
@@ -41,6 +40,3 @@ const Header = ({ appState }) => {
 }
 
 export default Header;
-// export default connect(state => ({
-//   appState: state
-// }), null)(Header)
