@@ -7,6 +7,9 @@ import { LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "./cache";
 
 export const loginAsync = async (username, password) => {
   const jwt = await authenicationAsync(username, password);
+
+  console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
+
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
     loggedInVar(true);
@@ -31,11 +34,11 @@ const authenicationAsync = async (username, password) => {
   return fetch('https://ss.albernirentals.com/jwt/token?_format=json', {
     method: 'GET',
     headers: {
+      'Content-Type': 'application/json',
       'Authorization': `Basic ${loginStr}`
     },
   }).then(response => response.json());
 }
-
 
 export const logout = () => {
   localStorage.removeItem(LOCAL_STORAGE_JWT_TOKEN);
