@@ -4,6 +4,8 @@
 
 We're using Drupal's JWT module for authenication.
 
+Edit the configuation (such as how long JWT tokens are valid for): `/admin/config/system/jwt`
+
 Links:
  - Module page: https://www.drupal.org/project/jwt
  - How to use: https://www.drupal.org/project/jwt/issues/3249407
