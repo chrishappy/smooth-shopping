@@ -57,7 +57,7 @@ const CategoryProducts = () => {
         <DialogContent sx={{ minWidth: '20rem', maxWith: '97vw'}}>
         <Stack>
           {selectedProduct.hasOwnProperty('fieldImage')
-            ? <img src={selectedProduct.fieldImage.entity.url} alt="TODO"/>
+            ? <img src={selectedProduct.fieldImage.derivative.url} alt={selectedProduct.fieldImage.alt} title={selectedProduct.fieldImage.title}/>
             : <img src="https://source.unsplash.com/random" alt="random item"/>}
           <Box sx={{ margin: '0.5rem 0 1rem' }}>
             <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
@@ -150,7 +150,7 @@ function Products({ category, setProduct, setOpen }) {
             setOpen(true);
           }}
         >
-          <img src={ product.fieldImage.entity.url } alt="" />
+          <img src={product.fieldImage.derivative.url} alt={product.fieldImage.alt} title={product.fieldImage.title}/>
           <Box className="product-listing__content">
             <h3 className="product-listing__title">{product.entityLabel}</h3>
             <Box sx={{ textAlign: 'right', }}>

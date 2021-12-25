@@ -74,11 +74,11 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
           fieldCredit
           fieldExpired
           fieldImage {
-            entity {
-              ... on File {
-                url
-              }
+            derivative(style: PRODUCTCATEGORY) {
+              url
             }
+            alt
+            title
           }
         }
       }
