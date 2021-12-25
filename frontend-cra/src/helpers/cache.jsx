@@ -26,10 +26,11 @@ if (localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN)) {
 
 // TODO: Replace later?
 export const currentUserVar = makeVar({
-		totalCredits: 120.0,
-		creditsRemaining: 120.0,
-		familyName: 'Sample Family Name',
-		numberOfFamilyMembers: 3,
+  uid: -1,
+  totalCredits: 120.0,
+  creditsRemaining: 120.0,
+  familyName: 'Sample Family Name',
+  numberOfFamilyMembers: 3,
 });
 
 export const cache = new InMemoryCache({

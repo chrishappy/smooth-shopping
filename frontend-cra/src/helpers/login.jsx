@@ -1,4 +1,10 @@
-import { LOCAL_STORAGE_JWT_TOKEN, loggedInVar } from "./cache";
+import { 
+  apolloClient, 
+  currentUserVar, 
+  LOCAL_STORAGE_JWT_TOKEN, 
+  loggedInVar,
+} from "./cache";
+import { GET_USER_STATS } from "./queries";
 
 /**
  * 
@@ -14,6 +20,10 @@ export const loginAsync = async (username, password) => {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
     loggedInVar(true);
 
+    // Run code to initalizer user
+    // TODO: need to run this code if user already has JWT token
+    await initializeUserAsync();
+
     console.log('User successfully logged in');
   }
   else {
@@ -22,7 +32,26 @@ export const loginAsync = async (username, password) => {
   }
 };
 
-/// Get the JWT value the server 
+/**
+ * After logging in or coming back with a JWT, run this code
+ */
+const initializeUserAsync = async () => {
+  const { data } = await apolloClient.query({
+    query: GET_USER_STATS,
+  });
+  currentUserVar({
+    ...currentUserVar,
+    ...data.currentUserContext,
+  });
+}
+/**
+ * Get the JWT key with a fetch call
+ * 
+ * @param {*} username 
+ * @param {*} password 
+ * @returns Promise<any> The JWT key
+ */
+
 const authenicationAsync = async (username, password) => {
   const usernameConcatPassword = `${username}:${password}`;
 
