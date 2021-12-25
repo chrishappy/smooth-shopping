@@ -30,7 +30,7 @@ const mathButtonStyle = {
   margin: '0 0.3rem'
 }
 
-const ProductCategories = () => {
+const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
   const { title } = location.state;
   // const products = data.allNodeProduct.edges; //TODO decide if just call useQuery(PRODUCTS) here...
@@ -56,20 +56,17 @@ const ProductCategories = () => {
       >
         <DialogContent sx={{ minWidth: '20rem', maxWith: '97vw'}}>
         <Stack>
-          {selectedProduct.hasOwnProperty('fieldImage') ?
-            <img src={selectedProduct.fieldImage.entity.url} alt="TODO"/>
-            : <img src="https://source.unsplash.com/random" alt="random item"/>
-          }
+          {selectedProduct.hasOwnProperty('fieldImage')
+            ? <img src={selectedProduct.fieldImage.entity.url} alt="TODO"/>
+            : <img src="https://source.unsplash.com/random" alt="random item"/>}
           <Box sx={{ margin: '0.5rem 0 1rem' }}>
             <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
               {selectedProduct.entityLabel}
             </Typography>
-            <Typography id="modal-product-description" sx={{ mb: 1 }}>
-              <p>
-                {selectedProduct.fieldExpired
-                  ? <span><WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/>Expired</span>
-                  : <span>Not expired</span>}
-              </p>
+            <Typography id="modal-product-description" component="p" sx={{ mb: 1 }}>
+              {selectedProduct.fieldExpired
+                ? <span><WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/>Expired</span>
+                : <span>Not expired</span>}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -80,7 +77,7 @@ const ProductCategories = () => {
                   let count = (selectedProductCount-1 < 1) ? 1 : selectedProductCount-1;
                   setCount(count);
                 }}
-                >
+              >
                 <RemoveIcon />
               </IconButton>
               <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
@@ -91,7 +88,7 @@ const ProductCategories = () => {
                 onClick={() => {
                   setCount(selectedProductCount + 1);
                 }}
-                >
+              >
                 <AddIcon />
               </IconButton>
             </Stack>
@@ -125,7 +122,7 @@ const ProductCategories = () => {
 //   appState: state
 // }), dispatch => ({
 //   storeDispatch: dispatch
-// }))(ProductCategories)
+// }))(CategoryProducts)
 
 function Products({ category, setProduct, setOpen }) {
   const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
@@ -141,28 +138,30 @@ function Products({ category, setProduct, setOpen }) {
   // console.log(data.nodeQuery.entities);
   return (
     <ImageList
-        sx={{ margin: '0' }}
-        className="product-listings"
-        gap="8px">
-        {data.nodeQuery.entities.map((product) => (
-          <Box 
-            key={product.entityId}
-            className="product-listing"
-            onClick={() => {
-              setProduct(product);
-              setOpen(true);
-            }}>
-            <img src={ product.fieldImage.entity.url } alt="" />
-            <Box className="product-listing__content">
-              <h3 className="product-listing__title">{product.entityLabel}</h3>
-              <Box sx={{ textAlign: 'right', }}>
-              {product.fieldExpired ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${product.fieldCredit}
-              </Box>
+      sx={{ margin: '0' }}
+      className="product-listings"
+      gap={8}>
+      {data.nodeQuery.entities.map((product) => (
+        <Box 
+          key={product.entityId}
+          className="product-listing"
+          onClick={() => {
+            setProduct(product);
+            setOpen(true);
+          }}
+        >
+          <img src={ product.fieldImage.entity.url } alt="" />
+          <Box className="product-listing__content">
+            <h3 className="product-listing__title">{product.entityLabel}</h3>
+            <Box sx={{ textAlign: 'right', }}>
+            {product.fieldExpired ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${product.fieldCredit}
             </Box>
           </Box>
-        ))}
-      </ImageList>
+        </Box>
+      ))}
+    </ImageList>
   );
 }
 
-export default ProductCategories;
+
+export default CategoryProducts;

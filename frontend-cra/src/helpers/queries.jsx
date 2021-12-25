@@ -51,6 +51,7 @@ export const GET_PRODUCT_CATEGORIES = gql`
  * @param $category the name of the product category
  */ 
 export const GET_PRODUCTS_OF_CATEGORY = gql`
+  # Get the products in a category
   query GetCategoryProducts($category:String) {
     nodeQuery(filter: {
       conditions: [
