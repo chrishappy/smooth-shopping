@@ -7,11 +7,11 @@ import {
   from,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { getJwtString, isLoggedIn, logoutCurrentUser } from './login';
+import { getJwtString, logoutCurrentUser } from './login';
 
-export const cartItemsVar = makeVar([]);
+const cartItemsVar = makeVar([]);
 
-export const cache = new InMemoryCache({
+const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
@@ -20,13 +20,13 @@ export const cache = new InMemoryCache({
             return cartItemsVar();
           }
         },
-        currentUser: {
-          loggedIn: {
-            read() {
-              return isLoggedIn();
-            }
-          }
-        }
+        // currentUser: {
+        //   loggedIn: {
+        //     read() {
+        //       return isLoggedIn();
+        //     }
+        //   }
+        // }
       }
     }
   }
@@ -44,7 +44,11 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   // get the authentication token from local storage if it exists
   const token = getJwtString();
 
-  // add the authorization to the headers
+  if (!token) {
+    console.error(`The JWT string is somehow null or empty. Value: ${JSON.stringify(token)}`)
+  }
+
+  // Add the authorization to the headers
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
@@ -55,7 +59,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation);
 })
 
-// Logout if we get a 401
+// Logout if we get a 401 or 403
 // https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-response-logic
 const logoutLink = onError((err) => {
   if (err.hasOwnProperty('networkError')) {

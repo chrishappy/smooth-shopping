@@ -22,7 +22,7 @@ export const isLoggedIn = () => !!getJwtString();
 export const loginAsync = async (username, password) => {
   const jwt = await authenicationAsync(username, password);
 
-  console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
+  // console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
 
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
@@ -47,8 +47,6 @@ const authenicationAsync = async (username, password) => {
 
   const loginStrBase64 = Buffer.from(usernameConcatPassword, 'binary');
   const loginStr = loginStrBase64.toString('base64');
-
-  console.log(loginStr);
 
   return fetch('https://ss.albernirentals.com/jwt/token?_format=json', {
     method: 'GET',
