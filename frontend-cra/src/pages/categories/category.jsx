@@ -58,7 +58,12 @@ const CategoryProducts = () => {
         <DialogContent sx={{ minWidth: '20rem', maxWith: '97vw'}}>
         <Stack>
           {selectedProduct.hasOwnProperty('fieldImage')
-            ? <img src={selectedProduct.fieldImage.derivative.url} alt={selectedProduct.fieldImage.alt} title={selectedProduct.fieldImage.title}/>
+            ? <img 
+                src={selectedProduct.fieldImage.derivative.url} 
+                alt={selectedProduct.fieldImage.alt}
+                title={selectedProduct.fieldImage.title} 
+                width={selectedProduct.fieldImage.derivative.width}
+                height={selectedProduct.fieldImage.derivative.height} />
             : <img src="https://source.unsplash.com/random" alt="random item"/>}
           <Box sx={{ margin: '0.5rem 0 1rem' }}>
             <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
@@ -159,9 +164,13 @@ function Products({ category, setProduct, setOpen }) {
           onClick={() => {
             setProduct(product);
             setOpen(true);
-          }}
-        >
-          <img src={product.fieldImage.derivative.url} alt={product.fieldImage.alt} title={product.fieldImage.title}/>
+          }}>
+          <img 
+            src={product.fieldImage.derivative.url} 
+            alt={product.fieldImage.alt} 
+            title={product.fieldImage.title}
+            width={product.fieldImage.derivative.width}
+            height={product.fieldImage.derivative.height} />
           <Box className="product-listing__content">
             <h3 className="product-listing__title">{product.entityLabel}</h3>
             <Box sx={{ textAlign: 'right', }}>

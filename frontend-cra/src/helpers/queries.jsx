@@ -47,6 +47,8 @@ export const GET_PRODUCT_CATEGORIES = gql`
           fieldImage {
             derivative(style: PRODUCTCATEGORY) {
               url
+              width
+              height
             }
             alt
             title
@@ -88,6 +90,8 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
           fieldImage {
             derivative(style: PRODUCTCATEGORY) {
               url
+              width
+              height
             }
             alt
             title

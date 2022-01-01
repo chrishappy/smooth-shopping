@@ -118,13 +118,7 @@ sup {
 img {
   border-style: none;
   max-width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
+  height: auto;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -137,26 +131,14 @@ samp {
   font-size: 1em;
 }
 figure {
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  margin-bottom: 1.45rem;
+  padding: 0;
+  margin: 0 0 1.45rem;
 }
 hr {
   box-sizing: content-box;
   overflow: visible;
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  margin-bottom: calc(1.45rem - 1px);
+  padding: 0;
+  margin: 0 0 calc(1.45rem - 1px);
   background: hsla(0, 0%, 0%, 0.2);
   border: none;
   height: 1px;
