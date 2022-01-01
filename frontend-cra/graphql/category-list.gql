@@ -1,0 +1,26 @@
+query GetCategories {
+  taxonomyTermQuery(filter: {
+  conditions: [
+    {operator: EQUAL, field: "vid", value: ["product_categories"]},
+  ]}) {
+    count
+    entities {
+      entityId
+      entityUuid
+      entityLabel
+      entityType
+      entityUrl {
+        path
+      }
+      ... on TaxonomyTermProductCategories {
+        fieldImage {
+          derivative(style: PRODUCTCATEGORY) {
+            url
+          }
+          alt
+          title
+        }
+      }
+    }
+  }
+}
