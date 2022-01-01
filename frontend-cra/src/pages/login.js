@@ -1,13 +1,13 @@
 import * as React from "react"
-import { Link, useLocation, Navigate } from "react-router-dom";
-import { Box, Stack, TextField  } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Box, Stack, TextField, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Seo from "../components/seo"
 import { isLoggedIn, loginAsync } from "../helpers/login";
 
 const LoginPage = () => {
 
-  let location = useLocation();
+  const navigate = useNavigate();
 
   // Form elements
   const [username, setUsername] = React.useState('');
@@ -27,14 +27,12 @@ const LoginPage = () => {
       console.log("Login");
       await loginAsync(username, password);
     }
-
-    setIsLoading(false);
+    
+    navigate('/');
   }
 
   if (isLoggedIn()) {
-    return (
-      <Navigate to="/" state={{ from: location }} />
-    );
+    navigate('/');
   }
 
   return (
@@ -63,36 +61,44 @@ const LoginPage = () => {
         <Box
           component="form"
           noValidate>
-          <TextField 
-            id="login__username" 
-            variant="filled"
-            label="Username"
-            sx={{ background: '#fff', mb: '2rem' }}
-            onInput={(e) => setUsername(e.target.value)} />
-          <TextField 
-            id="login__password" 
-            type="password"
-            variant="filled" 
-            label="Password"
-            sx={{ background: '#fff', mb: '2rem' }} 
-            onInput={(e) => setPassword(e.target.value)}/>
-          <LoadingButton
-            type="submit"
-            variant="contained" 
-            loading={isLoading}
-            component={Link}
-            to="/"
-            sx={{
-              backgroundColor: '#75F348',
-              color: 'black',
-              borderRadius: '20px',
-              fontWeight: 'bold',
-              padding: '0.3rem 10%'
-            }}
-            onClick={submitLoginForm}
-          >
-            SUBMIT
-          </LoadingButton>
+          <Box
+            component="div">
+            <TextField 
+              id="login__username" 
+              variant="filled"
+              label="Username"
+              sx={{ background: '#fff', mb: '2rem' }}
+              onInput={(e) => setUsername(e.target.value)} />
+          </Box>
+          <Box
+            component="div">
+            <TextField 
+              id="login__password" 
+              type="password"
+              variant="filled" 
+              label="Password"
+              sx={{ background: '#fff', mb: '2rem' }} 
+              onInput={(e) => setPassword(e.target.value)}/>
+          </Box>
+          <Box
+            component="div">
+            <LoadingButton
+              type="submit"
+              variant="contained" 
+              loading={isLoading}
+              component={Button}
+              sx={{
+                backgroundColor: '#75F348',
+                color: 'black',
+                borderRadius: '20px',
+                fontWeight: 'bold',
+                padding: '0.3rem 10%'
+              }}
+              onClick={submitLoginForm}
+            >
+              SUBMIT
+            </LoadingButton>
+          </Box>
         </Box>
       </Stack>
     </>
