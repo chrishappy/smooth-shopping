@@ -1,10 +1,28 @@
 import * as React from "react"
 import { Link } from "react-router-dom";
-import { currentUserVar } from "../helpers/cache";
+import { useQuery } from '@apollo/client';
+import { GET_USER_STATS } from "../helpers/queries";
 
 const CurrentCredits = () => {
 
-  const userData = currentUserVar();
+  const { loading, error, data } = useQuery(GET_USER_STATS);
+
+  if (error) {
+    return (
+      'There was an error.'
+    );
+  }
+
+  let userData;
+  if (loading) {
+    userData = {
+      creditsRemaining: 0.00,
+      totalCredits: 0.00,
+    };
+  }
+  else {
+    userData = data.currentUserContext;
+  }
 
   return (
     <Link

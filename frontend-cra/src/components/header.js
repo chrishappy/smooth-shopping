@@ -4,11 +4,14 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SearchIcon from '@mui/icons-material/Search';
 // import { navigate } from "gatsby";
 // import { connect } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import CurrentCreditStatus from "./current-credit-status";
 
 const Header = ({ appState }) => {
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const pathname = useLocation().pathname;
   const isHome = pathname.replace(/\/$/, '') === '';
+
+  const navigate = useNavigate();
 
   return (
   <header
@@ -25,7 +28,7 @@ const Header = ({ appState }) => {
       <IconButton
         style={{ color: 'white', visibility: isHome ? 'hidden' : undefined }}
         aria-label={'back'}
-        onClick={() => console.log('TODO: fix navigate(-1)')}>
+        onClick={() => navigate(-1) } >
           <ArrowBackIosNewIcon fontSize="medium" />
       </IconButton>
       <CurrentCreditStatus />

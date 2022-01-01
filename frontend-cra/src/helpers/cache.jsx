@@ -9,8 +9,6 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 
-
-
 export const cartItemsVar = makeVar([]);
 
 // TODO: Replace later?
@@ -20,6 +18,7 @@ export const loggedInVar = makeVar(false);
 // The constant for the local storage variable storing the JWT value
 export const LOCAL_STORAGE_JWT_TOKEN = 'JW_TOKEN_VALUE';
 
+// TODO: Better way to check if this is true?
 if (localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN)) {
   loggedInVar(true);
 }
