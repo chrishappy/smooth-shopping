@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Typography, Button } from '@mui/material';
 import Seo from "../components/seo"
 import { currentUserVar } from "../helpers/cache";
-import { logout } from "../helpers/login";
+import { logoutCurrentUser } from "../helpers/login";
 
 const Account = () => {
 
@@ -49,7 +49,7 @@ const Account = () => {
           marginTop: '3rem'
         }}
         onClick={() => {
-          logout();
+          logoutCurrentUser();
         }}>Log out</Button>
     </>
   );
