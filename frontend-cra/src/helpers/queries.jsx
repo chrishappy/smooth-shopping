@@ -15,6 +15,18 @@ query getUserStats {
   }
 }
 `
+
+// TODO: Should we use default values rather than a loading symbol?
+// export const defaultUserStats = {
+//   currentUserContext: {
+//     uid: -1,
+//     familyName: '',
+//     creditsRemaining: 0,
+//     totalCredits: 0,
+//     numberOfFamilyMembers: 0,
+//   }
+// }
+
 // Get the images of the main product categories
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {

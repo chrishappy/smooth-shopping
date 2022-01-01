@@ -12,13 +12,13 @@ import Footer from "./footer"
 import "./layout.css"
 import "./custom.css"
 import { Outlet } from "react-router"
-import { loggedInVar } from "../helpers/cache"
+import { isLoggedIn } from "../helpers/login"
 
 const Layout = () => {
 
   return (
     <div className="page">
-      {loggedInVar() ?
+      {isLoggedIn() ?
       <>
         <Header
           siteTitle={`Title`}

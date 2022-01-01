@@ -7,36 +7,9 @@ import {
   from,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { getJwtString, logoutCurrentUser } from './login';
+import { getJwtString, isLoggedIn, logoutCurrentUser } from './login';
 
 export const cartItemsVar = makeVar([]);
-
-// TODO: Replace later?
-// Remove `export` later?
-export const loggedInVar = makeVar(false);
-
-// The constant for the local storage variable storing the JWT value
-export const LOCAL_STORAGE_JWT_TOKEN = 'JW_TOKEN_VALUE';
-
-// TODO: Better way to check if this is true?
-if (localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN)) {
-  loggedInVar(true);
-}
-
-// TODO: Replace later?
-export const currentUserVar = makeVar({
-  initialized: false,
-  uid: 0,
-  totalCredits: 120.0,
-  creditsRemaining: 120.0,
-  familyName: 'Sample Family Name',
-  numberOfFamilyMembers: 3,
-});
-
-// Return whether the user is initialized yet
-export const userIsInitialized = () => {
-  return currentUserVar().initialized === true;
-}
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -50,7 +23,7 @@ export const cache = new InMemoryCache({
         currentUser: {
           loggedIn: {
             read() {
-              return loggedInVar();
+              return isLoggedIn();
             }
           }
         }

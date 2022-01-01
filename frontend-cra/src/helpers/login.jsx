@@ -1,11 +1,17 @@
-import { 
-  apolloClient, 
-  currentUserVar, 
-  LOCAL_STORAGE_JWT_TOKEN, 
-  loggedInVar,
-  userIsInitialized,
-} from "./cache";
-import { GET_USER_STATS } from "./queries";
+/**
+ * @file
+ * Store the login logic
+ * Avoids the use of a `loggedIn = makeVar(false)`
+ */
+
+// The constant for the local storage variable storing the JWT value
+const LOCAL_STORAGE_JWT_TOKEN = 'JWT_aUTHENICATION';
+
+// Get JWT key
+export const getJwtString = () => localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN) || null;
+
+// Helper function for convience. Return whether the user is currently logged in
+export const isLoggedIn = () => !!getJwtString();
 
 /**
  * Use this function when the user is logging in the first time
@@ -20,11 +26,6 @@ export const loginAsync = async (username, password) => {
 
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
-    loggedInVar(true);
-
-    // Run code to initalizer user
-    await initializeUserAsync();
-
     console.log('User successfully logged in');
   }
   else {
@@ -33,36 +34,6 @@ export const loginAsync = async (username, password) => {
   }
 };
 
-/**
- * Use this function when the user is already logged in, and just need to fetch user stats
- */
-export const initializeAlreadyLoggedInAsync = async () => {
-  if (!userIsInitialized()) {
-    console.log(`About to initalizing user: ${currentUserVar().initialized}`);
-    await initializeUserAsync();
-    console.log(`Finished to initalizing user ${currentUserVar().initialized}`);
-  }
-};
-
-/**
- * After logging in or coming back with a JWT, run this code
- */
-const initializeUserAsync = async () => {
-  const { data } = await apolloClient.query({
-    query: GET_USER_STATS,
-  });
-  
-  if (data.hasOwnProperty('currentUserContext')) {
-    currentUserVar({
-      ...currentUserVar,
-      ...data.currentUserContext,
-      initialized: true,
-    });
-  }
-  else {
-    console.error('Can not initalize user');
-  }
-}
 /**
  * Get the JWT key with a fetch call
  * 
@@ -88,13 +59,9 @@ const authenicationAsync = async (username, password) => {
   }).then(response => response.json());
 }
 
+/**
+ * Log out user
+ */
 export const logoutCurrentUser = () => {
   localStorage.removeItem(LOCAL_STORAGE_JWT_TOKEN);
-  loggedInVar(false); 
 };
-
-// Return whether the user is currently logged in
-export const isLoggedIn = () => loggedInVar();
-
-// Get JWT key
-export const getJwtString = () => localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN) || null;

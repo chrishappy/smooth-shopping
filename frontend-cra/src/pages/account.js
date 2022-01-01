@@ -1,14 +1,29 @@
 import * as React from "react"
-
 import { Link } from "react-router-dom";
 import { Typography, Button } from '@mui/material';
 import Seo from "../components/seo"
-import { currentUserVar } from "../helpers/cache";
 import { logoutCurrentUser } from "../helpers/login";
+import { useQuery } from '@apollo/client';
+import { GET_USER_STATS } from "../helpers/queries";
+import MainContentLoader from "../components/main-content-loader";
 
 const Account = () => {
 
-  const userData = currentUserVar();
+  const { loading, error, data } = useQuery(GET_USER_STATS);
+
+  if (error) {
+    return (
+      'There was an error.'
+    );
+  }
+
+  if (loading) {
+    return (
+      <MainContentLoader />
+    )
+  }
+  const userData = data.currentUserContext;
+
   return (
     <>
       <Seo title="Cart Page" />

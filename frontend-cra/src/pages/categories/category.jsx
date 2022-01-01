@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import { useQuery } from "@apollo/client";
 import { useLocation } from 'react-router-dom'
 import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
+import MainContentLoader from "../../components/main-content-loader";
 
 // TODO Abstract it out
 const mathButtonStyle = {
@@ -129,13 +130,23 @@ function Products({ category, setProduct, setOpen }) {
     variables: { category },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+    <MainContentLoader />
+  );
+
   if (error) {
     console.log(error);
     return <p>{error.message}</p>;
   }
 
-  // console.log(data.nodeQuery.entities);
+  // If no content
+  if (data.nodeQuery.entities.length === 0) {
+    return (
+      'No items at the moment.'
+    );
+  }
+
+  // Default content
   return (
     <ImageList
       sx={{ margin: '0' }}

@@ -1,13 +1,14 @@
 import * as React from "react"
 
+import { useQuery } from '@apollo/client';
+import { GET_USER_STATS } from "../helpers/queries";
+
 import Seo from "../components/seo"
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
-// import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
-// import { connect } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -16,7 +17,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
-import { currentUserVar } from "../helpers/cache";
 
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -29,23 +29,33 @@ const mathButtonStyle = {
 
 const CartPage = () => {
 
-  // const date = [];
-
   const cartItems = [];
 
   const products = [];
+
+  // TODO: should no longer need this
   const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
 
-  const { totalCredits } = currentUserVar();
-
+  // TODO: Better way to calculate the total of the products?
   const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
     return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
   }, 0);
 
+  // For dialogs
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
   };
+
+  const { loading, error, data } = useQuery(GET_USER_STATS);
+
+  if (error) {
+    return (
+      'There was an error'
+    );
+  }
+
+  const totalCredits = loading ? 0 : data.currentUserContext.totalCredits;
 
   return (
     <>

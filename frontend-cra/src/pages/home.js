@@ -9,8 +9,8 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 import Seo from "../components/seo"
-import { CircularProgress } from "@mui/material";
 import { GET_PRODUCT_CATEGORIES } from "../helpers/queries";
+import MainContentLoader from "../components/main-content-loader";
 
 const HomePage = () => (
   <>
@@ -26,13 +26,9 @@ function Categories() {
   const { loading, error, data } = useQuery(GET_PRODUCT_CATEGORIES);
 
   if (loading) {
-    return <>
-      <div style={{ 
-        textAlign: 'center',
-        padding: '2em 0 0', }}>
-        <CircularProgress />
-      </div>
-    </>
+    return (
+      <MainContentLoader />
+    )
   }
   if (error) {
     console.error(error);
