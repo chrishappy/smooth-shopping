@@ -6,9 +6,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useLocation,
-  Navigate,
-  Outlet,
 } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
@@ -24,7 +21,7 @@ import {
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
 import { apolloClient } from './helpers/cache';
 import Category from './pages/categories/category';
-import { isLoggedIn } from './helpers/login';
+import RequireAuth from './components/RequireAuth';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -54,17 +51,3 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-function RequireAuth(){
-  let location = useLocation();
-
-  if (!isLoggedIn()) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
-    return <Navigate to="/login" state={{ from: location }} />;
-  }
-
-  return <Outlet />;
-}

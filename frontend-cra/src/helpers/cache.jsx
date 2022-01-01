@@ -7,7 +7,7 @@ import {
   from,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { getJwtString, logout } from './login';
+import { getJwtString, logoutCurrentUser } from './login';
 
 
 
@@ -26,12 +26,18 @@ if (localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN)) {
 
 // TODO: Replace later?
 export const currentUserVar = makeVar({
-  uid: -1,
+  initialized: false,
+  uid: 0,
   totalCredits: 120.0,
   creditsRemaining: 120.0,
   familyName: 'Sample Family Name',
   numberOfFamilyMembers: 3,
 });
+
+// Return whether the user is initialized yet
+export const userIsInitialized = () => {
+  return currentUserVar().initialized === true;
+}
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -83,7 +89,7 @@ const logoutLink = onError((err) => {
   if (err.hasOwnProperty('networkError')) {
     const statusCode = err.networkError.statusCode;
     if (statusCode === 401 || statusCode === 403) {
-      logout();
+      logoutCurrentUser();
     }
   }
   else if (err.hasOwnProperty('graphQLErrors')) {
