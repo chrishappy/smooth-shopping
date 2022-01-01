@@ -1,3 +1,7 @@
+# No Longer Used - Use `frontend-CRA` instead
+
+--------------
+
 # Smooth Shopping
 
 ## App description
