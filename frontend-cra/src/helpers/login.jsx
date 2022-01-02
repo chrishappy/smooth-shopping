@@ -5,7 +5,7 @@
  */
 
 // The constant for the local storage variable storing the JWT value
-const LOCAL_STORAGE_JWT_TOKEN = 'JWT_aUTHENICATION';
+const LOCAL_STORAGE_JWT_TOKEN = 'JWT_AUTHENICATION';
 
 // Get JWT key
 export const getJwtString = () => localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN) || null;

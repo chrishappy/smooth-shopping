@@ -21,6 +21,9 @@ import { useLocation } from 'react-router-dom'
 import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
 import MainContentLoader from "../../components/main-content-loader";
 
+// Import the CSS
+import "./category.css"
+
 // TODO Abstract it out
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -34,91 +37,26 @@ const mathButtonStyle = {
 const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
   const { title } = location.state;
-  // const products = data.allNodeProduct.edges; //TODO decide if just call useQuery(PRODUCTS) here...
 
   const [selectedProduct, setProduct] = React.useState({});
   const [selectedProductCount, setCount] = React.useState(1);
   const [isOpen, setOpen] = React.useState(false);
   const handleClose = () => {
-    setCount(1); // Revert to one
     setOpen(false);
+    setCount(1); // Revert to one
   };
 
   return (
     <>
       <h1>{ title }</h1>
-      <Products category={title} setProduct={setProduct} setOpen={setOpen} />
+      <Products category={title} setProduct={setProduct} setOpen={setOpen}/>
       {/* <CheckoutButton /> */}
-      <Dialog
-        open={isOpen}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <DialogContent sx={{ minWidth: '20rem', maxWith: '97vw'}}>
-        <Stack>
-          {selectedProduct.hasOwnProperty('fieldImage')
-            ? <img 
-                src={selectedProduct.fieldImage.derivative.url} 
-                alt={selectedProduct.fieldImage.alt}
-                title={selectedProduct.fieldImage.title} 
-                width={selectedProduct.fieldImage.derivative.width}
-                height={selectedProduct.fieldImage.derivative.height} />
-            : <img src="https://source.unsplash.com/random" alt="random item"/>}
-          <Box sx={{ margin: '0.5rem 0 1rem' }}>
-            <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
-              {selectedProduct.entityLabel}
-            </Typography>
-            <Typography id="modal-product-description" component="p" sx={{ mb: 1 }}>
-              {selectedProduct.fieldExpired
-                ? <span><WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/>Expired</span>
-                : <span>Not expired</span>}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Stack direction="row">
-              <IconButton
-                style={mathButtonStyle}
-                onClick={() => {
-                  let count = (selectedProductCount-1 < 1) ? 1 : selectedProductCount-1;
-                  setCount(count);
-                }}
-              >
-                <RemoveIcon />
-              </IconButton>
-              <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
-                {selectedProductCount}
-              </Typography>
-              <IconButton
-                style={mathButtonStyle}
-                onClick={() => {
-                  setCount(selectedProductCount + 1);
-                }}
-              >
-                <AddIcon />
-              </IconButton>
-            </Stack>
-            <div style={{marginRight: 'auto'}}></div>
-            <Button variant="contained"
-              sx={{
-                backgroundColor: '#75F348',
-                color: 'black',
-                borderRadius: '20px',
-                fontWeight: 'bold',
-                padding: '0 10%'
-              }}
-              onClick={() => {
-                // storeDispatch({
-                //   type: 'incrementProduct',
-                //   product: selectedProduct,
-                //   by: selectedProductCount
-                // });
-                handleClose();
-              }}>Add to cart</Button>
-          </Box>
-        </Stack>
-        </DialogContent>
-      </Dialog>
+      <ProductDialog 
+        selectedProduct={selectedProduct} 
+        selectedProductCount={selectedProductCount}
+        isOpen={isOpen}
+        handleClose={handleClose}
+        setCount={setCount} />
       {/* { products.length === 0 ? (<p>There are currently no products.</p>) : ''} */}
     </>
   )
@@ -183,5 +121,90 @@ function Products({ category, setProduct, setOpen }) {
   );
 }
 
+const ProductDialog = ({isOpen, handleClose, selectedProduct, selectedProductCount, setCount}) => {
+  return (
+    <Dialog
+        open={isOpen}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DialogContent sx={{
+          minWidth: '20rem', 
+          maxWidth: '97vw', 
+          height: '95vh',
+        }}>
+        <Stack
+          className="product-dialog">
+          <Box className="product-dialog__img">
+          {selectedProduct.hasOwnProperty('fieldImage')
+            ? <img 
+                src={selectedProduct.fieldImage.url} 
+                alt={selectedProduct.fieldImage.alt}
+                title={selectedProduct.fieldImage.title} 
+                width={selectedProduct.fieldImage.width}
+                height={selectedProduct.fieldImage.height} />
+            : <img src="https://source.unsplash.com/random" alt="random item"/>}
+          </Box>
+          <Box className="product-dialog__content">
+            <Box sx={{ margin: '0.5rem 0 1rem' }}>
+              <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
+                {selectedProduct.entityLabel}
+              </Typography>
+              <Typography id="modal-product-description" component="p" sx={{ mb: 1 }}>
+                {selectedProduct.fieldExpired
+                  ? <span><WarningAmberIcon sx={{verticalAlign: 'top', color: '#FA9500' }}/>Expired</span>
+                  : <span>Not expired</span>}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Stack direction="row">
+                <IconButton
+                  style={mathButtonStyle}
+                  onClick={() => {
+                    let count = (selectedProductCount-1 < 1) ? 1 : selectedProductCount-1;
+                    setCount(count);
+                  }}
+                >
+                  <RemoveIcon />
+                </IconButton>
+                <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
+                  {selectedProductCount}
+                </Typography>
+                <IconButton
+                  style={mathButtonStyle}
+                  onClick={() => {
+                    setCount(selectedProductCount + 1);
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Stack>
+              <div style={{marginRight: 'auto'}}></div>
+              <Button variant="contained"
+                sx={{
+                  backgroundColor: '#75F348',
+                  color: 'black',
+                  borderRadius: '20px',
+                  fontWeight: 'bold',
+                  padding: '0 10%'
+                }}
+                onClick={() => {
+                  // storeDispatch({
+                  //   type: 'incrementProduct',
+                  //   product: selectedProduct,
+                  //   by: selectedProductCount
+                  // });
+                  handleClose();
+                }}>
+                  Add to cart
+              </Button>
+            </Box>
+          </Box>
+        </Stack>
+        </DialogContent>
+      </Dialog>
+  )
+}
 
 export default CategoryProducts;

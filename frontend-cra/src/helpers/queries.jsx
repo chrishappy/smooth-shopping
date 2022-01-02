@@ -95,6 +95,9 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
             }
             alt
             title
+            width
+            height
+            url
           }
         }
       }
