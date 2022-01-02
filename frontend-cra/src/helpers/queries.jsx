@@ -97,12 +97,23 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
 /**
  * Create an Order
  * 
+ * Schema
  * @code
  *   SsOrderCreateInput {
  *     "title" = "String",
  *     "uid" = "Int!",
- *     "fieldStatus" = "String",
- *     "orderItems" = "[SsOrderItem]"
+ *     "fieldStatus" = "String"
+ *   }
+ * @endcode
+ * 
+ * Example:
+ * @code
+ *  {
+ *     "order": {
+ *       "title": "Some Order",
+ *       "uid": 6,
+ *       "fieldStatus": "SUBMITTED"
+ *     }
  *   }
  * @endcode
  */
@@ -133,6 +144,7 @@ export const CREATE_ORDER = gql`
 /**
  * Update an Order
  * 
+ * Types Schema
  * @code
  *   SsOrderUpdateInput {
  *     "title" = "String",
@@ -140,12 +152,32 @@ export const CREATE_ORDER = gql`
  *     "fieldStatus" = "String",
  *     "orderItems" = "[SsOrderItem]"
  *   }
- * @endcode
  * 
- * @code
  *   SsOrderItem {
  *     "productId" = "Int!",
  *     "quantity" = "Float!",
+ *   }
+ * @endcode
+ * 
+ * Example Variables
+ * @code
+ *   {
+ *     "id": "15",
+ *     "order": {
+ *       "title": "Some Order",
+ *       "uid": 6,
+ *       "fieldStatus": "SUBMITTED",
+ *       "orderItems": [
+ *          {
+ *            "productId": 6,
+ *            "quantity": 5.0
+ *          },
+ *          {
+ *            "productId": 7,
+ *            "quantity": 2.0
+ *          }
+ *       ]
+ *     }
  *   }
  * @endcode
  */

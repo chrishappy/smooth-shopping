@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 
 import Seo from "../components/seo"
