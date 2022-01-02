@@ -16,17 +16,6 @@ query getUserStats {
 }
 `
 
-// TODO: Should we use default values rather than a loading symbol?
-// export const defaultUserStats = {
-//   currentUserContext: {
-//     uid: -1,
-//     familyName: '',
-//     creditsRemaining: 0,
-//     totalCredits: 0,
-//     numberOfFamilyMembers: 0,
-//   }
-// }
-
 // Get the images of the main product categories
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {
@@ -104,3 +93,98 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
     }
   }
 `;
+
+/**
+ * Create an Order
+ * 
+ * @code
+ *   SsOrderCreateInput {
+ *     "title" = "String",
+ *     "uid" = "Int!",
+ *     "fieldStatus" = "String",
+ *     "orderItems" = "[SsOrderItem]"
+ *   }
+ * @endcode
+ */
+export const CREATE_ORDER = gql`
+  mutation CreateOrder($order:SsOrderCreateInput!) {
+    createOrder(input: $order) {
+      errors
+      violations {
+        code
+        message
+        path
+      }
+      entity {
+        ... on NodeOrder {
+          nid
+          title
+          fieldStatus {
+            entity {
+              entityLabel
+            }
+          }
+        }
+      }
+    }
+  } 
+`;
+
+/**
+ * Update an Order
+ * 
+ * @code
+ *   SsOrderUpdateInput {
+ *     "title" = "String",
+ *     "uid" = "Int!",
+ *     "fieldStatus" = "String",
+ *     "orderItems" = "[SsOrderItem]"
+ *   }
+ * @endcode
+ * 
+ * @code
+ *   SsOrderItem {
+ *     "productId" = "Int!",
+ *     "quantity" = "Float!",
+ *   }
+ * @endcode
+ */
+export const UPDATE_ORDER = gql`
+  mutation UpdateOrder($id: String!, $order:SsOrderUpdateInput!) {
+    updateOrder(input: $order, id: $id) {
+      errors
+      violations {
+        code
+        message
+        path
+      }
+      entity {
+        ... on NodeOrder {
+          nid
+          title
+          fieldTotalOrderAmount
+          fieldStatus {
+            entity {
+              entityLabel
+            }
+          }
+          fieldOrderItems {
+            entity {
+              ... on ParagraphProductItem {
+                fieldProduct {
+                  entity {
+                    ... on NodeProduct {
+                      title
+                      fieldQuantity
+                    }
+                  }
+                }
+                fieldQuantity
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
