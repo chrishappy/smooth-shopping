@@ -48,6 +48,7 @@ const authenicationAsync = async (username, password) => {
   const loginStrBase64 = Buffer.from(usernameConcatPassword, 'binary');
   const loginStr = loginStrBase64.toString('base64');
 
+  // ENSURE this is https:// for security
   return fetch('https://ss.albernirentals.com/jwt/token?_format=json', {
     method: 'GET',
     headers: {
