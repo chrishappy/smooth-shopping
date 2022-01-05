@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
  * Get the current user's information, e.g. how much credit left for this month
  */
 export const GET_USER_STATS = gql`
-query getUserStats {
+query GetUserStats {
   currentUserContext {
     uid,
     familyName: fieldSsFamilyName,

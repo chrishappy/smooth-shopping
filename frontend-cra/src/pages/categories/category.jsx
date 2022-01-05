@@ -24,6 +24,35 @@ import MainContentLoader from "../../components/main-content-loader";
 // Import the CSS
 import "./category.css"
 
+import { cartItemsVar } from "../../helpers/cache";
+
+const NewOrderItem = (product, quantity) => {
+  return { 
+    productId: product.entityId,
+    quantity: quantity,
+    field_credit: product.fieldCredit,
+    field_expired: product.fieldExpired,
+    title: product.entityLabel
+  };
+}
+
+const AddOrderItem = (product, addQuantity) => {
+  console.log(product);
+  let currItems = cartItemsVar();
+
+  let found = currItems.findIndex(prod => prod.productId === product.entityId);
+  if (found >= 0) {
+    currItems[found].quantity += addQuantity;
+  }
+  else {
+    currItems.push(NewOrderItem(product, addQuantity));
+  }
+
+  cartItemsVar(currItems);
+  console.log(cartItemsVar());
+  return currItems;
+}
+
 // TODO Abstract it out
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -189,7 +218,8 @@ const ProductDialog = ({isOpen, handleClose, selectedProduct, selectedProductCou
                   fontWeight: 'bold',
                   padding: '0 10%'
                 }}
-                onClick={() => {
+                onClick={() => {                 
+                  AddOrderItem(selectedProduct, selectedProductCount);
                   // storeDispatch({
                   //   type: 'incrementProduct',
                   //   product: selectedProduct,

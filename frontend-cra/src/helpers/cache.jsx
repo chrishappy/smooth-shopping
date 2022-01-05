@@ -5,11 +5,25 @@ import {
   InMemoryCache, 
   makeVar,
   from,
+  gql
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 
-const cartItemsVar = makeVar([]);
+const typeDefs = gql`
+  extend type Query {
+    cartItems: [OrderItem!]!
+  }
+  extend type OrderItem {
+    productId: Int!
+    quantity: Float!
+    field_credit: Float!
+    field_expired: Boolean!
+    title: String!
+  }
+`;
+
+export const cartItemsVar = makeVar([]);
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -82,4 +96,5 @@ export const apolloClient = new ApolloClient({
     httpLink,
   ]),
   cache: cache,
+  typeDefs
 });

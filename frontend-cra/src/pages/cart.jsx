@@ -1,7 +1,8 @@
 import * as React from "react"
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
+import { cartItemsVar } from "../helpers/cache";
 
 import Seo from "../components/seo"
 import Card from '@mui/material/Card';
@@ -18,6 +19,19 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 
+// export const GET_CART_ITEMS = gql`
+// query GetCartItems {
+//   cartItems @client
+//   currentUserContext {
+//     uid,
+//     familyName: fieldSsFamilyName,
+//     creditsRemaining: fieldSsCurrentCredit,
+//     totalCredits: fieldSsMonthlyCredit,
+//     numberOfFamilyMembers: fieldSsPersonCount,
+//   }
+// }
+// `;
+
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
   backgroundColor: 'darkGray',
@@ -28,17 +42,22 @@ const mathButtonStyle = {
 };
 
 const CartPage = () => {
+  // const { data, loading, error } = useQuery(GET_CART_ITEMS);
+  // console.log(data);
+  const cartItems = useReactiveVar(cartItemsVar);
+  console.log(cartItems);
 
-  const cartItems = [];
+  // const products = [];
 
-  const products = [];
-
-  // TODO: should no longer need this
-  const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
+  // TODO: REMOVE should no longer need this
+  // const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
 
   // TODO: Better way to calculate the total of the products?
-  const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
-    return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
+  // const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
+  //   return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
+  // }, 0);
+  const productTotal = cartItems.reduce((runningTotal, item) => {
+    return runningTotal += parseFloat(item.field_credit) * item.quantity;
   }, 0);
 
   // For dialogs
@@ -63,14 +82,14 @@ const CartPage = () => {
       <h1>Your Cart</h1>
       
       <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
-        { productsFiltered.length } items
+        { cartItems.length } items
       </Typography>
 
       <hr></hr>
 
       <Box className="cart-items">
-        {productsFiltered.map(({ node: product }) => (
-          <Card sx={{ display: 'flex', margin: '1em 0' }} key={product.id}>
+        {cartItems.map((item) => (
+          <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.productId}>
             <Box sx={{ minWidth: '100px' }}>
               <img src="" alt="" />
             </Box>
@@ -78,10 +97,10 @@ const CartPage = () => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
                   <h4 className="cart-item__title">
-                    { product.title }
+                    { item.title }
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
-                    <div>${ product.field_credit }</div>
+                    <div>${ item.field_credit }</div>
                     {/* <div>x { cartItems[product.id].quantity }</div> */}
                   </Box>
                   {/* <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -105,7 +124,7 @@ const CartPage = () => {
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-                      {cartItems[product.id].quantity}
+                      {item.quantity}
                     </Box>
                     <IconButton
                       style={mathButtonStyle}
