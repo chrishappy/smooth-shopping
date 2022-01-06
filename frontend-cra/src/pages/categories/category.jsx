@@ -24,34 +24,7 @@ import MainContentLoader from "../../components/main-content-loader";
 // Import the CSS
 import "./category.css"
 
-import { cartItemsVar } from "../../helpers/cache";
-
-const NewOrderItem = (product, quantity) => {
-  return { 
-    productId: product.entityId,
-    quantity: quantity,
-    field_credit: product.fieldCredit,
-    field_expired: product.fieldExpired,
-    title: product.entityLabel
-  };
-}
-
-const AddOrderItem = (product, addQuantity) => {
-  console.log(product);
-  let currItems = cartItemsVar();
-
-  let found = currItems.findIndex(prod => prod.productId === product.entityId);
-  if (found >= 0) {
-    currItems[found].quantity += addQuantity;
-  }
-  else {
-    currItems.push(NewOrderItem(product, addQuantity));
-  }
-
-  cartItemsVar(currItems);
-  console.log(cartItemsVar());
-  return currItems;
-}
+import { AddOrderItem } from "../../helpers/cache";
 
 // TODO Abstract it out
 const mathButtonStyle = {

@@ -10,6 +10,39 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 
+
+// ---------------------------------------------------------------------------
+// Cart Items reactive variable and operations
+export const cartItemsVar = makeVar([]);
+
+const NewOrderItem = (product, quantity) => {
+  return { 
+    productId: product.entityId,
+    quantity: quantity,
+    field_credit: product.fieldCredit,
+    field_expired: product.fieldExpired,
+    title: product.entityLabel
+  };
+}
+
+export const AddOrderItem = (product, addQuantity) => {
+  console.log(product);
+  let currItems = cartItemsVar();
+
+  let found = currItems.findIndex(prod => prod.productId === product.entityId);
+  if (found >= 0) {
+    currItems[found].quantity += addQuantity;
+  }
+  else {
+    currItems.push(NewOrderItem(product, addQuantity));
+  }
+
+  cartItemsVar(currItems);
+  console.log(cartItemsVar());
+  return currItems;
+}
+// ---------------------------------------------------------------------------
+
 const typeDefs = gql`
   extend type Query {
     cartItems: [OrderItem!]!
@@ -22,8 +55,6 @@ const typeDefs = gql`
     title: String!
   }
 `;
-
-export const cartItemsVar = makeVar([]);
 
 const cache = new InMemoryCache({
   typePolicies: {
