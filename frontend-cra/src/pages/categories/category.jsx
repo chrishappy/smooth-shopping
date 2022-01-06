@@ -1,7 +1,12 @@
-// TODO Work In Progress
+import React from "react";
+import { useLocation } from 'react-router-dom';
+import { useQuery } from "@apollo/client";
+import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
+import { AddOrderItem } from "../../helpers/cache";
+// import gql from "graphql-tag";
+// import CheckoutButton from "../../components/checkout";
+import MainContentLoader from "../../components/main-content-loader";
 
-import React from "react"
-// import Img from "gatsby-image"
 import ImageList from '@mui/material/ImageList';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -14,17 +19,8 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
-// import CheckoutButton from "../../components/checkout";
-// import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
-import { useLocation } from 'react-router-dom'
-import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
-import MainContentLoader from "../../components/main-content-loader";
 
-// Import the CSS
 import "./category.css"
-
-import { AddOrderItem } from "../../helpers/cache";
 
 // TODO Abstract it out
 const mathButtonStyle = {

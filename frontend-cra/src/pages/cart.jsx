@@ -2,8 +2,8 @@ import * as React from "react";
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import { cartItemsVar, AddOrderItem } from "../helpers/cache";
-
 import Seo from "../components/seo"
+
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
@@ -60,13 +60,12 @@ const CartPage = () => {
         { cartItems.length } items
       </Typography>
 
-      <hr></hr>
+      <hr />
 
       <Box className="cart-items">
         {cartItems.map((item) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.productId}>
             <Box sx={{ minWidth: '100px' }}>
-              {/* <img src="" alt="" /> */}
               <img
                 src={item.fieldImage.derivative.url} 
                 alt={item.fieldImage.alt} 
@@ -101,8 +100,7 @@ const CartPage = () => {
                         //   type: 'incrementProduct',
                         //   product: product,
                         // })
-                      }}
-                      >
+                      }}>
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
