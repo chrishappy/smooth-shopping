@@ -64,12 +64,6 @@ const CategoryProducts = () => {
   )
 }
 
-// export default connect(state => ({
-//   appState: state
-// }), dispatch => ({
-//   storeDispatch: dispatch
-// }))(CategoryProducts)
-
 function Products({ category, setProduct, setOpen }) {
   const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { category },
@@ -98,14 +92,14 @@ function Products({ category, setProduct, setOpen }) {
       className="product-listings"
       gap={8}>
       {data.nodeQuery.entities.map((product) => (
-        <Box 
+        <Box
           key={product.entityId}
           className="product-listing"
           onClick={() => {
             setProduct(product);
             setOpen(true);
           }}>
-          <img 
+          <img
             src={product.fieldImage.derivative.url} 
             alt={product.fieldImage.alt} 
             title={product.fieldImage.title}
@@ -193,11 +187,6 @@ const ProductDialog = ({isOpen, handleClose, selectedProduct, selectedProductCou
                 }}
                 onClick={() => {                 
                   AddOrderItem(selectedProduct, selectedProductCount);
-                  // storeDispatch({
-                  //   type: 'incrementProduct',
-                  //   product: selectedProduct,
-                  //   by: selectedProductCount
-                  // });
                   handleClose();
                 }}>
                   Add to cart

@@ -19,14 +19,15 @@ const NewOrderItem = (product, quantity) => {
   return { 
     productId: product.entityId,
     quantity: quantity,
-    field_credit: product.fieldCredit,
-    field_expired: product.fieldExpired,
-    title: product.entityLabel
-  };
+    fieldCredit: product.fieldCredit,
+    fieldExpired: product.fieldExpired,
+    title: product.entityLabel,
+    fieldImage: product.fieldImage
+  }; // Note: I don't really know if keeping this same as in typeDefs matters..?
 }
 
 export const AddOrderItem = (product, addQuantity) => {
-  console.log(product);
+  // console.log(product);
   let currItems = cartItemsVar();
 
   let found = currItems.findIndex(prod => prod.productId === product.entityId);
@@ -38,7 +39,7 @@ export const AddOrderItem = (product, addQuantity) => {
   }
 
   cartItemsVar(currItems);
-  console.log(cartItemsVar());
+  // console.log(cartItemsVar());
   return currItems;
 }
 // ---------------------------------------------------------------------------
@@ -50,8 +51,8 @@ const typeDefs = gql`
   extend type OrderItem {
     productId: Int!
     quantity: Float!
-    field_credit: Float!
-    field_expired: Boolean!
+    fieldCredit: Float!
+    fieldExpired: Boolean!
     title: String!
   }
 `;

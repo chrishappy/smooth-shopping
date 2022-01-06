@@ -1,8 +1,7 @@
-import * as React from "react"
-
+import * as React from "react";
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
-import { cartItemsVar } from "../helpers/cache";
+import { cartItemsVar, AddOrderItem } from "../helpers/cache";
 
 import Seo from "../components/seo"
 import Card from '@mui/material/Card';
@@ -19,19 +18,6 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 
-// export const GET_CART_ITEMS = gql`
-// query GetCartItems {
-//   cartItems @client
-//   currentUserContext {
-//     uid,
-//     familyName: fieldSsFamilyName,
-//     creditsRemaining: fieldSsCurrentCredit,
-//     totalCredits: fieldSsMonthlyCredit,
-//     numberOfFamilyMembers: fieldSsPersonCount,
-//   }
-// }
-// `;
-
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
   backgroundColor: 'darkGray',
@@ -42,22 +28,11 @@ const mathButtonStyle = {
 };
 
 const CartPage = () => {
-  // const { data, loading, error } = useQuery(GET_CART_ITEMS);
-  // console.log(data);
   const cartItems = useReactiveVar(cartItemsVar);
-  console.log(cartItems);
+  // console.log(cartItems);
 
-  // const products = [];
-
-  // TODO: REMOVE should no longer need this
-  // const productsFiltered = products.filter(({ node: product }) => cartItems.hasOwnProperty(product.id));
-
-  // TODO: Better way to calculate the total of the products?
-  // const productTotal = productsFiltered.reduce((runningTotal, {node: product}) => {
-  //   return runningTotal += parseFloat(product.field_credit) * cartItems[product.id].quantity;
-  // }, 0);
   const productTotal = cartItems.reduce((runningTotal, item) => {
-    return runningTotal += parseFloat(item.field_credit) * item.quantity;
+    return runningTotal += parseFloat(item.fieldCredit) * item.quantity;
   }, 0);
 
   // For dialogs
@@ -80,7 +55,7 @@ const CartPage = () => {
     <>
       <Seo title="Cart Page" />
       <h1>Your Cart</h1>
-      
+
       <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
         { cartItems.length } items
       </Typography>
@@ -91,7 +66,13 @@ const CartPage = () => {
         {cartItems.map((item) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.productId}>
             <Box sx={{ minWidth: '100px' }}>
-              <img src="" alt="" />
+              {/* <img src="" alt="" /> */}
+              <img
+                src={item.fieldImage.derivative.url} 
+                alt={item.fieldImage.alt} 
+                title={item.fieldImage.title}
+                width={item.fieldImage.derivative.width}
+                height={item.fieldImage.derivative.height} />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -100,12 +81,12 @@ const CartPage = () => {
                     { item.title }
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
-                    <div>${ item.field_credit }</div>
-                    {/* <div>x { cartItems[product.id].quantity }</div> */}
+                    <div>${ item.fieldCredit }</div>
+                    <div>x { item.quantity }</div>
                   </Box>
-                  {/* <Typography variant="subtitle1" color="text.secondary" component="div">
-                    BBD: <strong>{product.field_expired_ ? "After" : "Before"}</strong>
-                  </Typography> */}
+                  <Typography variant="subtitle1" color="text.secondary" component="div">
+                    BBD: <strong>{item.fieldExpired ? "After" : "Before"}</strong>
+                  </Typography>
                 </CardContent>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -115,6 +96,7 @@ const CartPage = () => {
                       style={mathButtonStyle}
                       sx={{ height: 28 }}
                       onClick={() => {
+                        // AddOrderItem(item, 1); // TODO: better to query items from backend and populate cartItems I think...
                         // storeDispatch({
                         //   type: 'incrementProduct',
                         //   product: product,
@@ -177,8 +159,6 @@ const CartPage = () => {
         </Box>
       </Box>
 
-      
-
       <Dialog
         open={open}
         onClose={handleClose}
@@ -194,34 +174,3 @@ const CartPage = () => {
 }
 
 export default CartPage;
-// export default connect(state => ({
-//   appState: state
-// }), dispatch => ({
-//   storeDispatch: dispatch
-// }))(CartPage)
-
-// export const query = graphql`
-// query {
-//   allNodeProduct {
-//     edges {
-//       node {
-//         id
-//         title
-//         field_credit
-//         field_expired_
-//         relationships {
-//           field_image {
-//             localFile {
-//               childImageSharp {
-//                 fluid(cropFocus: NORTH, maxWidth: 100, maxHeight: 100) {
-//                   ...GatsbyImageSharpFluid
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
-// `;
