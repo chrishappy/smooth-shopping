@@ -33,4 +33,4 @@ We're only going to allow authenicated users execute arbitrary GraphQL commands.
 
 ### Migrate to GraphQL v4?
 
-Right now, we're using GraphQL v3 because it requires less work to set up. However, it means that authenticated users may not be able view more information than they're supposed to.
+Right now, we're using GraphQL v3 because it requires less work to set up. However, it means that authenticated users can view more information than they're supposed to.
