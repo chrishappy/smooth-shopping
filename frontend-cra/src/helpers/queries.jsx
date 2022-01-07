@@ -187,7 +187,7 @@ export const CREATE_ORDER = gql`
         }
       }
     }
-  } 
+  }
 `;
 
 /**
@@ -233,6 +233,85 @@ export const CREATE_ORDER = gql`
 export const UPDATE_ORDER = gql`
   mutation UpdateOrder($id: String!, $order:SsOrderUpdateInput!) {
     updateOrder(input: $order, id: $id) {
+      errors
+      violations {
+        code
+        message
+        path
+      }
+      entity {
+        ... on NodeOrder {
+          nid
+          title
+          fieldTotalOrderAmount
+          fieldStatus {
+            entity {
+              entityLabel
+            }
+          }
+          fieldOrderItems {
+            entity {
+              ... on ParagraphProductItem {
+                fieldProduct {
+                  entity {
+                    ... on NodeProduct {
+                      title
+                      fieldQuantity
+                    }
+                  }
+                }
+                fieldQuantity
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * Create and Update an Order
+ * 
+ * Types Schema
+ * @code
+ *   SsOrderCreateAndUpdateInput {
+ *     "title" = "String",
+ *     "uid" = "Int!",
+ *     "fieldStatus" = "String",
+ *     "orderItems" = "[SsOrderItem]"
+ *   }
+ * 
+ *   SsOrderItem {
+ *     "productId" = "Int!",
+ *     "quantity" = "Float!",
+ *   }
+ * @endcode
+ * 
+ * Example Variables
+ * @code
+ *   {
+ *     "order": {
+ *       "title": "Some Order",
+ *       "uid": 6,
+ *       "fieldStatus": "SUBMITTED",
+ *       "orderItems": [
+ *          {
+ *            "productId": 6,
+ *            "quantity": 5.0
+ *          },
+ *          {
+ *            "productId": 7,
+ *            "quantity": 2.0
+ *          }
+ *       ]
+ *     }
+ *   }
+ * @endcode
+ */
+export const CREATE_AND_UPDATE_ORDER = gql`
+  mutation CreateAndUpdateOrder($order:SsOrderUpdateInput!) {
+    createAndUpdateOrder(input: $order) {
       errors
       violations {
         code

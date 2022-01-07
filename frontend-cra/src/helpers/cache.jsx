@@ -6,6 +6,7 @@ import {
   makeVar,
   from
 } from '@apollo/client';
+import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 
@@ -139,6 +140,19 @@ const logoutLink = onError((err) => {
     console.error(err);
   }
 })
+
+// await before instantiating ApolloClient, else queries might run before the cache is persisted
+export const cachePersistor = new CachePersistor({
+  cache,
+  storage: new LocalStorageWrapper(window.localStorage),
+});
+
+export const clearCache = () => {
+  if (!cachePersistor) {
+    return;
+  }
+  cachePersistor.purge();
+};
 
 // The final Apollo client
 export const apolloClient = new ApolloClient({

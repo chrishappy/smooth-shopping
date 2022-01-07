@@ -42,6 +42,7 @@ const CartPage = () => {
 
   const totalCredits = loading ? 0 : parseFloat(data.currentUserContext.creditsRemaining);
   const cartItems = loading ? [] : data.nodeQuery.entities;
+  const userId = loading ? -1 : data.currentUserContext.uid;
 
   return (
     <>
@@ -128,9 +129,9 @@ const CartPage = () => {
             <CartCheckoutButton 
               disabled={cartTotalReactive > totalCredits}
               orderData={{
-                uid: data.currentUserContext.uid,
+                uid: userId,
                 title: `Sample Order`,
-                totalAmount: cartTotalReactive,
+                orderItems: cartIdsAndQuantities,
               }}/>
           </Box>
         </Box>
