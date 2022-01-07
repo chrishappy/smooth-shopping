@@ -8,12 +8,18 @@ import { CREATE_AND_UPDATE_ORDER } from "../helpers/queries";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
+import { clearCart } from "../helpers/cartItems";
 
 export const CartCheckoutButton = ({disabled, orderData}) => {
   const [createOrder, {data, loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
 
   // For dialogs
   const [open, setOpen] = React.useState(false);
+
+  // If the order is successfully created, clear the cart
+  // if (open && !loading && !error) {
+  //   clearCart();
+  // }
 
   return (
     <>
@@ -34,8 +40,12 @@ export const CartCheckoutButton = ({disabled, orderData}) => {
 
           createOrder({
             variables: {
-              title: orderData.title,
-              orderItems: getOrderItemsFormatted(orderData.orderItems),
+              order: {
+                uid: parseInt(orderData.uid),
+                title: orderData.title,
+                // fieldStatus: "SUBMITTED",
+                orderItems: getOrderItemsFormatted(orderData.orderItems),
+              }
             }
           });
         }}>
@@ -58,10 +68,10 @@ export const CartCheckoutButton = ({disabled, orderData}) => {
 }
 
 function getOrderItemsFormatted(orderItems) {
-  return orderItems.entries().map(([productId, quantity]) => {
+  return [...orderItems.entries()].map(([productId, quantity]) => {
     return {
-      productId, 
-      quantity
+      productId: parseInt(productId), 
+      quantity: parseFloat(quantity),
     };
   });
 }

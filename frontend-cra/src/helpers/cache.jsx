@@ -8,7 +8,7 @@ import {
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
-import { cartItemsVar } from './cartItems';
+import { cartItemsVar, clearCart } from './cartItems';
 
 
 // ---------------------------------------------------------------------------
@@ -84,11 +84,18 @@ export const cachePersistor = new CachePersistor({
   storage: new LocalStorageWrapper(window.localStorage),
 });
 
-export const clearCache = () => {
+/**
+ * Clear the ApolloClient and Cart cache
+ * @returns undefined|null
+ */
+export const clearApolloCache = () => {
   if (!cachePersistor) {
     return;
   }
   cachePersistor.purge();
+
+  // Clear the cart cache too
+  clearCart();
 };
 
 // The final Apollo client

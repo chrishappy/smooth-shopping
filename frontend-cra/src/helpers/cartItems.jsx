@@ -6,8 +6,7 @@ import { makeVar } from "@apollo/client";
  *  {productID: quantity}
  */
 const LOCAL_STORAGE_CART_ITEMS_VAR = 'LOCAL_STORAGE_CART_ITEMS_VAR';
-const cartItemsMap = new Map();
-export const cartItemsVar = makeVar(cartItemsMap);
+export const cartItemsVar = makeVar(new Map());
 
 // The amount of credits used in the cart
 // Don't store remainingStoreCredits so that we don't have to initialize
@@ -101,4 +100,15 @@ export const storeCartItems = () => {
 
   const cartTotal = JSON.stringify(cartTotalVar());
   window.localStorage.setItem(LOCAL_STORAGE_CART_TOTAL, cartTotal);
+}
+
+/**
+ * Clear the cart
+ */
+export const clearCart = () => {
+  cartItemsVar(new Map());
+  cartTotalVar(0.0);
+
+  // Clear local storage
+  storeCartItems();
 }

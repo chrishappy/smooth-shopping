@@ -51,7 +51,6 @@ const GoCheckoutButton = () => {
           variant="extended"
           size="large"
           onClick={() => {
-            console.log('TODO: fix navigate');
             navigate('/cart');
           }}>
           <StyledBadge badgeContent={cartItemsCount} color="primary" sx={{ mr: 1 }}>
