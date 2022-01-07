@@ -19,6 +19,7 @@ import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
 import './App.css';
 import { restoreCartItems, storeCartItems } from './helpers/cartItems';
+import MainContentLoader from './components/main-content-loader';
 
 const App = () => {
   const [client, setClient] = React.useState();
@@ -49,7 +50,11 @@ const App = () => {
   // }, [persistor]);
 
   if (!client) {
-    return <h2>Initializing app...</h2>;
+    return (
+      // <div className='page'>
+        <p style={{textAlign: 'center'}}>Loading...</p>
+      // </div>
+    );
   }
 
   return (

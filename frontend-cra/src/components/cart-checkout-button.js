@@ -8,18 +8,19 @@ import { CREATE_AND_UPDATE_ORDER } from "../helpers/queries";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
-import { clearCart } from "../helpers/cartItems";
 
-export const CartCheckoutButton = ({disabled, orderData}) => {
+export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
   const [createOrder, {data, loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
 
   // For dialogs
   const [open, setOpen] = React.useState(false);
+  const [cartCleared, setCartCleared] = React.useState(false);
 
   // If the order is successfully created, clear the cart
-  // if (open && !loading && !error) {
-  //   clearCart();
-  // }
+  if (open && !loading && !error && !cartCleared) {
+    setCartCleared(true);
+    clearCart();
+  }
 
   return (
     <>
@@ -37,6 +38,7 @@ export const CartCheckoutButton = ({disabled, orderData}) => {
         startIcon={<CheckCircleIcon />}
         onClick={() => {
           setOpen(true);
+          setCartCleared(false);
 
           createOrder({
             variables: {

@@ -29,6 +29,15 @@ export const AddOrderItem = (product, addQuantity) => {
   if (!currItems.has(product.entityId)) {
     currItems.set(product.entityId, 0.0);
   }
+
+  // If the quantity exceeds the max quantity, add the remaining
+  if (currItems.get(product.entityId) + addQuantity > product.quantity) {
+    console.warn(`Quantity Exceeded for ${product.entityLabel}`);
+    // TODO: show users a notice
+
+    addQuantity = product.quantity - currItems.get(product.entityId); 
+  }
+
   currItems.set(product.entityId, currItems.get(product.entityId) + addQuantity);
   cartItemsVar(currItems);
 

@@ -1,6 +1,6 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
-import { cartItemsVar, AddOrderItem, cartTotalVar, MinusOrderItem } from "../helpers/cartItems";
+import { cartItemsVar, AddOrderItem, cartTotalVar, MinusOrderItem, clearCart } from "../helpers/cartItems";
 import Seo from "../components/seo"
 
 import Card from '@mui/material/Card';
@@ -14,6 +14,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 import { CardMedia } from "@mui/material";
 import { CartCheckoutButton } from "../components/cart-checkout-button";
+
+import { format } from "date-fns";
 
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -127,10 +129,11 @@ const CartPage = () => {
 
           <Box sx={{ textAlign: 'center' }}>
             <CartCheckoutButton 
-              disabled={cartTotalReactive > totalCredits}
+              disabled={cartItems.length === 0 || cartTotalReactive > totalCredits}
+              clearCart={clearCart}
               orderData={{
                 uid: userId,
-                title: `Sample Order`,
+                title: `Order - ${format(new Date(), 'yyyy-MM-dd')}`, // TODO: Set timezone
                 orderItems: cartIdsAndQuantities,
               }}/>
           </Box>
