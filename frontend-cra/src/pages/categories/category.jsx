@@ -30,7 +30,7 @@ const CategoryProducts = () => {
   const [isOpen, setOpen] = React.useState(false);
 
   
-  const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
+  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { category: title },
   });
 
@@ -40,13 +40,22 @@ const CategoryProducts = () => {
 
   return (
     <>
-      <IconButton
-        style={{ color: 'white', display: 'none' }}
-        aria-label={'Refresh page'}
-        onClick={() => console.log('Clear caches') } >
-        <CachedIcon />
-      </IconButton>
-      <h1>{ title }</h1>
+      <Stack 
+        direction="row" 
+        sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
+        <h1>{ title }</h1>
+        <div>
+          <IconButton
+            color="primary"
+            aria-label={'Refresh page'}
+            onClick={() => {
+              console.log('Clear caches');
+              refetch();
+            }} >
+            <CachedIcon />
+          </IconButton>
+        </div>
+      </Stack>
       { loading 
           ? <MainContentLoader />
           : error 

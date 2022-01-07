@@ -58,7 +58,7 @@ export const GET_ALL_PRODUCTS = gql`
   query GetAllProducts {
     nodeQuery(filter: {
       conditions: [
-        {operator: EQUAL, field: "type", value: ["product"]},,
+        {operator: EQUAL, field: "type", value: ["product"]},
       ]}, 
       limit: 30,
       offset: 0,
