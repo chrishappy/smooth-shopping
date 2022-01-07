@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from 'react-router-dom';
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
 import { AddOrderItem, cartItemsVar } from "../../helpers/cartItems";
 import MainContentLoader from "../../components/main-content-loader";
@@ -97,16 +97,16 @@ function Products({ category, setProduct, setOpen }) {
 
 const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
 
-  const productQuantity = parseFloat(cartItemsVar().get(selectedProduct.entityId)) || 0.0;
+  const productQuantity = parseFloat(useReactiveVar(cartItemsVar).get(selectedProduct.entityId)) || 0.0;
   
-  const maxQuantity = parseFloat(selectedProduct.fieldQuantity) - productQuantity;
+  const maxQuantity = parseFloat(selectedProduct.fieldQuantity || 0.0) - productQuantity;
   const minQuantity = Math.min(maxQuantity, 1.0); // In case no more elements (e.g. maxQuantity is zero)
 
-  const [selectedProductCount, setCount] = React.useState(minQuantity);
+  const [selectedProductCount, setCount] = React.useState(1.0);
 
   const handleClose = () => {
     setOpen(false);
-    setCount(minQuantity); // Revert to one
+    setCount(1.0); // Revert to one
   };
 
 
@@ -158,7 +158,11 @@ const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
                   <RemoveIcon sx={{ fontSize: 22 }} />
                 </IconButton>
                 <Box id="modal-product-count" sx={{ mt: 0.8, ml: 1, mr: 1 }}>
-                  {selectedProductCount}
+                  { // TODO: Remove hack: how to detect if maxQuantity is zero?
+                    maxQuantity === 0.0 
+                      ? 0.0 
+                      : selectedProductCount
+                  }
                 </Box>
                 <IconButton
                   className="math-button-style"

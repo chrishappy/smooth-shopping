@@ -7,8 +7,8 @@ import { cartTotalVar } from "../helpers/cartItems";
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS, {
-    fetchPolicy: "network-only",
-    pollInterval: 5000,
+    // fetchPolicy: "network-only",
+    // pollInterval: 5000,
   });
 
   let cartTotalReactive = useReactiveVar(cartTotalVar);
