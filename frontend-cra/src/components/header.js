@@ -7,7 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate, useLocation } from "react-router-dom";
 import CurrentCreditStatus from "./current-credit-status";
 
-const Header = ({ appState }) => {
+const Header = () => {
   const pathname = useLocation().pathname;
   const isHome = pathname.replace(/\/$/, '') === '';
 

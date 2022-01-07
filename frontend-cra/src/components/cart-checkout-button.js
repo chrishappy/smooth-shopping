@@ -10,17 +10,11 @@ import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
 
 export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
+  // TODO: Display old orders somewhere
   const [createOrder, {data, loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
 
   // For dialogs
   const [open, setOpen] = React.useState(false);
-  const [cartCleared, setCartCleared] = React.useState(false);
-
-  // If the order is successfully created, clear the cart
-  if (open && !loading && !error && !cartCleared) {
-    setCartCleared(true);
-    clearCart();
-  }
 
   return (
     <>
@@ -38,7 +32,7 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
         startIcon={<CheckCircleIcon />}
         onClick={() => {
           setOpen(true);
-          setCartCleared(false);
+          // setCartCleared(false);
 
           createOrder({
             variables: {
@@ -50,6 +44,9 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
               }
             }
           });
+
+          // TODO: Is there a better hack?
+          setTimeout(clearCart, 1500);
         }}>
         Confirm Order
       </LoadingButton>

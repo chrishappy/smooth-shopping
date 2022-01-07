@@ -40,7 +40,12 @@ function Categories() {
     {data.taxonomyTermQuery.entities.map((category) => (
       <ImageListItem key={category.entityId} variant="masonry">
         <Link to={category.entityUrl.path} state={{ title: category.entityLabel }}>
-          <img src={category.fieldImage.derivative.url} alt="" />
+          <img 
+            src={category.fieldImage.derivative.url} 
+            alt={category.fieldImage.alt} 
+            title={category.fieldImage.title}
+            width={category.fieldImage.derivative.width}
+            height={category.fieldImage.derivative.height} />
           <ImageListItemBar
             title={category.entityLabel}
             sx={{

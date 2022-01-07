@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link } from "react-router-dom";
-import { Typography, Button } from '@mui/material';
+import { Typography, Button, Box } from '@mui/material';
 import Seo from "../components/seo"
 import { logoutCurrentUser } from "../helpers/login";
 import { useQuery } from '@apollo/client';
@@ -54,18 +54,21 @@ const Account = () => {
         Your credits are renewed on the first of every month. Credits do not roll over.
       </Typography>
 
-      <Button variant="contained" component={Link} to="/"
-        sx={{
-          backgroundColor: 'gray',
-          color: 'black',
-          borderRadius: '20px',
-          fontWeight: 'bold',
-          padding: '0 10%',
-          marginTop: '3rem'
-        }}
-        onClick={() => {
-          logoutCurrentUser();
-        }}>Log out</Button>
+      <Box sx={{ textAlign: 'center' }}>
+        <Button variant="outlined" component={Link} to="/"
+          color="primary"
+          sx={{
+            // backgroundColor: 'gray',
+            // color: 'black',
+            // borderRadius: '20px',
+            // fontWeight: 'bold',
+            // padding: '0 10%',
+            marginTop: '3rem'
+          }}
+          onClick={() => {
+            logoutCurrentUser();
+          }}>Log out</Button>
+      </Box>
     </>
   );
 }

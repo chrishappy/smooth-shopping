@@ -20,9 +20,7 @@ const Layout = () => {
     <div className="page">
       {isLoggedIn() ?
       <>
-        <Header
-          siteTitle={`Title`}
-          />
+        <Header />
         <div
           style={{
             margin: `0 auto`,

@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from 'react-router-dom';
 import { useQuery } from "@apollo/client";
 import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
-import { AddOrderItem } from "../../helpers/cartItems";
+import { AddOrderItem, cartItemsVar } from "../../helpers/cartItems";
 import MainContentLoader from "../../components/main-content-loader";
 
 import ImageList from '@mui/material/ImageList';
@@ -21,27 +21,12 @@ import IconButton from '@mui/material/IconButton';
 import "./category.css"
 import GoCheckoutButton from "../../components/go-checkout-button";
 
-// TODO Abstract it out
-const mathButtonStyle = {
-  background: 'rgba(255, 255, 255, 0.54)',
-  backgroundColor: 'darkGray',
-  color: 'black',
-  borderRadius: '20px',
-  fontWeight: 'bold',
-  margin: '0 0.3rem'
-}
-
 const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
   const { title } = location.state;
 
   const [selectedProduct, setProduct] = React.useState({});
-  const [selectedProductCount, setCount] = React.useState(1);
   const [isOpen, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-    setCount(1); // Revert to one
-  };
 
   return (
     <>
@@ -50,10 +35,8 @@ const CategoryProducts = () => {
       <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
-        selectedProductCount={selectedProductCount}
         isOpen={isOpen}
-        handleClose={handleClose}
-        setCount={setCount} />
+        setOpen={setOpen} />
       {/* { products.length === 0 ? (<p>There are currently no products.</p>) : ''} */}
     </>
   )
@@ -112,7 +95,21 @@ function Products({ category, setProduct, setOpen }) {
   );
 }
 
-const ProductDialog = ({isOpen, handleClose, selectedProduct, selectedProductCount, setCount}) => {
+const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
+
+  const productQuantity = parseFloat(cartItemsVar().get(selectedProduct.entityId)) || 0.0;
+  
+  const maxQuantity = parseFloat(selectedProduct.fieldQuantity) - productQuantity;
+  const minQuantity = Math.min(maxQuantity, 1.0); // In case no more elements (e.g. maxQuantity is zero)
+
+  const [selectedProductCount, setCount] = React.useState(minQuantity);
+
+  const handleClose = () => {
+    setOpen(false);
+    setCount(minQuantity); // Revert to one
+  };
+
+
   return (
     <Dialog
         open={isOpen}
@@ -149,26 +146,29 @@ const ProductDialog = ({isOpen, handleClose, selectedProduct, selectedProductCou
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Stack direction="row">
+              <Stack direction="row" sx={{ alignContent: 'center' }}>
                 <IconButton
-                  style={mathButtonStyle}
+                  className="math-button-style"
                   onClick={() => {
-                    let count = (selectedProductCount-1 < 1) ? 1 : selectedProductCount-1;
+                    const count = Math.max(selectedProductCount-1, minQuantity);
                     setCount(count);
                   }}
+                  disabled={selectedProductCount === minQuantity}
                 >
-                  <RemoveIcon />
+                  <RemoveIcon sx={{ fontSize: 22 }} />
                 </IconButton>
-                <Typography id="modal-product-count" sx={{ mt:1, ml:0.5, mr:0.5 }}>
+                <Box id="modal-product-count" sx={{ mt: 0.8, ml: 1, mr: 1 }}>
                   {selectedProductCount}
-                </Typography>
+                </Box>
                 <IconButton
-                  style={mathButtonStyle}
+                  className="math-button-style"
                   onClick={() => {
-                    setCount(selectedProductCount + 1);
+                    const count = Math.min(selectedProductCount + 1, maxQuantity);
+                    setCount(count);
                   }}
+                  disabled={selectedProductCount === maxQuantity}
                 >
-                  <AddIcon />
+                  <AddIcon sx={{ fontSize: 22 }} />
                 </IconButton>
               </Stack>
               <div style={{marginRight: 'auto'}}></div>

@@ -16,15 +16,7 @@ import { CardMedia } from "@mui/material";
 import { CartCheckoutButton } from "../components/cart-checkout-button";
 
 import { format } from "date-fns";
-
-const mathButtonStyle = {
-  background: 'rgba(255, 255, 255, 0.54)',
-  backgroundColor: 'darkGray',
-  color: 'black',
-  borderRadius: '20px',
-  fontWeight: 'bold',
-  margin: '0 0.3rem',
-};
+import './categories/category'; // for math-button-style
 
 const CartPage = () => {
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
@@ -75,11 +67,13 @@ const CartPage = () => {
                     { item.title }
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
-                    <span>${ item.fieldCredit } </span>
+                    <span>${ parseFloat(item.fieldCredit) } </span>
                     <span>x { cartIdsAndQuantities.get(item.entityId) }</span> {/* TODO: Find less hacky solution? */}
                   </Box>
-                  <Typography variant="subtitle1" color="text.secondary" component="div">
-                    BBD: <strong>{item.fieldExpired ? "After" : "Before"}</strong>
+                  <Typography variant="body2" color="text.secondary" component="div">
+                    {item.fieldExpired 
+                      ? <strong>Expired</strong>
+                      : <em>Not Expired</em>}
                   </Typography>
                 </CardContent>
               </Box>
@@ -88,22 +82,24 @@ const CartPage = () => {
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
                   <Stack direction="column">
                     <IconButton
-                      style={mathButtonStyle}
-                      sx={{ height: 28 }}
+                      className='math-button-style'
+                      sx={{ height: '1.1em', width: '1.1em' }}
                       onClick={() => {
                         AddOrderItem(item, 1);
-                      }}>
+                      }}
+                      disabled={cartIdsAndQuantities.get(item.entityId) >= item.fieldQuantity}>
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
                       <span>{ cartIdsAndQuantities.get(item.entityId) }</span> {/* TODO: Find less hacky solution? */}
                     </Box>
                     <IconButton
-                      style={mathButtonStyle}
-                      sx={{ height: 28 }}
+                      className='math-button-style'
+                      sx={{ height: '1.1em', width: '1.1em' }}
                       onClick={() => {
                         MinusOrderItem(item, 1);
-                      }}>
+                      }}
+                      >
                       <RemoveIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                   </Stack>

@@ -22,7 +22,7 @@ export const GET_PRODUCT_CATEGORIES = gql`
     taxonomyTermQuery(filter: {
     conditions: [
       {operator: EQUAL, field: "vid", value: ["product_categories"]},
-    ]}) {
+    ]}, limit: 30) {
       count
       entities {
         entityId
@@ -60,7 +60,7 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
       conditions: [
         {operator: EQUAL, field: "type", value: ["product"]},
         {operator: EQUAL, field: "field_categories.entity.name", value: [$category]},
-      ]}
+      ]}, limit: 30
     ) {
       entities {
         entityUuid
@@ -75,6 +75,7 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
             }
           }
           fieldCredit
+          fieldQuantity
           fieldExpired
           fieldImage {
             derivative(style: PRODUCTCATEGORY) {
@@ -109,7 +110,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
     nodeQuery(filter: {
       conditions: [
         {operator: IN, field: "nid", value: $productIds},
-      ]}
+      ]}, limit: 30
     ) {
       entities {
         entityUuid
@@ -124,6 +125,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
             }
           }
           fieldCredit
+          fieldQuantity
           fieldExpired
           fieldImage {
             derivative(style: PRODUCTCATEGORY) {

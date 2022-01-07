@@ -17,8 +17,10 @@ export const cartTotalVar = makeVar(0.0);
 /**
  * Increase the quantity of a product in the cart
  * 
- * @param {float} product the product to add to the cart. Require 
- *                        `entityId` and `fieldCredit` fields
+ * @param {float} product the product to add to the cart. Require the fields:
+ *  - entityId
+ *  - fieldCredit
+ *  - fieldQuantity
  * @param {float|int} addQuantity the amount to add to product
  * @returns {object} the cart items
  */
@@ -31,11 +33,11 @@ export const AddOrderItem = (product, addQuantity) => {
   }
 
   // If the quantity exceeds the max quantity, add the remaining
-  if (currItems.get(product.entityId) + addQuantity > product.quantity) {
+  if (currItems.get(product.entityId) + addQuantity > product.fieldQuantity) {
     console.warn(`Quantity Exceeded for ${product.entityLabel}`);
     // TODO: show users a notice
 
-    addQuantity = product.quantity - currItems.get(product.entityId); 
+    addQuantity = product.fieldQuantity - currItems.get(product.entityId); 
   }
 
   currItems.set(product.entityId, currItems.get(product.entityId) + addQuantity);

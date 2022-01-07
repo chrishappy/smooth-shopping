@@ -19,7 +19,6 @@ import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
 import './App.css';
 import { restoreCartItems, storeCartItems } from './helpers/cartItems';
-import MainContentLoader from './components/main-content-loader';
 
 const App = () => {
   const [client, setClient] = React.useState();
