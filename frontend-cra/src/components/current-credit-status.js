@@ -1,11 +1,14 @@
 import * as React from "react"
 import { Link } from "react-router-dom";
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
+import { cartTotal } from "../helpers/cache";
 
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS);
+
+  let cartTotalReactive = useReactiveVar(cartTotal);
 
   if (error) {
     return (
@@ -41,14 +44,14 @@ const CurrentCredits = () => {
       >
         {/* <ShoppingCartIcon fontSize="large" /> */}
         <h3 style={{ margin: 0, color: '#75F348', fontSize: '2rem' }}>
-            ${userData.creditsRemaining}
+            ${parseFloat(userData.creditsRemaining) - cartTotalReactive}
         </h3>
         <div style={{
           textAlign: 'left',
           fontSize: '0.8em',
           lineHeight: 1,
           marginLeft: '0.5em'
-        }}>/{userData.totalCredits}<br/>credits</div>
+        }}>/{parseFloat(userData.totalCredits)}<br/>credits</div>
       </div>
     </Link>
   );

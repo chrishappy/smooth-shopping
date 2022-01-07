@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useQuery, useReactiveVar } from '@apollo/client';
-import { GET_USER_STATS } from "../helpers/queries";
-import { cartItemsVar, AddOrderItem } from "../helpers/cache";
+import { makeVar, useQuery, useReactiveVar } from '@apollo/client';
+import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
+import { cartItemsVar, AddOrderItem, cartTotal } from "../helpers/cache";
 import Seo from "../components/seo"
 
 import Card from '@mui/material/Card';
@@ -28,20 +28,19 @@ const mathButtonStyle = {
 };
 
 const CartPage = () => {
-  const cartItems = useReactiveVar(cartItemsVar);
-  // console.log(cartItems);
-
-  const productTotal = cartItems.reduce((runningTotal, item) => {
-    return runningTotal += parseFloat(item.fieldCredit) * item.quantity;
-  }, 0);
+  const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
+  const productTotal = useReactiveVar(cartTotal);
 
   // For dialogs
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const open = makeVar(false);
 
-  const { loading, error, data } = useQuery(GET_USER_STATS);
+  console.log(Object.keys(cartIdsAndQuantities));
+
+  const { loading, error, data } = useQuery(GET_PRODUCTS_FOR_CART, {
+    variables: {
+      productIds: Object.keys(cartIdsAndQuantities),
+    },
+  });
 
   if (error) {
     return (
@@ -50,6 +49,7 @@ const CartPage = () => {
   }
 
   const totalCredits = loading ? 0 : data.currentUserContext.totalCredits;
+  const cartItems = loading ? [] : data.nodeQuery.entities;
 
   return (
     <>
@@ -65,7 +65,7 @@ const CartPage = () => {
       <Box className="cart-items">
         {cartItems.map((item) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.productId}>
-            <Box sx={{ minWidth: '100px' }}>
+            <Box sx={{ width: '150px' }}>
               <img
                 src={item.fieldImage.derivative.url} 
                 alt={item.fieldImage.alt} 
@@ -80,8 +80,8 @@ const CartPage = () => {
                     { item.title }
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
-                    <div>${ item.fieldCredit }</div>
-                    <div>x { item.quantity }</div>
+                    <span>${ item.fieldCredit } </span>
+                    <span>x { item.quantity }</span>
                   </Box>
                   <Typography variant="subtitle1" color="text.secondary" component="div">
                     BBD: <strong>{item.fieldExpired ? "After" : "Before"}</strong>
@@ -150,7 +150,7 @@ const CartPage = () => {
               // storeDispatch({
               //   type: 'CLEAR_CART'
               // });
-              setOpen(true);
+              open(true);
             }}>
             Confirm Order
           </Button>
@@ -158,8 +158,8 @@ const CartPage = () => {
       </Box>
 
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={open()}
+        onClose={() => {open(false)}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

@@ -7,11 +7,11 @@ import { gql } from "@apollo/client";
 export const GET_USER_STATS = gql`
 query GetUserStats {
   currentUserContext {
-    uid,
-    familyName: fieldSsFamilyName,
-    creditsRemaining: fieldSsCurrentCredit,
-    totalCredits: fieldSsMonthlyCredit,
-    numberOfFamilyMembers: fieldSsPersonCount,
+    uid
+    familyName: fieldSsFamilyName
+    creditsRemaining: fieldSsCurrentCredit
+    totalCredits: fieldSsMonthlyCredit
+    numberOfFamilyMembers: fieldSsPersonCount
   }
 }
 `
@@ -60,6 +60,54 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
       conditions: [
         {operator: EQUAL, field: "type", value: ["product"]},
         {operator: EQUAL, field: "field_categories.entity.name", value: [$category]},
+      ]}
+    ) {
+      entities {
+        entityUuid
+        entityId
+        entityLabel
+        ... on NodeProduct {
+          fieldCategories {
+            targetId
+            entity {
+              name
+              entityLabel
+            }
+          }
+          fieldCredit
+          fieldExpired
+          fieldImage {
+            derivative(style: PRODUCTCATEGORY) {
+              url
+              width
+              height
+            }
+            alt
+            title
+            width
+            height
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * Get the products by ids
+ * 
+ * @param $category the name of the product category
+ */ 
+export const GET_PRODUCTS_FOR_CART = gql`
+  # Get the products by ids
+  query GetProductsByIds($productIds:[String]) {
+    currentUserContext {
+        totalCredits: fieldSsMonthlyCredit
+    }
+    nodeQuery(filter: {
+      conditions: [
+        {operator: IN, field: "nid", value: $productIds},
       ]}
     ) {
       entities {

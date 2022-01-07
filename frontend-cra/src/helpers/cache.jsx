@@ -13,35 +13,30 @@ import { getJwtString, logoutCurrentUser } from './login';
 
 // ---------------------------------------------------------------------------
 // Cart Items reactive variable and operations
-export const cartItemsVar = makeVar([]);
+export const cartItemsVar = makeVar({});
 
-const NewOrderItem = (product, quantity) => {
-  return { 
-    productId: product.entityId,
-    quantity: quantity,
-    fieldCredit: product.fieldCredit,
-    fieldExpired: product.fieldExpired,
-    title: product.entityLabel,
-    fieldImage: product.fieldImage
-  }; // Note: I don't really know if keeping this same as in typeDefs matters..?
-}
+export const cartTotal = makeVar(0.0);
 
+// Add order item
 export const AddOrderItem = (product, addQuantity) => {
-  // console.log(product);
   let currItems = cartItemsVar();
 
-  let found = currItems.findIndex(prod => prod.productId === product.entityId);
-  if (found >= 0) {
-    currItems[found].quantity += addQuantity;
+  // Update quantity
+  if (!currItems.hasOwnProperty(product.entityId)) {
+    currItems[product.entityId] = 0.0;
   }
-  else {
-    currItems.push(NewOrderItem(product, addQuantity));
-  }
-
+  currItems[product.entityId] += addQuantity;
   cartItemsVar(currItems);
-  // console.log(cartItemsVar());
+
+  // Update cart total
+  updateCartTotal(product.fieldCredit * addQuantity);
+
   return currItems;
 }
+
+const updateCartTotal = (numberToAdd) => {
+  cartTotal(cartTotal() + numberToAdd);
+};
 // ---------------------------------------------------------------------------
 
 const typeDefs = gql`
@@ -66,13 +61,6 @@ const cache = new InMemoryCache({
             return cartItemsVar();
           }
         },
-        // currentUser: {
-        //   loggedIn: {
-        //     read() {
-        //       return isLoggedIn();
-        //     }
-        //   }
-        // }
       }
     }
   }
