@@ -103,7 +103,8 @@ export const GET_PRODUCTS_FOR_CART = gql`
   # Get the products by ids
   query GetProductsByIds($productIds:[String]) {
     currentUserContext {
-        totalCredits: fieldSsMonthlyCredit
+      uid,
+      creditsRemaining: fieldSsCurrentCredit
     }
     nodeQuery(filter: {
       conditions: [

@@ -21,6 +21,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
 
 import "./category.css"
+import GoCheckoutButton from "../../components/go-checkout-button";
 
 // TODO Abstract it out
 const mathButtonStyle = {
@@ -48,7 +49,7 @@ const CategoryProducts = () => {
     <>
       <h1>{ title }</h1>
       <Products category={title} setProduct={setProduct} setOpen={setOpen}/>
-      {/* <CheckoutButton /> */}
+      <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
         selectedProductCount={selectedProductCount}

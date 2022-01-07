@@ -27,6 +27,8 @@ const CurrentCredits = () => {
     userData = data.currentUserContext;
   }
 
+  const currentCredits = parseFloat(userData.creditsRemaining) - cartTotalReactive;
+
   return (
     <Link
         to="/cart/"
@@ -43,21 +45,18 @@ const CurrentCredits = () => {
         }}
       >
         {/* <ShoppingCartIcon fontSize="large" /> */}
-        <h3 style={{ margin: 0, color: '#75F348', fontSize: '2rem' }}>
-            ${parseFloat(userData.creditsRemaining) - cartTotalReactive}
+        <h3 style={{ margin: 0, color: currentCredits > 0 ? '#75F348' : '#F34848', fontSize: '2rem' }}>
+            ${currentCredits}
         </h3>
         <div style={{
           textAlign: 'left',
           fontSize: '0.8em',
           lineHeight: 1,
           marginLeft: '0.5em'
-        }}>/{parseFloat(userData.totalCredits)}<br/>credits</div>
+        }}>/${parseFloat(userData.totalCredits)}<br/>credits</div>
       </div>
     </Link>
   );
 }
 
 export default CurrentCredits;
-// export default connect(state => ({
-//   appState: state
-// }), null)(CurrentCredits)

@@ -4,8 +4,7 @@ import {
   createHttpLink, 
   InMemoryCache, 
   makeVar,
-  from,
-  gql
+  from
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
@@ -29,28 +28,51 @@ export const AddOrderItem = (product, addQuantity) => {
   cartItemsVar(currItems);
 
   // Update cart total
-  updateCartTotal(product.fieldCredit * addQuantity);
+  updateCartTotal(product.fieldCredit, addQuantity);
 
   return currItems;
 }
 
-const updateCartTotal = (numberToAdd) => {
-  cartTotal(cartTotal() + numberToAdd);
+// Add order item
+export const MinusOrderItem = (product, minusQuantity) => {
+  let currItems = cartItemsVar();
+
+  // Update quantity
+  if (!currItems.hasOwnProperty(product.entityId)) {
+    currItems[product.entityId] = 0.0;
+  }
+  currItems[product.entityId] -= minusQuantity;
+
+  // Remove is necessary
+  if (currItems[product.entityId] <= 0) {
+    delete currItems[product.entityId];
+  }
+  
+  cartItemsVar(currItems);
+
+  // Update cart total
+  updateCartTotal(product.fieldCredit, -minusQuantity);
+
+  return currItems;
+}
+
+const updateCartTotal = (price, attemptedQuantity) => {
+  cartTotal(cartTotal() + price * attemptedQuantity);
 };
 // ---------------------------------------------------------------------------
 
-const typeDefs = gql`
-  extend type Query {
-    cartItems: [OrderItem!]!
-  }
-  extend type OrderItem {
-    productId: Int!
-    quantity: Float!
-    fieldCredit: Float!
-    fieldExpired: Boolean!
-    title: String!
-  }
-`;
+// const typeDefs = gql`
+//   extend type Query {
+//     cartItems: [OrderItem!]!
+//   }
+//   extend type OrderItem {
+//     productId: Int!
+//     quantity: Float!
+//     fieldCredit: Float!
+//     fieldExpired: Boolean!
+//     title: String!
+//   }
+// `;
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -63,16 +85,16 @@ const cache = new InMemoryCache({
         },
       }
     },
-    NodeProduct: {
-      fields: {
-        localQuantity: {
-          read(data, data2) {
-            console.log({ data, data2 });
-            return 1; //cartItemsVar();
-          }
-        }
-      }
-    }
+    // NodeProduct: {
+    //   fields: {
+    //     localQuantity: {
+    //       read(data, data2) {
+    //         console.log({ data, data2 });
+    //         return 1; //cartItemsVar();
+    //       }
+    //     }
+    //   }
+    // }
   }
 });
 
@@ -126,5 +148,5 @@ export const apolloClient = new ApolloClient({
     httpLink,
   ]),
   cache: cache,
-  typeDefs
+  // typeDefs
 });
