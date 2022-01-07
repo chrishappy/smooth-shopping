@@ -19,6 +19,7 @@ import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
 import './App.css';
 import { restoreCartItems, storeCartItems } from './helpers/cartItems';
+import SearchProducts from './pages/search-page';
 
 const App = () => {
   const [client, setClient] = React.useState();
@@ -71,6 +72,7 @@ const App = () => {
               <Route path="categories">
                 <Route path=":categorySlug" element={<Category />} />
               </Route>
+              <Route path="search" element={<SearchProducts />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>

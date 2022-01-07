@@ -50,8 +50,6 @@ export const GET_PRODUCT_CATEGORIES = gql`
 
 /**
  * Get the products of a category
- * 
- * @param $category the name of the product category
  */ 
 export const GET_ALL_PRODUCTS = gql`
   # Get the products in a category
@@ -95,6 +93,52 @@ export const GET_ALL_PRODUCTS = gql`
     }
   }
 `;
+
+/**
+ * Search for products using terms
+ */
+export const SEARCH_FOR_PRODUCT = gql`
+query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String) {
+    nodeQuery(filter: {
+      groups:[
+        {conditions: [
+          {operator: EQUAL, field: "type", value: ["product"]},
+        ]},
+        {conditions: [
+          {operator: LIKE, field: "title", value: [$searchTerm1]},
+          {operator: LIKE, field: "title", value: [$searchTerm2]},
+          {operator: LIKE, field: "title", value: [$searchTerm3]},
+        ], conjunction: OR}
+      ]}
+    ) {
+      entities {
+        entityUuid
+        entityId
+        entityLabel
+        ... on NodeProduct {
+          fieldCategories {
+            targetId
+            entity {
+              name
+              entityLabel
+            }
+          }
+          fieldCredit
+          fieldExpired
+          fieldImage {
+            derivative(style: PRODUCTCATEGORY) {
+              url
+              width
+              height
+            }
+            alt
+            title
+          }
+        }
+      }
+    }
+  }
+`
 
 /**
  * Get the products of a category
@@ -360,7 +404,7 @@ export const UPDATE_ORDER = gql`
  * @endcode
  */
 export const CREATE_AND_UPDATE_ORDER = gql`
-  mutation CreateAndUpdateOrder($order:SsOrderUpdateInput!) {
+  mutation CreateAndUpdateOrder($order:SsOrderCreateAndUpdateInput!) {
     createAndUpdateOrder(input: $order) {
       errors
       violations {

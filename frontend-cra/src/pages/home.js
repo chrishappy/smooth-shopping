@@ -24,7 +24,6 @@ const HomePage = () => (
       <Categories/>
     </div>
     <div>
-      <h2 style={{textAlign: 'center', marginTop: '2em', }}>All Products</h2>
       <AllProductsInfiniteScroll />
     </div>
   </>
@@ -78,7 +77,11 @@ function AllProductsInfiniteScroll() {
 
   if (loading) {
     return (
-      <MainContentLoader />
+      <>
+        <h2 style={{textAlign: 'center', marginTop: '2em', }}>All Products</h2>
+        <MainContentLoader />
+      </>
+
     )
   }
   if (error) {
@@ -89,6 +92,7 @@ function AllProductsInfiniteScroll() {
   // console.log(data.taxonomyTermQuery.entities);
   return (
     <>
+      <h2 style={{textAlign: 'center', marginTop: '2em', }}>All Products</h2>
       <Products 
         setProduct={setProduct} 
         setOpen={setOpen}
