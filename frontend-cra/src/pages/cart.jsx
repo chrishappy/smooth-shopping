@@ -17,6 +17,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
+import { CardMedia } from "@mui/material";
 
 const mathButtonStyle = {
   background: 'rgba(255, 255, 255, 0.54)',
@@ -64,15 +65,15 @@ const CartPage = () => {
 
       <Box className="cart-items">
         {cartItems.map((item) => (
-          <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.productId}>
-            <Box sx={{ width: '150px' }}>
-              <img
-                src={item.fieldImage.derivative.url} 
-                alt={item.fieldImage.alt} 
-                title={item.fieldImage.title}
-                width={item.fieldImage.derivative.width}
-                height={item.fieldImage.derivative.height} />
-            </Box>
+          <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.entityId}>
+            <CardMedia
+              component="img"
+              sx={{ width: '125px', lineHeight: '0' }}
+              src={item.fieldImage.derivative.url} 
+              alt={item.fieldImage.alt} 
+              title={item.fieldImage.title}
+              width={item.fieldImage.derivative.width}
+              height={item.fieldImage.derivative.height} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
@@ -81,30 +82,26 @@ const CartPage = () => {
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
                     <span>${ item.fieldCredit } </span>
-                    <span>x { item.quantity }</span>
+                    <span>x { cartIdsAndQuantities[parseInt(item.entityId)] }</span> {/* TODO: Find less hacky solution? */}
                   </Box>
                   <Typography variant="subtitle1" color="text.secondary" component="div">
                     BBD: <strong>{item.fieldExpired ? "After" : "Before"}</strong>
                   </Typography>
                 </CardContent>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <CardContent sx={{ flex: '1 0 auto', textAlign: 'center' }}>
+              <Box sx={{  display: 'flex', flex: '1 0 auto', textAlign: 'center', maxWidth: '2.1rem', margin: '0 0.7rem' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
                   <Stack direction="column">
                     <IconButton
                       style={mathButtonStyle}
                       sx={{ height: 28 }}
                       onClick={() => {
-                        // AddOrderItem(item, 1); // TODO: better to query items from backend and populate cartItems I think...
-                        // storeDispatch({
-                        //   type: 'incrementProduct',
-                        //   product: product,
-                        // })
+                        AddOrderItem(item, 1);
                       }}>
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-                      {item.quantity}
+                      <span>{ cartIdsAndQuantities[parseInt(item.entityId)] }</span> {/* TODO: Find less hacky solution? */}
                     </Box>
                     <IconButton
                       style={mathButtonStyle}
@@ -118,7 +115,7 @@ const CartPage = () => {
                       <RemoveIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                   </Stack>
-                </CardContent>
+                </Box>
               </Box>
             </Box>
           </Card>

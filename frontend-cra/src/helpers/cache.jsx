@@ -62,6 +62,16 @@ const cache = new InMemoryCache({
           }
         },
       }
+    },
+    NodeProduct: {
+      fields: {
+        localQuantity: {
+          read(data, data2) {
+            console.log({ data, data2 });
+            return 1; //cartItemsVar();
+          }
+        }
+      }
     }
   }
 });
