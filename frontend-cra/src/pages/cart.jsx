@@ -129,7 +129,7 @@ const CartPage = () => {
               clearCart={clearCart}
               orderData={{
                 uid: userId,
-                title: `Order - ${format(new Date(), 'yyyy-MM-dd')}`, // TODO: Set timezone
+                title: `Order`, // - ${format(new Date(), 'yyyy-MM-dd')} TODO: Set timezone
                 orderItems: cartIdsAndQuantities,
               }}/>
           </Box>

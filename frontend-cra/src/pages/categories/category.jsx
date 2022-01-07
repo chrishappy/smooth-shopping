@@ -66,9 +66,9 @@ function Products({ category, setProduct, setOpen }) {
   // Default content
   return (
     <ImageList
-      sx={{ margin: '0' }}
+      sx={{ margin: '0', padding: '0 0 6em' }}
       className="product-listings"
-      gap={8}>
+      gap={16}>
       {data.nodeQuery.entities.map((product) => (
         <Box
           key={product.entityId}

@@ -7,7 +7,7 @@ import { cartTotalVar } from "../helpers/cartItems";
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS, {
-    // fetchPolicy: "network-only",
+    fetchPolicy: "network-only",
     // pollInterval: 5000,
   });
 

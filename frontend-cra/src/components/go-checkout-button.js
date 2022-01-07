@@ -48,6 +48,7 @@ const GoCheckoutButton = () => {
             right: '1em',
             pointer: 'cursor',
           }}
+          disabled={cartItemsCount <= 0}
           variant="extended"
           size="large"
           onClick={() => {
