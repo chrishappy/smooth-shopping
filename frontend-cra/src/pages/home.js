@@ -9,15 +9,23 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 import Seo from "../components/seo"
-import { GET_PRODUCT_CATEGORIES } from "../helpers/queries";
+import { GET_ALL_PRODUCTS, GET_PRODUCT_CATEGORIES } from "../helpers/queries";
 import MainContentLoader from "../components/main-content-loader";
+import { ProductDialog, Products } from "./categories/category";
+import GoCheckoutButton from "../components/go-checkout-button";
+import { cartItemsVar } from "../helpers/cartItems";
 
 const HomePage = () => (
   <>
     <Seo title="Home" />
     <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
     <div className="categories-wrap">
+      {/* <h2>Categories</h2> */}
       <Categories/>
+    </div>
+    <div>
+      <h2 style={{textAlign: 'center', marginTop: '2em', }}>All Products</h2>
+      <AllProductsInfiniteScroll />
     </div>
   </>
 );
@@ -61,5 +69,41 @@ function Categories() {
   </ImageList>
 }
 
+function AllProductsInfiniteScroll() {
+  const { loading, error, data } = useQuery(GET_ALL_PRODUCTS);
+
+  
+  const [selectedProduct, setProduct] = React.useState({});
+  const [isOpen, setOpen] = React.useState(false);
+
+  if (loading) {
+    return (
+      <MainContentLoader />
+    )
+  }
+  if (error) {
+    console.error(error);
+    return <p>There was an error.</p>;
+  }
+
+  // console.log(data.taxonomyTermQuery.entities);
+  return (
+    <>
+      <Products 
+        setProduct={setProduct} 
+        setOpen={setOpen}
+        data={data} />
+      { cartItemsVar().size > 0 
+          ? <GoCheckoutButton />
+          : <></>
+      }
+      <ProductDialog 
+        selectedProduct={selectedProduct} 
+        isOpen={isOpen}
+        setOpen={setOpen} />
+    </>
+  )
+
+}
 
 export default HomePage;

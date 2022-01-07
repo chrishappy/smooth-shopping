@@ -15,8 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import { CardMedia } from "@mui/material";
 import { CartCheckoutButton } from "../components/cart-checkout-button";
 
-import { format } from "date-fns";
 import './categories/category'; // for math-button-style
+import MainContentLoader from '../components/main-content-loader';
 
 const CartPage = () => {
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
@@ -50,6 +50,10 @@ const CartPage = () => {
       <hr />
 
       <Box className="cart-items">
+        { loading
+            ? <MainContentLoader />
+            : <></>
+        }
         {cartItems.map((item) => (
           <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.entityId}>
             <CardMedia

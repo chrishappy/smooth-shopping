@@ -17,6 +17,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
+import CachedIcon from '@mui/icons-material/Cached';
 
 import "./category.css"
 import GoCheckoutButton from "../../components/go-checkout-button";
@@ -28,10 +29,33 @@ const CategoryProducts = () => {
   const [selectedProduct, setProduct] = React.useState({});
   const [isOpen, setOpen] = React.useState(false);
 
+  
+  const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
+    variables: { category: title },
+  });
+
+  if (error) {
+    console.log(error);
+  }
+
   return (
     <>
+      <IconButton
+        style={{ color: 'white', display: 'none' }}
+        aria-label={'Refresh page'}
+        onClick={() => console.log('Clear caches') } >
+        <CachedIcon />
+      </IconButton>
       <h1>{ title }</h1>
-      <Products category={title} setProduct={setProduct} setOpen={setOpen}/>
+      { loading 
+          ? <MainContentLoader />
+          : error 
+            ? <p>{error.message}</p>
+            : <Products 
+                setProduct={setProduct} 
+                setOpen={setOpen}
+                data={data} />
+      }
       <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
@@ -42,19 +66,7 @@ const CategoryProducts = () => {
   )
 }
 
-function Products({ category, setProduct, setOpen }) {
-  const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
-    variables: { category },
-  });
-
-  if (loading) return (
-    <MainContentLoader />
-  );
-
-  if (error) {
-    console.log(error);
-    return <p>{error.message}</p>;
-  }
+export const Products = ({ setProduct, setOpen, data }) => {
 
   // If no content
   if (data.nodeQuery.entities.length === 0) {
@@ -95,7 +107,7 @@ function Products({ category, setProduct, setOpen }) {
   );
 }
 
-const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
+export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
 
   const productQuantity = parseFloat(useReactiveVar(cartItemsVar).get(selectedProduct.entityId)) || 0.0;
   

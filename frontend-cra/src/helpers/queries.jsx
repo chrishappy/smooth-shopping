@@ -53,6 +53,54 @@ export const GET_PRODUCT_CATEGORIES = gql`
  * 
  * @param $category the name of the product category
  */ 
+export const GET_ALL_PRODUCTS = gql`
+  # Get the products in a category
+  query GetAllProducts {
+    nodeQuery(filter: {
+      conditions: [
+        {operator: EQUAL, field: "type", value: ["product"]},,
+      ]}, 
+      limit: 30,
+      offset: 0,
+    ) {
+      entities {
+        entityUuid
+        entityId
+        entityLabel
+        ... on NodeProduct {
+          fieldCategories {
+            targetId
+            entity {
+              name
+              entityLabel
+            }
+          }
+          fieldCredit
+          fieldQuantity
+          fieldExpired
+          fieldImage {
+            derivative(style: PRODUCTCATEGORY) {
+              url
+              width
+              height
+            }
+            alt
+            title
+            width
+            height
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * Get the products of a category
+ * 
+ * @param $category the name of the product category
+ */ 
 export const GET_PRODUCTS_OF_CATEGORY = gql`
   # Get the products in a category
   query GetCategoryProducts($category:String) {

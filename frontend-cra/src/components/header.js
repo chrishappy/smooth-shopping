@@ -33,7 +33,7 @@ const Header = () => {
       </IconButton>
       <CurrentCreditStatus />
       <IconButton
-        style={{ color: 'white' }}
+        style={{ color: 'white', visibility: 'hidden' }}
         aria-label={'search'}>
           <SearchIcon fontSize="large" />
       </IconButton>
