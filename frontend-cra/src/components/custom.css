@@ -56,14 +56,18 @@ div .product-listings {
   padding-bottom: 9em;
 }
 
-.cart-confirm-order {
+.cart-confirm-order-wrapper {
   position: fixed;
   bottom: 5rem;
   left: 0;
   right: 0;
   max-width: 400px;
-  padding: 1em;
   margin: 0 auto;
+  box-sizing: content-box;
+}
+
+.cart-confirm-order {
+  padding: 1em;
   background: #fff;
   border-top: 1px solid hsla(0, 0%, 0%, 0.2);
   box-shadow: 0 -4px 10px rgba(225, 225, 225, 0.5);

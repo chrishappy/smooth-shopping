@@ -5,13 +5,13 @@ import { gql } from "@apollo/client";
  * Get the current user's information, e.g. how much credit left for this month
  */
 export const GET_USER_STATS = gql`
-query getUserStats {
+query GetUserStats {
   currentUserContext {
-    uid,
-    familyName: fieldSsFamilyName,
-    creditsRemaining: fieldSsCurrentCredit,
-    totalCredits: fieldSsMonthlyCredit,
-    numberOfFamilyMembers: fieldSsPersonCount,
+    uid
+    familyName: fieldSsFamilyName
+    creditsRemaining: fieldSsCurrentCredit
+    totalCredits: fieldSsMonthlyCredit
+    numberOfFamilyMembers: fieldSsPersonCount
   }
 }
 `
@@ -95,6 +95,55 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
 `;
 
 /**
+ * Get the products by ids
+ * 
+ * @param $category the name of the product category
+ */ 
+export const GET_PRODUCTS_FOR_CART = gql`
+  # Get the products by ids
+  query GetProductsByIds($productIds:[String]) {
+    currentUserContext {
+      uid,
+      creditsRemaining: fieldSsCurrentCredit
+    }
+    nodeQuery(filter: {
+      conditions: [
+        {operator: IN, field: "nid", value: $productIds},
+      ]}
+    ) {
+      entities {
+        entityUuid
+        entityId
+        entityLabel
+        ... on NodeProduct {
+          fieldCategories {
+            targetId
+            entity {
+              name
+              entityLabel
+            }
+          }
+          fieldCredit
+          fieldExpired
+          fieldImage {
+            derivative(style: PRODUCTCATEGORY) {
+              url
+              width
+              height
+            }
+            alt
+            title
+            width
+            height
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
  * Create an Order
  * 
  * Schema
@@ -138,7 +187,7 @@ export const CREATE_ORDER = gql`
         }
       }
     }
-  } 
+  }
 `;
 
 /**
@@ -184,6 +233,85 @@ export const CREATE_ORDER = gql`
 export const UPDATE_ORDER = gql`
   mutation UpdateOrder($id: String!, $order:SsOrderUpdateInput!) {
     updateOrder(input: $order, id: $id) {
+      errors
+      violations {
+        code
+        message
+        path
+      }
+      entity {
+        ... on NodeOrder {
+          nid
+          title
+          fieldTotalOrderAmount
+          fieldStatus {
+            entity {
+              entityLabel
+            }
+          }
+          fieldOrderItems {
+            entity {
+              ... on ParagraphProductItem {
+                fieldProduct {
+                  entity {
+                    ... on NodeProduct {
+                      title
+                      fieldQuantity
+                    }
+                  }
+                }
+                fieldQuantity
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * Create and Update an Order
+ * 
+ * Types Schema
+ * @code
+ *   SsOrderCreateAndUpdateInput {
+ *     "title" = "String",
+ *     "uid" = "Int!",
+ *     "fieldStatus" = "String",
+ *     "orderItems" = "[SsOrderItem]"
+ *   }
+ * 
+ *   SsOrderItem {
+ *     "productId" = "Int!",
+ *     "quantity" = "Float!",
+ *   }
+ * @endcode
+ * 
+ * Example Variables
+ * @code
+ *   {
+ *     "order": {
+ *       "title": "Some Order",
+ *       "uid": 6,
+ *       "fieldStatus": "SUBMITTED",
+ *       "orderItems": [
+ *          {
+ *            "productId": 6,
+ *            "quantity": 5.0
+ *          },
+ *          {
+ *            "productId": 7,
+ *            "quantity": 2.0
+ *          }
+ *       ]
+ *     }
+ *   }
+ * @endcode
+ */
+export const CREATE_AND_UPDATE_ORDER = gql`
+  mutation CreateAndUpdateOrder($order:SsOrderUpdateInput!) {
+    createAndUpdateOrder(input: $order) {
       errors
       violations {
         code

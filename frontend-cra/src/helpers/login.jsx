@@ -4,6 +4,8 @@
  * Avoids the use of a `loggedIn = makeVar(false)`
  */
 
+import { clearApolloCache } from "./cache";
+
 // The constant for the local storage variable storing the JWT value
 const LOCAL_STORAGE_JWT_TOKEN = 'JWT_AUTHENICATION';
 
@@ -63,4 +65,6 @@ const authenicationAsync = async (username, password) => {
  */
 export const logoutCurrentUser = () => {
   localStorage.removeItem(LOCAL_STORAGE_JWT_TOKEN);
+
+  clearApolloCache();
 };

@@ -1,7 +1,10 @@
-// TODO Work In Progress
+import React from "react";
+import { useLocation } from 'react-router-dom';
+import { useQuery } from "@apollo/client";
+import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
+import { AddOrderItem } from "../../helpers/cartItems";
+import MainContentLoader from "../../components/main-content-loader";
 
-import React from "react"
-// import Img from "gatsby-image"
 import ImageList from '@mui/material/ImageList';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -14,15 +17,9 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import IconButton from '@mui/material/IconButton';
-// import CheckoutButton from "../../components/checkout";
-// import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
-import { useLocation } from 'react-router-dom'
-import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
-import MainContentLoader from "../../components/main-content-loader";
 
-// Import the CSS
 import "./category.css"
+import GoCheckoutButton from "../../components/go-checkout-button";
 
 // TODO Abstract it out
 const mathButtonStyle = {
@@ -50,7 +47,7 @@ const CategoryProducts = () => {
     <>
       <h1>{ title }</h1>
       <Products category={title} setProduct={setProduct} setOpen={setOpen}/>
-      {/* <CheckoutButton /> */}
+      <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
         selectedProductCount={selectedProductCount}
@@ -61,12 +58,6 @@ const CategoryProducts = () => {
     </>
   )
 }
-
-// export default connect(state => ({
-//   appState: state
-// }), dispatch => ({
-//   storeDispatch: dispatch
-// }))(CategoryProducts)
 
 function Products({ category, setProduct, setOpen }) {
   const { loading, error, data } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
@@ -96,14 +87,14 @@ function Products({ category, setProduct, setOpen }) {
       className="product-listings"
       gap={8}>
       {data.nodeQuery.entities.map((product) => (
-        <Box 
+        <Box
           key={product.entityId}
           className="product-listing"
           onClick={() => {
             setProduct(product);
             setOpen(true);
           }}>
-          <img 
+          <img
             src={product.fieldImage.derivative.url} 
             alt={product.fieldImage.alt} 
             title={product.fieldImage.title}
@@ -189,12 +180,8 @@ const ProductDialog = ({isOpen, handleClose, selectedProduct, selectedProductCou
                   fontWeight: 'bold',
                   padding: '0 10%'
                 }}
-                onClick={() => {
-                  // storeDispatch({
-                  //   type: 'incrementProduct',
-                  //   product: selectedProduct,
-                  //   by: selectedProductCount
-                  // });
+                onClick={() => {                 
+                  AddOrderItem(selectedProduct, selectedProductCount);
                   handleClose();
                 }}>
                   Add to cart

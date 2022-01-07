@@ -3,14 +3,15 @@ import {
   ApolloLink,
   createHttpLink, 
   InMemoryCache, 
-  makeVar,
-  from,
+  from
 } from '@apollo/client';
+import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
+import { cartItemsVar, clearCart } from './cartItems';
 
-const cartItemsVar = makeVar([]);
 
+// ---------------------------------------------------------------------------
 const cache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -20,15 +21,18 @@ const cache = new InMemoryCache({
             return cartItemsVar();
           }
         },
-        // currentUser: {
-        //   loggedIn: {
-        //     read() {
-        //       return isLoggedIn();
-        //     }
-        //   }
-        // }
       }
-    }
+    },
+    // NodeProduct: {
+    //   fields: {
+    //     localQuantity: {
+    //       read(data, data2) {
+    //         console.log({ data, data2 });
+    //         return 1; //cartItemsVar();
+    //       }
+    //     }
+    //   }
+    // }
   }
 });
 
@@ -74,6 +78,26 @@ const logoutLink = onError((err) => {
   }
 })
 
+// await before instantiating ApolloClient, else queries might run before the cache is persisted
+export const cachePersistor = new CachePersistor({
+  cache,
+  storage: new LocalStorageWrapper(window.localStorage),
+});
+
+/**
+ * Clear the ApolloClient and Cart cache
+ * @returns undefined|null
+ */
+export const clearApolloCache = () => {
+  if (!cachePersistor) {
+    return;
+  }
+  cachePersistor.purge();
+
+  // Clear the cart cache too
+  clearCart();
+};
+
 // The final Apollo client
 export const apolloClient = new ApolloClient({
   link: from([
@@ -82,4 +106,5 @@ export const apolloClient = new ApolloClient({
     httpLink,
   ]),
   cache: cache,
+  // typeDefs
 });

@@ -1,18 +1,22 @@
 import * as React from "react"
-// import { navigate } from "gatsby";
-// import { connect } from "react-redux";
 
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import { Fab } from "@mui/material";
 import { Box } from "@mui/system";
+import { useReactiveVar } from "@apollo/client";
+import { cartItemsVar } from "../helpers/cartItems";
+import { useNavigate } from "react-router-dom";
 
-const CheckoutButton = ({ storeState }) => {
+const GoCheckoutButton = () => {
 
-  const cartItems = storeState.cartItems;
+  const cartItemsReactive = useReactiveVar(cartItemsVar);
+  const cartItemsCount = [...cartItemsReactive.values()].reduce((prev, quantity) => prev + quantity, 0.0);
 
-  const StyledBadge = styled(Badge)(({ theme }) => ({
+  const navigate = useNavigate();
+
+  const StyledBadge = styled(Badge)(() => ({
     '& .MuiBadge-badge': {
       right: 4,
       top: 5,
@@ -47,10 +51,9 @@ const CheckoutButton = ({ storeState }) => {
           variant="extended"
           size="large"
           onClick={() => {
-            console.log('TODO: fix navigate');
-            // navigate('/cart');
+            navigate('/cart');
           }}>
-          <StyledBadge badgeContent={cartItems.numberOfProducts} color="primary" sx={{ mr: 1 }}>
+          <StyledBadge badgeContent={cartItemsCount} color="primary" sx={{ mr: 1 }}>
             <ShoppingCartOutlinedIcon  className="checkout__icon" sx={{ verticalAlign: 'top'}} />
           </StyledBadge>
           Checkout
@@ -73,7 +76,4 @@ const CheckoutButton = ({ storeState }) => {
   );
 }
 
-export default CheckoutButton;
-// export default connect(state => ({
-//   storeState: state
-// }), null)(CheckoutButton)
+export default GoCheckoutButton;
