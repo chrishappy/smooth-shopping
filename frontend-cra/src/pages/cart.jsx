@@ -1,6 +1,6 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
-import { cartItemsVar, AddOrderItem, cartTotal, MinusOrderItem } from "../helpers/cache";
+import { cartItemsVar, AddOrderItem, cartTotalVar, MinusOrderItem } from "../helpers/cartItems";
 import Seo from "../components/seo"
 
 import Card from '@mui/material/Card';
@@ -26,11 +26,11 @@ const mathButtonStyle = {
 
 const CartPage = () => {
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
-  const cartTotalReactive = useReactiveVar(cartTotal);
+  const cartTotalReactive = useReactiveVar(cartTotalVar);
 
   const { loading, error, data } = useQuery(GET_PRODUCTS_FOR_CART, {
     variables: {
-      productIds: Object.keys(cartIdsAndQuantities),
+      productIds: [...cartIdsAndQuantities.keys()],
     },
   });
 
@@ -74,7 +74,7 @@ const CartPage = () => {
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
                     <span>${ item.fieldCredit } </span>
-                    <span>x { cartIdsAndQuantities[parseInt(item.entityId)] }</span> {/* TODO: Find less hacky solution? */}
+                    <span>x { cartIdsAndQuantities.get(item.entityId) }</span> {/* TODO: Find less hacky solution? */}
                   </Box>
                   <Typography variant="subtitle1" color="text.secondary" component="div">
                     BBD: <strong>{item.fieldExpired ? "After" : "Before"}</strong>
@@ -94,7 +94,7 @@ const CartPage = () => {
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-                      <span>{ cartIdsAndQuantities[parseInt(item.entityId)] }</span> {/* TODO: Find less hacky solution? */}
+                      <span>{ cartIdsAndQuantities.get(item.entityId) }</span> {/* TODO: Find less hacky solution? */}
                     </Box>
                     <IconButton
                       style={mathButtonStyle}

@@ -2,9 +2,7 @@ import React from "react";
 import { useLocation } from 'react-router-dom';
 import { useQuery } from "@apollo/client";
 import { GET_PRODUCTS_OF_CATEGORY } from "../../helpers/queries";
-import { AddOrderItem } from "../../helpers/cache";
-// import gql from "graphql-tag";
-// import CheckoutButton from "../../components/checkout";
+import { AddOrderItem } from "../../helpers/cartItems";
 import MainContentLoader from "../../components/main-content-loader";
 
 import ImageList from '@mui/material/ImageList';

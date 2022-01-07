@@ -2,13 +2,13 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
-import { cartTotal } from "../helpers/cache";
+import { cartTotalVar } from "../helpers/cartItems";
 
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS);
 
-  let cartTotalReactive = useReactiveVar(cartTotal);
+  let cartTotalReactive = useReactiveVar(cartTotalVar);
 
   if (error) {
     return (

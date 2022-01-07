@@ -18,14 +18,24 @@ import Category from './pages/categories/category';
 import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
 import './App.css';
+import { restoreCartItems, storeCartItems } from './helpers/cartItems';
 
 const App = () => {
   const [client, setClient] = React.useState();
 
   React.useEffect(() => {
     async function init() {
+      // Restore the cartItems if not present
+      restoreCartItems();
+
+      // Set client + restore persistor
       await cachePersistor.restore();
       setClient(apolloClient);
+
+      // Store cart items before unloading
+      window.addEventListener('beforeunload', () => {
+        storeCartItems();
+      });
     }
 
     init().catch(console.error);

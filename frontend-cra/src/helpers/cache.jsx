@@ -3,78 +3,15 @@ import {
   ApolloLink,
   createHttpLink, 
   InMemoryCache, 
-  makeVar,
   from
 } from '@apollo/client';
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
+import { cartItemsVar } from './cartItems';
 
 
 // ---------------------------------------------------------------------------
-// Cart Items reactive variable and operations
-export const cartItemsVar = makeVar({});
-
-export const cartTotal = makeVar(0.0);
-
-// Add order item
-export const AddOrderItem = (product, addQuantity) => {
-  let currItems = cartItemsVar();
-
-  // Update quantity
-  if (!currItems.hasOwnProperty(product.entityId)) {
-    currItems[product.entityId] = 0.0;
-  }
-  currItems[product.entityId] += addQuantity;
-  cartItemsVar(currItems);
-
-  // Update cart total
-  updateCartTotal(product.fieldCredit, addQuantity);
-
-  return currItems;
-}
-
-// Add order item
-export const MinusOrderItem = (product, minusQuantity) => {
-  let currItems = cartItemsVar();
-
-  // Update quantity
-  if (!currItems.hasOwnProperty(product.entityId)) {
-    currItems[product.entityId] = 0.0;
-  }
-  currItems[product.entityId] -= minusQuantity;
-
-  // Remove is necessary
-  if (currItems[product.entityId] <= 0) {
-    delete currItems[product.entityId];
-  }
-  
-  cartItemsVar(currItems);
-
-  // Update cart total
-  updateCartTotal(product.fieldCredit, -minusQuantity);
-
-  return currItems;
-}
-
-const updateCartTotal = (price, attemptedQuantity) => {
-  cartTotal(cartTotal() + price * attemptedQuantity);
-};
-// ---------------------------------------------------------------------------
-
-// const typeDefs = gql`
-//   extend type Query {
-//     cartItems: [OrderItem!]!
-//   }
-//   extend type OrderItem {
-//     productId: Int!
-//     quantity: Float!
-//     fieldCredit: Float!
-//     fieldExpired: Boolean!
-//     title: String!
-//   }
-// `;
-
 const cache = new InMemoryCache({
   typePolicies: {
     Query: {
