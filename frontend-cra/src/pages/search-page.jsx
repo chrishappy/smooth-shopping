@@ -23,14 +23,14 @@ const SearchProducts = () => {
   const [isOpen, setOpen] = React.useState(false);
 
   const query = useUrlQuery();
-  const searchTerms = query.get('name') || '';
+  const searchTerms = query.get('keys') || '';
   const processedSearchTermsVariables = searchTerms.split(' ', 3);
   
   const { loading, error, data, refetch } = useQuery(SEARCH_FOR_PRODUCT, {
     variables: {
-      searchTerm1: processedSearchTermsVariables[0] || '',
-      searchTerm2: processedSearchTermsVariables[1] || '',
-      searchTerm3: processedSearchTermsVariables[2] || '',
+      searchTerm1: `%${processedSearchTermsVariables[0] || null}%`,
+      searchTerm2: `%${processedSearchTermsVariables[1] || null}%`,
+      searchTerm3: `%${processedSearchTermsVariables[2] || null}%`,
     },
   });
 

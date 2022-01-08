@@ -3,42 +3,50 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, TextField } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import "./custom-search-icon.css";
 
 const CustomSearchIcon = () => {
 
   const [keys, setKeys] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  // setOpen(false);
 
   const navigator = useNavigate();
 
   return (
     <Box
       component="form"
-      className="search-form--popout"
+      className="search-form"
       sx={{
         display: 'flex',
         alignItems: 'flex-end' 
       }}>
       <Box
-        className="search-form--inner">
-        <TextField 
+        className="search-form__inner">
+        <Box className={open ? "search-form__keys search-form__keys--open" : "search-form__keys"}>
+          <TextField 
               id="search__keys" 
-              className="search__textfield"
               type="text"
-              variant="filled" 
+              // variant="filled" 
               label="Search..."
-              sx={{ background: '#fff', mb: '2rem', display: open && false ? 'block' : 'none !important' }} 
+              sx={{ background: '#fff', mb: '2rem', display: open ? 'block' : 'none !important' }} 
               onInput={(e) => setKeys(e.target.value)}/>
+        </Box>
         <IconButton
-          className="search__icon"
+          className="search-form__icon"
           type="submit"
           component={Button}
           style={{ color: 'white' }}
           aria-label={'search'}
-          onClick={() => {
-            open 
-              ? navigator(`/search?keys=${encodeURIComponent(keys)}`)
-              : setOpen(true);
+          onClick={(e) => {
+            e.preventDefault();
+            if (open) {
+              setOpen(false);
+              navigator(`/search?keys=${encodeURIComponent(keys)}`);
+            } 
+            else {
+              setOpen(true);
+            }
           }}>
             <SearchIcon fontSize="large" />
         </IconButton>
