@@ -67,13 +67,16 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
         entityId
         entityLabel
         ... on NodeProduct {
-          fieldCategories {
-            targetId
-            entity {
-              name
-              entityLabel
-            }
+          body {
+            processed
           }
+          # fieldCategories { # TODO: is this used? Cleanup some queries maybe
+          #   targetId
+          #   entity {
+          #     name
+          #     entityLabel
+          #   }
+          # }
           fieldCredit
           fieldQuantity
           fieldExpired
