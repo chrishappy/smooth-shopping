@@ -8,7 +8,7 @@ import { CREATE_AND_UPDATE_ORDER } from "../helpers/queries";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
-import { apolloClient } from "../helpers/cache";
+import { apolloClient, clearApolloCache } from "../helpers/cache";
 
 export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
   // TODO: Display old orders somewhere
@@ -46,12 +46,12 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
             }
           });
 
-          // TODO: Is there a better hack?
+          // TODO: Not working & hacky. Need to refresh quantities of items in cart.
           // https://www.apollographql.com/docs/react/data/refetching/
           setTimeout(() => {
-            clearCart();
+            clearApolloCache();
             apolloClient.refetchQueries({
-              include: 'active',
+              include: 'all',
             });
           }, 1500);
         }}>
