@@ -21,9 +21,10 @@ const Header = () => {
     }}
     >
     <div style={{
-      padding: '1.45rem 1.0875rem',
+      padding: '1rem 1rem 1.4rem',
       display: 'flex',
       flexDirection: 'row',
+      alignItems: 'center',
       justifyContent: 'space-between' }}>
       <IconButton
         style={{ color: 'white', visibility: isHome ? 'hidden' : undefined }}

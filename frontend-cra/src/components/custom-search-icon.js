@@ -27,9 +27,9 @@ const CustomSearchIcon = () => {
           <TextField 
               id="search__keys" 
               type="text"
-              // variant="filled" 
+              variant="filled" 
               label="Search..."
-              sx={{ background: '#fff', mb: '2rem', display: open ? 'block' : 'none !important' }} 
+              sx={{ background: '#fff', mb: '2rem', width: '100%' }} 
               onInput={(e) => setKeys(e.target.value)}/>
         </Box>
         <IconButton
@@ -42,7 +42,9 @@ const CustomSearchIcon = () => {
             e.preventDefault();
             if (open) {
               setOpen(false);
-              navigator(`/search?keys=${encodeURIComponent(keys)}`);
+              if (keys.length > 0) {
+                navigator(`/search?keys=${encodeURIComponent(keys)}`);
+              }
             } 
             else {
               setOpen(true);
