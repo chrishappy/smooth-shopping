@@ -4,6 +4,7 @@ import { Box, Stack, TextField, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Seo from "../components/seo"
 import { isLoggedIn, loginAsync } from "../helpers/login";
+import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/snackbar";
 
 const LoginPage = () => {
 
@@ -25,10 +26,20 @@ const LoginPage = () => {
     }
     else {
       console.log("Login");
-      await loginAsync(username, password);
+      await loginAsync(username, password)
+        .then((loggedInSuccessfully) => {
+          if (loggedInSuccessfully) {
+            navigate('/');
+          }
+          else {
+            snackbarOpenVar(true);
+            snackbarTypeVar(SnackbarType.warning);
+            snackbarMsgVar("Your username or password is incorrect.");
+            setIsLoading(false);
+          }
+        });
     }
     
-    navigate('/');
   }
 
   if (isLoggedIn()) {

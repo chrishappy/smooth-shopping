@@ -3,7 +3,7 @@ import { makeVar, useReactiveVar } from "@apollo/client";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-const SnackbarType = {
+export const SnackbarType = {
   success: 'success',
   info: 'info',
   warning: 'warning',

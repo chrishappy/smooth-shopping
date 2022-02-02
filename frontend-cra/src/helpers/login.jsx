@@ -29,11 +29,11 @@ export const loginAsync = async (username, password) => {
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
     console.log('User successfully logged in');
+    return true;
   }
-  else {
-    console.warn('Unable to authenicate user');
-    console.log(jwt);
-  }
+  
+  console.warn('Unable to authenicate user');
+  return false;
 };
 
 /**

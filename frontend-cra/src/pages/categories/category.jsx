@@ -95,7 +95,7 @@ export const Products = ({ setProduct, setOpen, data }) => {
           underline="none"
           key={product.entityId}
           className="product-listing"
-          disabled={product.fieldQuantity <= 0.0 ? 'true' : null}
+          disabled={product.fieldQuantity <= 0.0 ? true : false}
           tabIndex={product.fieldQuantity <= 0.0 ? -1 : null}
           onClick={(e) => {
             e.preventDefault();
