@@ -1,18 +1,12 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
-
 import * as React from "react"
+import { Outlet } from "react-router"
+import { isLoggedIn } from "../helpers/login"
 
+import CustomizedSnackbar from "./snackbar"
 import Header from "./header"
 import Footer from "./footer"
 import "./layout.css"
 import "./custom.css"
-import { Outlet } from "react-router"
-import { isLoggedIn } from "../helpers/login"
 
 const Layout = () => {
 
@@ -49,8 +43,8 @@ const Layout = () => {
         <main>
           <Outlet />
         </main>
-      </div>
-    }
+      </div>}
+      <CustomizedSnackbar/>
     </div>
   )
 }
