@@ -4,6 +4,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
+.links-inherit-color a {
+  color: inherit;
+}
+
 .gatsby-image-wrapper {
   max-width: 100%;
 }
@@ -21,6 +25,12 @@ div .product-listings {
   box-shadow: 0px 2px 2px rgb(0 0 0 / 14%), 0px 3px 1px rgb(0 0 0 / 12%), 0px 1px 5px rgb(0 0 0 / 20%);
   border-radius: 10px;
   overflow: hidden;
+}
+
+.product-listing[disabled] {
+  opacity: 0.8;
+  pointer-events: none;
+  background: #ccc;
 }
 
 .product-listing__content {

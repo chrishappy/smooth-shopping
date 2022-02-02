@@ -21,6 +21,7 @@ import { hasExistentProperty } from '../../helpers/generic'
 import MainContentLoader from '../../components/main-content-loader';
 import GoCheckoutButton from '../../components/go-checkout-button';
 import './category.css'
+import { Link } from '@mui/material';
 
 const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
@@ -86,13 +87,18 @@ export const Products = ({ setProduct, setOpen, data }) => {
   return (
     <ImageList
       sx={{ margin: '0', padding: '0 0 6em' }}
-      className="product-listings"
+      className="product-listings links-inherit-color"
       gap={16}>
       {data.nodeQuery.entities.map((product) => (
-        <Box
+        <Link
+          href="#"
+          underline="none"
           key={product.entityId}
           className="product-listing"
-          onClick={() => {
+          disabled={product.fieldQuantity <= 0.0 ? 'true' : null}
+          tabIndex={product.fieldQuantity <= 0.0 ? -1 : null}
+          onClick={(e) => {
+            e.preventDefault();
             setProduct(product);
             setOpen(true);
           }}>
@@ -108,7 +114,7 @@ export const Products = ({ setProduct, setOpen, data }) => {
               {product.fieldExpired ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${product.fieldCredit}
             </Box>
           </Box>
-        </Box>
+        </Link>
       ))}
     </ImageList>
   );

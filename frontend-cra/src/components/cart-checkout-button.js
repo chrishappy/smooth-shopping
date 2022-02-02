@@ -4,7 +4,7 @@ import * as React from "react";
 import { Button } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import { useMutation } from "@apollo/client";
-import { CREATE_AND_UPDATE_ORDER, GET_USER_STATS } from "../helpers/queries";
+import { CREATE_AND_UPDATE_ORDER } from "../helpers/queries";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
@@ -12,7 +12,7 @@ import { apolloClient } from "../helpers/cache";
 
 export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
   // TODO: Display old orders somewhere
-  const [createOrder, {data, loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
+  const [createOrder, {loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
 
   // For dialogs
   const [open, setOpen] = React.useState(false);
@@ -47,10 +47,11 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
           });
 
           // TODO: Is there a better hack?
+          // https://www.apollographql.com/docs/react/data/refetching/
           setTimeout(() => {
             clearCart();
             apolloClient.refetchQueries({
-              include: [GET_USER_STATS],
+              include: 'active',
             });
           }, 1500);
         }}>
