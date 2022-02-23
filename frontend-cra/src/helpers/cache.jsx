@@ -1,17 +1,21 @@
 import { 
   ApolloClient, 
   ApolloLink,
-  createHttpLink, 
-  InMemoryCache, 
+  InMemoryCache,
+  createHttpLink,
   from
 } from '@apollo/client';
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 import { cartItemsVar, clearCart } from './cartItems';
+import { RestLink } from 'apollo-link-rest';
+import { JsonApiLink } from "apollo-link-json-api";
+
 
 
 // ---------------------------------------------------------------------------
+// Currently not used
 const cache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -38,7 +42,10 @@ const cache = new InMemoryCache({
 
 // Set up authenication
 const httpLink = createHttpLink({
-  uri: 'https://ss.albernirentals.com/graphql',
+  uri: 'https://ss.albernirentals.com/graphql/',
+});
+const jsonApiLink = new JsonApiLink({
+  uri: 'https://ss.albernirentals.com/jsonapi/',
 });
 
 
@@ -56,7 +63,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : null,
+      Authorization: token ? `Bearer ${token}` : null,
     }
   }));
 
@@ -103,8 +110,8 @@ export const apolloClient = new ApolloClient({
   link: from([
     authMiddleware,
     logoutLink,
-    httpLink,
+    jsonApiLink,
   ]),
-  cache: cache,
+  cache,
   // typeDefs
 });

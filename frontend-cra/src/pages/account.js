@@ -2,14 +2,21 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { Typography, Button, Box } from '@mui/material';
 import Seo from "../components/seo"
-import { logoutCurrentUser } from "../helpers/login";
+import { getUserUuid, logoutCurrentUser } from "../helpers/login";
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/main-content-loader";
+import { clearApolloCache } from "../helpers/cache";
 
 const Account = () => {
 
-  const { loading, error, data } = useQuery(GET_USER_STATS);
+  clearApolloCache();
+
+  const { loading, error, data } = useQuery(GET_USER_STATS, {
+    variables: {
+      userPath: `user/user/${getUserUuid()}`
+    }
+  });
 
   if (error) {
     return (
@@ -22,7 +29,9 @@ const Account = () => {
       <MainContentLoader />
     )
   }
-  const userData = data.currentUserContext;
+
+  const userData = data.currentUser;
+  console.log(userData);
 
   return (
     <>
