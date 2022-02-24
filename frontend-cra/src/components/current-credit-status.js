@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import { cartTotalVar } from "../helpers/cartItems";
+import { getUserUuid } from "../helpers/login";
 
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS, {
     fetchPolicy: "network-only",
+    variables: {
+      userUuid: getUserUuid(),
+    },
     // pollInterval: 5000,
   });
 
@@ -27,7 +31,7 @@ const CurrentCredits = () => {
     };
   }
   else {
-    userData = data.currentUserContext;
+    userData = data.currentUser;
   }
 
   const currentCredits = parseFloat(userData.creditsRemaining) - cartTotalReactive;

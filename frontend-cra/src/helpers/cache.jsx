@@ -3,13 +3,13 @@ import {
   ApolloLink,
   InMemoryCache,
   createHttpLink,
-  from
 } from '@apollo/client';
+import camelCase from 'camelcase';
+
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 import { cartItemsVar, clearCart } from './cartItems';
-import { RestLink } from 'apollo-link-rest';
 import { JsonApiLink } from "apollo-link-json-api";
 
 
@@ -46,6 +46,7 @@ const httpLink = createHttpLink({
 });
 const jsonApiLink = new JsonApiLink({
   uri: 'https://ss.albernirentals.com/jsonapi/',
+  fieldNameNormalizer: camelCase,
 });
 
 
@@ -63,6 +64,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
+      Accept: "application/json",
       Authorization: token ? `Bearer ${token}` : null,
     }
   }));
@@ -107,10 +109,11 @@ export const clearApolloCache = () => {
 
 // The final Apollo client
 export const apolloClient = new ApolloClient({
-  link: from([
+  link: ApolloLink.from([
     authMiddleware,
     logoutLink,
     jsonApiLink,
+    httpLink,
   ]),
   cache,
   // typeDefs

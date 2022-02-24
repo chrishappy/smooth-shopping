@@ -42,10 +42,9 @@ function Categories() {
     return <p>There was an error.</p>;
   }
 
-  // console.log(data.taxonomyTermQuery.entities);
   return <ImageList>
-    {data.taxonomyTermQuery.entities.map((category) => (
-      <ImageListItem key={category.entityId} variant="masonry">
+    {data.taxonomyTerms.map((category) => (
+      <ImageListItem key={category.uuid} variant="masonry">
         <Link to={category.entityUrl.path} state={{ title: category.entityLabel }}>
           <img 
             src={category.fieldImage.derivative.url} 

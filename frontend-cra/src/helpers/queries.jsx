@@ -3,15 +3,13 @@ import { gql } from "@apollo/client";
 
 /**
  * Get the current user's information, e.g. how much credit left for this month
+ * 
+ * TODO: set currentUuid in context, then use {context.currentUserUuid}
+ * See: https://www.apollographql.com/docs/react/api/link/apollo-link-rest/#example
  */
 export const GET_USER_STATS = gql`
-query GetUserStats($userPath: String!) {
-  currentUser @jsonapi(path: $userPath) {
-    id
-    attributes {
-      fieldSsFamilyName
-      fieldSsCurrentCredit
-    }
+query GetUserStats($userUuid: String!) {
+  currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {
     familyName: fieldSsFamilyName
     creditsRemaining: fieldSsCurrentCredit
     totalCredits: fieldSsMonthlyCredit
@@ -23,29 +21,15 @@ query GetUserStats($userPath: String!) {
 // Get the images of the main product categories
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {
-    taxonomyTermQuery(filter: {
-    conditions: [
-      {operator: EQUAL, field: "vid", value: ["product_categories"]},
-    ]}, limit: 30) {
-      count
-      entities {
-        entityId
-        entityUuid
-        entityLabel
-        entityType
-        entityUrl {
-          path
-        }
-        ... on TaxonomyTermProductCategories {
-          fieldImage {
-            derivative(style: PRODUCTCATEGORY) {
-              url
-              width
-              height
-            }
-            alt
-            title
-          }
+    taxonomyTerms @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]=product_categories") {
+      uuid
+      name
+      path {
+        alias
+      }
+      fieldImage {
+        imageStyleUri {
+          productCategory
         }
       }
     }

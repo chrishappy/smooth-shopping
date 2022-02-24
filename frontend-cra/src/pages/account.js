@@ -6,15 +6,12 @@ import { getUserUuid, logoutCurrentUser } from "../helpers/login";
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/main-content-loader";
-import { clearApolloCache } from "../helpers/cache";
 
 const Account = () => {
 
-  clearApolloCache();
-
   const { loading, error, data } = useQuery(GET_USER_STATS, {
     variables: {
-      userPath: `user/user/${getUserUuid()}`
+      userUuid: getUserUuid(),
     }
   });
 
@@ -31,7 +28,6 @@ const Account = () => {
   }
 
   const userData = data.currentUser;
-  console.log(userData);
 
   return (
     <>
@@ -72,7 +68,7 @@ const Account = () => {
             // borderRadius: '20px',
             // fontWeight: 'bold',
             // padding: '0 10%',
-            marginTop: '3rem'
+            marginTop: '2rem'
           }}
           onClick={() => {
             logoutCurrentUser();
