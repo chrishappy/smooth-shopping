@@ -21,13 +21,15 @@ import MainContentLoader from '../../components/main-content-loader';
 import GoCheckoutButton from '../../components/go-checkout-button';
 import './category.css'
 import { Link } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const CategoryProducts = () => {
-  let { categoryId, categorySlug } = useParams();
+  const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
+  const { title, categoryId } = location.state;
   const [selectedProduct, setProduct] = React.useState({});
   const [isOpen, setOpen] = React.useState(false);
   
+  console.log(categoryId);
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { categoryId },
   });
@@ -41,7 +43,7 @@ const CategoryProducts = () => {
       <Stack 
         direction="row" 
         sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
-        <h1>{ categorySlug }</h1>
+        <h1>{ title }</h1>
         <div>
           <IconButton
             color="primary"
@@ -82,8 +84,6 @@ export const Products = ({ setProduct, setOpen, data }) => {
       'No items at the moment.'
     );
   }
-
-  console.log(products);
 
   // Default content
   return (
@@ -149,7 +149,7 @@ export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
         <Box className="product-dialog__img">
         {hasExistentProperty(selectedProduct,  'fieldImage')
           ? <img
-              src={selectedProduct.fieldImage.url}
+              src={selectedProduct.fieldImage.imageStyleUri.popup_large_image}
               alt={selectedProduct.fieldImage.alt}
               title={selectedProduct.fieldImage.title}
               width={selectedProduct.fieldImage.width}

@@ -5,6 +5,7 @@
  */
 
 import { clearApolloCache } from "./cache";
+import { encodeURIComponentOrNull } from "./generic";
 
 // The constant for the local storage variable storing the JWT value
 const LOCAL_STORAGE_JWT_TOKEN = 'JWT_AUTHENICATION';
@@ -19,12 +20,12 @@ const LOCAL_STORAGE_USER_KEYS = {
 };
 
 // Get JWT key
-export const getJwtString = () => localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN) || null;
+export const getJwtString = () => encodeURIComponentOrNull(localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN));
 
 // Get User Uuid 
-export const getUserUuid = () => localStorage.getItem(LOCAL_STORAGE_CURRENT_USER_UUID) || null;
+export const getUserUuid = () => encodeURIComponentOrNull(localStorage.getItem(LOCAL_STORAGE_CURRENT_USER_UUID));
 
-// Helper function for convience. Return whether the user is currently logged in
+// Helper function for convenience. Return whether the user is currently logged in
 export const isLoggedIn = () => !!getJwtString();
 
 /**
@@ -41,6 +42,9 @@ export const loginAsync = async (username, password) => {
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
     console.log('User successfully logged in');
+
+    // Check if the User's uuid exists. If not, create it.
+    await checkUserUuidAsync();
 
     return true;
   }

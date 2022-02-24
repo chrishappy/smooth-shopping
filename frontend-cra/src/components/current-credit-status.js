@@ -24,7 +24,7 @@ const CurrentCredits = () => {
   }
 
   let userData;
-  if (loading || userData == null || userData.currentUser == null) {
+  if (loading) {
     userData = {
       creditsRemaining: 0.00,
       totalCredits: 0.00,

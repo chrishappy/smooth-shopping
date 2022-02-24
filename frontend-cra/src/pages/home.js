@@ -48,7 +48,7 @@ function Categories() {
   return <ImageList>
     {categories.map((category) => (
       <ImageListItem key={category.id} variant="masonry">
-        <Link to={category.path.alias} state={{ title: category.name }}>
+        <Link to={category.path.alias} state={{ title: category.name, categoryId: category.id }}>
           <img 
             src={category.fieldImage.imageStyleUri.productCategory} 
             alt={category.fieldImage.alt} 

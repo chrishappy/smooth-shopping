@@ -28,9 +28,9 @@ const SearchProducts = () => {
   
   const { loading, error, data, refetch } = useQuery(SEARCH_FOR_PRODUCT, {
     variables: {
-      searchTerm1: `%${processedSearchTermsVariables[0] || null}%`,
-      searchTerm2: `%${processedSearchTermsVariables[1] || null}%`,
-      searchTerm3: `%${processedSearchTermsVariables[2] || null}%`,
+      searchTerm1: encodeURIComponent(processedSearchTermsVariables[0]),
+      searchTerm2: encodeURIComponent(processedSearchTermsVariables[1]),
+      searchTerm3: encodeURIComponent(processedSearchTermsVariables[2]),
     },
   });
 

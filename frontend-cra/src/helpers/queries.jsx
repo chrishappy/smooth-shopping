@@ -22,7 +22,7 @@ query GetUserStats($userUuid: String!) {
 
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {
-    categories @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]=product_categories&include=field_image") {
+    categories(vocabulary: "product_categories") @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]={args.vocabulary}&include=field_image") {
       id
       name
       path {
@@ -82,7 +82,7 @@ export const GET_ALL_PRODUCTS = gql`
   ${coreProductFieldsFragment}
 
   # Get the products in a category
-  query GetAllProducts($category:String) {
+  query GetAllProducts {
     products @jsonapi(path: "node/product/?filter[status]=1&include=field_image") {
       ...CoreProductFields
       # Start fragment
@@ -94,6 +94,7 @@ export const GET_ALL_PRODUCTS = gql`
       fieldImage {
         imageStyleUri {
           productCategory
+          popup_large_image
         }
         alt       # This and below does not currently work
         title
@@ -114,46 +115,42 @@ export const GET_ALL_PRODUCTS = gql`
 
 /**
  * Search for products using terms
+ * 
+ * &filter[search-terms][group][conjunction]=OR
+
+&filter[st1][condition][path]=title
+&filter[st1][condition][operator]=CONTAINS
+&filter[st1][condition][value]={args.st1}
+&filter[st1][condition][memberOf]=search-terms
  */
 export const SEARCH_FOR_PRODUCT = gql`
 query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String) {
-    nodeQuery(filter: {
-      groups:[
-        {conditions: [
-          {operator: EQUAL, field: "type", value: ["product"]},
-        ]},
-        {conditions: [
-          {operator: LIKE, field: "title", value: [$searchTerm1]},
-          {operator: LIKE, field: "title", value: [$searchTerm2]},
-          {operator: LIKE, field: "title", value: [$searchTerm3]},
-        ], conjunction: OR}
-      ]}
+  products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms"
     ) {
-      entities {
-        entityUuid
-        entityId
-        entityLabel
-        ... on NodeProduct {
-          fieldCategories {
-            targetId
-            entity {
-              name
-              entityLabel
-            }
-          }
-          fieldCredit
-          fieldExpired
-          fieldImage {
-            derivative(style: PRODUCTCATEGORY) {
-              url
-              width
-              height
-            }
-            alt
-            title
-          }
-        }
+      # Start fragment
+      id
+      title
+      path {
+        alias
       }
+      fieldImage {
+        imageStyleUri {
+          productCategory
+          popup_large_image
+        }
+        alt       # This and below does not currently work
+        title
+        width
+        height    # Up to here
+      }
+      fieldCredit
+      fieldQuantity
+      fieldExpired
+      fieldLimitPerClient
+      body {
+        processed
+      }
+      # End fragment
     }
   }
 `
@@ -167,7 +164,7 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
   
   # Get the products in a category
   query GetCategoryProducts($categoryId: Int!) {
-    products(categoryId: $categoryId) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.meta.drupal__internal_id]={args.categoryId}&include=field_image") {
+    products(categoryId: $categoryId) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image") {
       ...CoreProductFields
       # Start fragment
       id
@@ -178,6 +175,7 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
       fieldImage {
         imageStyleUri {
           productCategory
+          popup_large_image
         }
         alt       # This and below does not currently work
         title
@@ -203,45 +201,39 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
  */ 
 export const GET_PRODUCTS_FOR_CART = gql`
   # Get the products by ids
-  query GetProductsByIds($productIds:[String]) {
-    currentUserContext {
-      uid,
+  query GetProductsByIds($productIds:[String], $userUuid: String!) {
+    currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {
+      familyName: fieldSsFamilyName
       creditsRemaining: fieldSsCurrentCredit
+      totalCredits: fieldSsMonthlyCredit
+      numberOfFamilyMembers: fieldSsPersonCount
     }
-    nodeQuery(filter: {
-      conditions: [
-        {operator: IN, field: "nid", value: $productIds},
-      ]}, limit: 30
-    ) {
-      entities {
-        entityUuid
-        entityId
-        entityLabel
-        ... on NodeProduct {
-          fieldCategories {
-            targetId
-            entity {
-              name
-              entityLabel
-            }
-          }
-          fieldCredit
-          fieldQuantity
-          fieldExpired
-          fieldImage {
-            derivative(style: PRODUCTCATEGORY) {
-              url
-              width
-              height
-            }
-            alt
-            title
-            width
-            height
-            url
-          }
-        }
+    products(productIds: $productIds) @jsonapi(path: "node/product/?filter[status]=1&filter[st1][condition][path]=id&filter[st1][condition][operator]=IN&filter[st1][condition][value]={args.productIds}&include=field_image") {
+      ...CoreProductFields
+      # Start fragment
+      id
+      title
+      path {
+        alias
       }
+      fieldImage {
+        imageStyleUri {
+          productCategory
+          popup_large_image
+        }
+        alt       # This and below does not currently work
+        title
+        width
+        height    # Up to here
+      }
+      fieldCredit
+      fieldQuantity
+      fieldExpired
+      fieldLimitPerClient
+      body {
+        processed
+      }
+      # End fragment
     }
   }
 `;
