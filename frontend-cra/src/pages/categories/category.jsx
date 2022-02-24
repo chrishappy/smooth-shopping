@@ -15,7 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CachedIcon from '@mui/icons-material/Cached';
 
-import { GET_PRODUCTS_OF_CATEGORY } from '../../helpers/queries';
+import { GET_ALL_PRODUCTS } from '../../helpers/queries';
 import { AddOrderItem, cartItemsVar } from '../../helpers/cartItems';
 import { hasExistentProperty } from '../../helpers/generic'
 import MainContentLoader from '../../components/main-content-loader';
@@ -30,7 +30,7 @@ const CategoryProducts = () => {
   const [isOpen, setOpen] = React.useState(false);
 
   
-  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
+  const { loading, error, data, refetch } = useQuery(GET_ALL_PRODUCTS, {
     variables: { category: title },
   });
 
@@ -76,8 +76,11 @@ const CategoryProducts = () => {
 
 export const Products = ({ setProduct, setOpen, data }) => {
 
+  const { products } = data;
+  console.log(data);
+
   // If no content
-  if (data.nodeQuery.entities.length === 0) {
+  if (!products || products.length === 0) {
     return (
       'No items at the moment.'
     );
@@ -89,11 +92,11 @@ export const Products = ({ setProduct, setOpen, data }) => {
       sx={{ margin: '0', padding: '0 0 6em' }}
       className="product-listings links-inherit-color"
       gap={16}>
-      {data.nodeQuery.entities.map((product) => (
+      {products.map((product) => (
         <Link
           href="#"
           underline="none"
-          key={product.entityId}
+          key={product.id}
           className="product-listing"
           disabled={product.fieldQuantity <= 0.0 ? true : false}
           tabIndex={product.fieldQuantity <= 0.0 ? -1 : null}
@@ -103,13 +106,13 @@ export const Products = ({ setProduct, setOpen, data }) => {
             setOpen(true);
           }}>
           <img
-            src={product.fieldImage.derivative.url} 
+            src={product.fieldImage.imageStyleUri.productCategory} 
             alt={product.fieldImage.alt} 
             title={product.fieldImage.title}
-            width={product.fieldImage.derivative.width}
-            height={product.fieldImage.derivative.height} />
+            width={product.fieldImage.width}
+            height={product.fieldImage.height} />
           <Box className="product-listing__content">
-            <h3 className="product-listing__title">{product.entityLabel}</h3>
+            <h3 className="product-listing__title">{product.title}</h3>
             <Box sx={{ textAlign: 'right', }}>
               {product.fieldExpired ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${product.fieldCredit}
             </Box>
@@ -121,7 +124,7 @@ export const Products = ({ setProduct, setOpen, data }) => {
 }
 
 export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
-  const productQuantity = parseFloat(useReactiveVar(cartItemsVar).get(selectedProduct.entityId)) || 0.0;
+  const productQuantity = parseFloat(useReactiveVar(cartItemsVar).get(selectedProduct.id)) || 0.0;
   const maxQuantity = parseFloat(selectedProduct.fieldQuantity || 0.0) - productQuantity;
   const minQuantity = Math.min(maxQuantity, 1.0); // In case no more elements (e.g. maxQuantity is zero)
   const [selectedProductCount, setCount] = React.useState(1.0);
@@ -157,7 +160,7 @@ export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
         <Box className="product-dialog__content">
           <Box sx={{ margin: '0.5rem 0 1rem' }}>
             <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mt: 0.5, fontWeight: 'bold' }}>
-              {selectedProduct.entityLabel}
+              {selectedProduct.title}
             </Typography>
             <Typography id="modal-product-description" component="p" sx={{ mb: 1 }}>
               {selectedProduct.fieldExpired

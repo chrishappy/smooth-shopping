@@ -68,7 +68,7 @@ const authenicationAsync = async (username, password) => {
   const loginStr = loginStrBase64.toString('base64');
 
   // ENSURE this is https:// for security
-  return fetch('https://ss.albernirentals.com/jwt/token?_format=json', {
+  return fetch(`${process.env.REACT_APP_ROOT_DOMAIN}/jwt/token?_format=json`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ const authenicationAsync = async (username, password) => {
  * Fetch the current user's uuid. Requires the JWT string.
  */
 const fetchUserUuid = async () => {
-  return fetch('https://ss.albernirentals.com/jsonapi', {
+  return fetch(`${process.env.REACT_APP_JSON_URL_WITH_END_SLASH}/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -19,10 +19,11 @@ query GetUserStats($userUuid: String!) {
 `
 
 // Get the images of the main product categories
+
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {
-    taxonomyTerms @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]=product_categories") {
-      uuid
+    categories @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]=product_categories&include=field_image") {
+      id
       name
       path {
         alias
@@ -31,6 +32,10 @@ export const GET_PRODUCT_CATEGORIES = gql`
         imageStyleUri {
           productCategory
         }
+        alt       # This and below does not currently work
+        title     
+        width       
+        height    # Up to here
       }
     }
   }
@@ -41,42 +46,28 @@ export const GET_PRODUCT_CATEGORIES = gql`
  */ 
 export const GET_ALL_PRODUCTS = gql`
   # Get the products in a category
-  query GetAllProducts {
-    nodeQuery(filter: {
-      conditions: [
-        {operator: EQUAL, field: "type", value: ["product"]},
-      ]}, 
-      limit: 30,
-      offset: 0,
-    ) {
-      entities {
-        entityUuid
-        entityId
-        entityLabel
-        ... on NodeProduct {
-          fieldCategories {
-            targetId
-            entity {
-              name
-              entityLabel
-            }
-          }
-          fieldCredit
-          fieldQuantity
-          fieldExpired
-          fieldImage {
-            derivative(style: PRODUCTCATEGORY) {
-              url
-              width
-              height
-            }
-            alt
-            title
-            width
-            height
-            url
-          }
+  query GetAllProducts($category:String) {
+    products(category: $category) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[field_categories.entity.name]={args.category}") {
+      id
+      title
+      path {
+        alias
+      }
+      fieldImage {
+        imageStyleUri {
+          productCategory
         }
+        alt       # This and below does not currently work
+        title
+        width
+        height    # Up to here
+      }
+      fieldCredit
+      fieldQuantity
+      fieldExpired
+      fieldLimitPerClient
+      body {
+        processed
       }
     }
   }
@@ -127,56 +118,6 @@ query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String
     }
   }
 `
-
-/**
- * Get the products of a category
- * 
- * @param $category the name of the product category
- */ 
-export const GET_PRODUCTS_OF_CATEGORY = gql`
-  # Get the products in a category
-  query GetCategoryProducts($category:String) {
-    nodeQuery(filter: {
-      conditions: [
-        {operator: EQUAL, field: "type", value: ["product"]},
-        {operator: EQUAL, field: "field_categories.entity.name", value: [$category]},
-      ]}, limit: 30
-    ) {
-      entities {
-        entityUuid
-        entityId
-        entityLabel
-        ... on NodeProduct {
-          body {
-            processed
-          }
-          # fieldCategories { # TODO: is this used? Cleanup some queries maybe
-          #   targetId
-          #   entity {
-          #     name
-          #     entityLabel
-          #   }
-          # }
-          fieldCredit
-          fieldQuantity
-          fieldExpired
-          fieldImage {
-            derivative(style: PRODUCTCATEGORY) {
-              url
-              width
-              height
-            }
-            alt
-            title
-            width
-            height
-            url
-          }
-        }
-      }
-    }
-  }
-`;
 
 /**
  * Get the products by ids

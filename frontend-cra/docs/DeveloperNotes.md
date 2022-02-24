@@ -19,7 +19,7 @@ npm install --save @apollo/client apollo-link-rest graphql graphql-anywhere qs
 Installed using:
 
 ```bash
-$ npm uninstall apollo-link-json-api apollo-link graphql graphql-anywhere qs humps --save
+$ npm install apollo-link-json-api apollo-link graphql graphql-anywhere qs humps --save
 ```
 
 ## Limit per client

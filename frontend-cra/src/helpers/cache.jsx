@@ -42,10 +42,9 @@ const cache = new InMemoryCache({
 
 // Set up authenication
 const httpLink = createHttpLink({
-  uri: 'https://ss.albernirentals.com/graphql/',
 });
 const jsonApiLink = new JsonApiLink({
-  uri: 'https://ss.albernirentals.com/jsonapi/',
+  uri: `${process.env.REACT_APP_JSON_URL_WITH_END_SLASH}`,
   fieldNameNormalizer: camelCase,
 });
 

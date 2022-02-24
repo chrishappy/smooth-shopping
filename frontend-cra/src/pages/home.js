@@ -42,18 +42,22 @@ function Categories() {
     return <p>There was an error.</p>;
   }
 
+  const { categories } = data;
+  console.log(categories[0].fieldImage);
+
   return <ImageList>
-    {data.taxonomyTerms.map((category) => (
-      <ImageListItem key={category.uuid} variant="masonry">
-        <Link to={category.entityUrl.path} state={{ title: category.entityLabel }}>
+    {categories.map((category) => (
+      <ImageListItem key={category.id} variant="masonry">
+        <Link to={category.path.alias} state={{ title: category.name }}>
           <img 
-            src={category.fieldImage.derivative.url} 
+            src={category.fieldImage.imageStyleUri.productCategory} 
             alt={category.fieldImage.alt} 
             title={category.fieldImage.title}
-            width={category.fieldImage.derivative.width}
-            height={category.fieldImage.derivative.height} />
+            // width={category.fieldImage.derivative.width}
+            // height={category.fieldImage.derivative.height}
+             />
           <ImageListItemBar
-            title={category.entityLabel}
+            title={category.name}
             sx={{
               top: 0,
               textAlign: 'center',
