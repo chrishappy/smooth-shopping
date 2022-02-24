@@ -149,7 +149,7 @@ export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
         <Box className="product-dialog__img">
         {hasExistentProperty(selectedProduct,  'fieldImage')
           ? <img
-              src={selectedProduct.fieldImage.imageStyleUri.popup_large_image}
+              src={selectedProduct.fieldImage.imageStyleUri.popupLargeImage}
               alt={selectedProduct.fieldImage.alt}
               title={selectedProduct.fieldImage.title}
               width={selectedProduct.fieldImage.width}

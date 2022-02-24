@@ -94,7 +94,7 @@ export const GET_ALL_PRODUCTS = gql`
       fieldImage {
         imageStyleUri {
           productCategory
-          popup_large_image
+          popupLargeImage
         }
         alt       # This and below does not currently work
         title
@@ -136,7 +136,7 @@ query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String
       fieldImage {
         imageStyleUri {
           productCategory
-          popup_large_image
+          popupLargeImage
         }
         alt       # This and below does not currently work
         title
@@ -175,7 +175,7 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
       fieldImage {
         imageStyleUri {
           productCategory
-          popup_large_image
+          popupLargeImage
         }
         alt       # This and below does not currently work
         title
@@ -208,7 +208,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
       totalCredits: fieldSsMonthlyCredit
       numberOfFamilyMembers: fieldSsPersonCount
     }
-    products(productIds: $productIds) @jsonapi(path: "node/product/?filter[status]=1&filter[st1][condition][path]=id&filter[st1][condition][operator]=IN&filter[st1][condition][value]={args.productIds}&include=field_image") {
+    products(productIds: $productIds) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=id&filter[cart][condition][operator]=IN{args.productIds}&include=field_image") {
       ...CoreProductFields
       # Start fragment
       id
@@ -219,7 +219,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
       fieldImage {
         imageStyleUri {
           productCategory
-          popup_large_image
+          popupLargeImage
         }
         alt       # This and below does not currently work
         title
