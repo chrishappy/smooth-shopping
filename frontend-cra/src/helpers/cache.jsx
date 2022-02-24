@@ -4,7 +4,7 @@ import {
   InMemoryCache,
   createHttpLink,
 } from '@apollo/client';
-import camelCase from 'camelcase';
+import { camelize, pascalize } from 'humps';
 
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
@@ -41,11 +41,11 @@ const cache = new InMemoryCache({
 });
 
 // Set up authenication
-const httpLink = createHttpLink({
-});
+const httpLink = createHttpLink({});
 const jsonApiLink = new JsonApiLink({
-  uri: `${process.env.REACT_APP_JSON_URL_WITH_END_SLASH}`,
-  fieldNameNormalizer: camelCase,
+  uri: process.env.REACT_APP_JSON_URL_WITH_END_SLASH,
+  fieldNameNormalizer: camelize,
+  typeNameNormalizer: (type) => pascalize(type), // TODO: not working. Required for fragments
 });
 
 

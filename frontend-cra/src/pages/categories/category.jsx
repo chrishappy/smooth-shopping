@@ -1,6 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import { useLocation } from 'react-router-dom';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import ImageList from '@mui/material/ImageList';
 import Button from '@mui/material/Button';
@@ -15,23 +14,22 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CachedIcon from '@mui/icons-material/Cached';
 
-import { GET_ALL_PRODUCTS } from '../../helpers/queries';
+import { GET_PRODUCTS_OF_CATEGORY } from '../../helpers/queries';
 import { AddOrderItem, cartItemsVar } from '../../helpers/cartItems';
 import { hasExistentProperty } from '../../helpers/generic'
 import MainContentLoader from '../../components/main-content-loader';
 import GoCheckoutButton from '../../components/go-checkout-button';
 import './category.css'
 import { Link } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 const CategoryProducts = () => {
-  const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
-  const { title } = location.state;
+  let { categoryId, categorySlug } = useParams();
   const [selectedProduct, setProduct] = React.useState({});
   const [isOpen, setOpen] = React.useState(false);
-
   
-  const { loading, error, data, refetch } = useQuery(GET_ALL_PRODUCTS, {
-    variables: { category: title },
+  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
+    variables: { categoryId },
   });
 
   if (error) {
@@ -43,7 +41,7 @@ const CategoryProducts = () => {
       <Stack 
         direction="row" 
         sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
-        <h1>{ title }</h1>
+        <h1>{ categorySlug }</h1>
         <div>
           <IconButton
             color="primary"
@@ -77,7 +75,6 @@ const CategoryProducts = () => {
 export const Products = ({ setProduct, setOpen, data }) => {
 
   const { products } = data;
-  console.log(data);
 
   // If no content
   if (!products || products.length === 0) {
@@ -85,6 +82,8 @@ export const Products = ({ setProduct, setOpen, data }) => {
       'No items at the moment.'
     );
   }
+
+  console.log(products);
 
   // Default content
   return (

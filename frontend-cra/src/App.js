@@ -70,7 +70,7 @@ const App = () => {
               <Route path="cart" element={<CartPage />} />
               <Route path="account" element={<AccountPage />} />
               <Route path="categories">
-                <Route path=":categorySlug" element={<Category />} />
+                <Route path=":categoryId/:categorySlug" element={<Category />} />
               </Route>
               <Route path="search" element={<SearchProducts />} />
               <Route path="*" element={<NotFoundPage />} />

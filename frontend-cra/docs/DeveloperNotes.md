@@ -4,23 +4,17 @@ A file containing the reason behind some of the design decisions.
 
 ## Use JSON API
 
-### Use actively maintained (but unstable) plugin `apollo-link-rest`
-
-Installed using:
-
-```
-npm install --save @apollo/client apollo-link-rest graphql graphql-anywhere qs
-```
+Because Drupal's GraphQL module is either 1) insecure or 2) requires too much work to set up initially
 
 ### Use the unmaintained plugin `https://github.com/rsullivan00/apollo-link-json-api`. 
-
-*Update*: Remove `apollo-link-json-api` because no longer supported
 
 Installed using:
 
 ```bash
-$ npm install apollo-link-json-api apollo-link graphql graphql-anywhere qs humps --save
+$ npm install apollo-link-json-api apollo-link @apollo/client graphql graphql-anywhere qs humps camelcase apollo-link-rest --save
 ```
+
+**Note**: We must use `fieldNameNormalizer: camelCase,` when creating a JsonApi (or RestApi) link, because GraphQL does not suppose snack_case field names.
 
 ## Limit per client
 

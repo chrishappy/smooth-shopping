@@ -42,12 +42,50 @@ export const GET_PRODUCT_CATEGORIES = gql`
 `;
 
 /**
+ * Products fields
+ */
+const coreProductFieldsFragment = gql`
+  fragment CoreProductFields on NodeProduct {
+    # Start fragment
+    id
+    title
+    path {
+      alias
+    }
+    fieldImage {
+      imageStyleUri {
+        productCategory
+      }
+      alt       # This and below does not currently work
+      title
+      width
+      height    # Up to here
+    }
+    fieldCredit
+    fieldQuantity
+    fieldExpired
+    fieldLimitPerClient
+    body {
+      processed
+    }
+    # End fragment
+  }
+`;
+
+/**
  * Get the products of a category
+ * 
+ * TODO: Support pagination
+ * See: /jsonapi_data/node/product/?filter[status]=1&include=field_image&page[offset]=50&page[limit]=50
  */ 
 export const GET_ALL_PRODUCTS = gql`
+  ${coreProductFieldsFragment}
+
   # Get the products in a category
   query GetAllProducts($category:String) {
-    products(category: $category) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[field_categories.entity.name]={args.category}") {
+    products @jsonapi(path: "node/product/?filter[status]=1&include=field_image") {
+      ...CoreProductFields
+      # Start fragment
       id
       title
       path {
@@ -69,6 +107,7 @@ export const GET_ALL_PRODUCTS = gql`
       body {
         processed
       }
+      # End fragment
     }
   }
 `;
@@ -120,6 +159,44 @@ query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String
 `
 
 /**
+ * Get the products of a category
+ * 
+ */ 
+export const GET_PRODUCTS_OF_CATEGORY = gql`
+  ${coreProductFieldsFragment}
+  
+  # Get the products in a category
+  query GetCategoryProducts($categoryId: Int!) {
+    products(categoryId: $categoryId) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.meta.drupal__internal_id]={args.categoryId}&include=field_image") {
+      ...CoreProductFields
+      # Start fragment
+      id
+      title
+      path {
+        alias
+      }
+      fieldImage {
+        imageStyleUri {
+          productCategory
+        }
+        alt       # This and below does not currently work
+        title
+        width
+        height    # Up to here
+      }
+      fieldCredit
+      fieldQuantity
+      fieldExpired
+      fieldLimitPerClient
+      body {
+        processed
+      }
+      # End fragment
+    }
+  }
+`;
+
+/**
  * Get the products by ids
  * 
  * @param $category the name of the product category
@@ -168,133 +245,6 @@ export const GET_PRODUCTS_FOR_CART = gql`
     }
   }
 `;
-
-/**
- * Create an Order
- * 
- * Schema
- * @code
- *   SsOrderCreateInput {
- *     "title" = "String",
- *     "uid" = "Int!",
- *     "fieldStatus" = "String"
- *   }
- * @endcode
- * 
- * Example:
- * @code
- *  {
- *     "order": {
- *       "title": "Some Order",
- *       "uid": 6,
- *       "fieldStatus": "SUBMITTED"
- *     }
- *   }
- * @endcode
- */
-export const CREATE_ORDER = gql`
-  mutation CreateOrder($order:SsOrderCreateInput!) {
-    createOrder(input: $order) {
-      errors
-      violations {
-        code
-        message
-        path
-      }
-      entity {
-        ... on NodeOrder {
-          nid
-          title
-          fieldStatus {
-            entity {
-              entityLabel
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-/**
- * Update an Order
- * 
- * Types Schema
- * @code
- *   SsOrderUpdateInput {
- *     "title" = "String",
- *     "uid" = "Int!",
- *     "fieldStatus" = "String",
- *     "orderItems" = "[SsOrderItem]"
- *   }
- * 
- *   SsOrderItem {
- *     "productId" = "Int!",
- *     "quantity" = "Float!",
- *   }
- * @endcode
- * 
- * Example Variables
- * @code
- *   {
- *     "id": "15",
- *     "order": {
- *       "title": "Some Order",
- *       "uid": 6,
- *       "fieldStatus": "SUBMITTED",
- *       "orderItems": [
- *          {
- *            "productId": 6,
- *            "quantity": 5.0
- *          },
- *          {
- *            "productId": 7,
- *            "quantity": 2.0
- *          }
- *       ]
- *     }
- *   }
- * @endcode
- */
-export const UPDATE_ORDER = gql`
-  mutation UpdateOrder($id: String!, $order:SsOrderUpdateInput!) {
-    updateOrder(input: $order, id: $id) {
-      errors
-      violations {
-        code
-        message
-        path
-      }
-      entity {
-        ... on NodeOrder {
-          nid
-          title
-          fieldTotalOrderAmount
-          fieldStatus {
-            entity {
-              entityLabel
-            }
-          }
-          fieldOrderItems {
-            entity {
-              ... on ParagraphProductItem {
-                fieldProduct {
-                  entity {
-                    ... on NodeProduct {
-                      title
-                      fieldQuantity
-                    }
-                  }
-                }
-                fieldQuantity
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
 
 /**
  * Create and Update an Order

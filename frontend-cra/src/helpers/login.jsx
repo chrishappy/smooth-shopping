@@ -42,16 +42,31 @@ export const loginAsync = async (username, password) => {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
     console.log('User successfully logged in');
 
-    // Get User ID
-    const userUuid = await fetchUserUuid();
-    localStorage.setItem(LOCAL_STORAGE_CURRENT_USER_UUID, userUuid);
-
     return true;
   }
   
   console.warn('Unable to authenicate user');
   return false;
 };
+
+/**
+ * Updates the UserUuid if not already set
+ * @returns boolean
+ */
+export const checkUserUuidAsync = async () => {
+  if (getUserUuid() === null) {
+    // Get User ID
+    const userUuid = await fetchUserUuid();
+    if (userUuid) {
+      localStorage.setItem(LOCAL_STORAGE_CURRENT_USER_UUID, userUuid);
+    }
+    else {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 /**
  * Get the JWT key with a fetch call
