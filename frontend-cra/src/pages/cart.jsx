@@ -26,10 +26,12 @@ const CartPage = () => {
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
   const cartTotalReactive = useReactiveVar(cartTotalVar);
 
+  console.log(cartIdsAndQuantities.keys());
+
   const { loading, error, data } = useQuery(GET_PRODUCTS_FOR_CART, {
     variables: {
       productIds: [...cartIdsAndQuantities.keys()].map(
-        (curr, i) => `&filter[cart][condition][value][${i}]=${curr}`),
+        (curr, i) => `&filter[cart][condition][value][${i}]=${curr}`).join(''),
       userUuid,
     },
   });
