@@ -35,6 +35,7 @@ const CartPage = () => {
   });
 
   if (error) {
+    console.error(error);
     return (
       'There was an error'
     );
@@ -59,28 +60,28 @@ const CartPage = () => {
             ? <MainContentLoader />
             : <></>
         }
-        {cartItems.map((item) => (
-          <Card sx={{ display: 'flex', margin: '1em 0' }} key={item.entityId}>
+        {cartItems.map((cartItem) => (
+          <Card sx={{ display: 'flex', margin: '1em 0' }} key={cartItem.id}>
             <CardMedia
               component="img"
               sx={{ width: '125px', lineHeight: '0' }}
-              src={item.fieldImage.derivative.url} 
-              alt={item.fieldImage.alt} 
-              title={item.fieldImage.title}
-              width={item.fieldImage.derivative.width}
-              height={item.fieldImage.derivative.height} />
+              src={cartItem.fieldImage.imageStyleUri.popupLargeImage}
+              alt={cartItem.fieldImage.alt}
+              title={cartItem.fieldImage.title}
+              width={cartItem.fieldImage.width}
+              height={cartItem.fieldImage.height} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
                   <h4 className="cart-item__title">
-                    { item.title }
+                    { cartItem.title }
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
-                    <span>${ parseFloat(item.fieldCredit) } </span>
-                    <span>x { cartIdsAndQuantities.get(item.entityId) }</span> {/* TODO: Find less hacky solution? */}
+                    <span>${ parseFloat(cartItem.fieldCredit) } </span>
+                    <span>x { cartIdsAndQuantities.get(cartItem.id) }</span> {/* TODO: Find less hacky solution? */}
                   </Box>
                   <Typography variant="body2" color="text.secondary" component="div">
-                    {item.fieldExpired 
+                    {cartItem.fieldExpired 
                       ? <strong>Expired</strong>
                       : <em>Not Expired</em>}
                   </Typography>
@@ -92,21 +93,21 @@ const CartPage = () => {
                   <Stack direction="column">
                     <IconButton
                       className='math-button-style'
-                      sx={{ height: '1.1em', width: '1.1em' }}
+                      sx={{ height: '1.1em', width: '1.1em', background: '#fff' }}
                       onClick={() => {
-                        AddOrderItem(item, 1);
+                        AddOrderItem(cartItem, 1);
                       }}
-                      disabled={cartIdsAndQuantities.get(item.entityId) >= item.fieldQuantity}>
+                      disabled={cartIdsAndQuantities.get(cartItem.id) >= cartItem.fieldQuantity}>
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-                      <span>{ cartIdsAndQuantities.get(item.entityId) }</span> {/* TODO: Find less hacky solution? */}
+                      <span>{ cartIdsAndQuantities.get(cartItem.id) }</span> {/* TODO: Find less hacky solution? */}
                     </Box>
                     <IconButton
                       className='math-button-style'
                       sx={{ height: '1.1em', width: '1.1em' }}
                       onClick={() => {
-                        MinusOrderItem(item, 1);
+                        MinusOrderItem(cartItem, 1);
                       }}
                       >
                       <RemoveIcon sx={{ fontSize: 12, }} />

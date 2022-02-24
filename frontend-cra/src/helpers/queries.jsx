@@ -200,13 +200,15 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
  * @param $category the name of the product category
  */ 
 export const GET_PRODUCTS_FOR_CART = gql`
+  ${coreProductFieldsFragment}
+
   # Get the products by ids
   query GetProductsByIds($productIds:[String], $userUuid: String!) {
     currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {
-      familyName: fieldSsFamilyName
+      # familyName: fieldSsFamilyName
       creditsRemaining: fieldSsCurrentCredit
-      totalCredits: fieldSsMonthlyCredit
-      numberOfFamilyMembers: fieldSsPersonCount
+      # totalCredits: fieldSsMonthlyCredit
+      # numberOfFamilyMembers: fieldSsPersonCount
     }
     products(productIds: $productIds) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=id&filter[cart][condition][operator]=IN{args.productIds}&include=field_image") {
       ...CoreProductFields
