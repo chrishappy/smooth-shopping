@@ -1,17 +1,21 @@
 import { 
   ApolloClient, 
   ApolloLink,
-  createHttpLink, 
-  InMemoryCache, 
-  from
+  InMemoryCache,
+  createHttpLink,
 } from '@apollo/client';
+import { camelize, pascalize } from 'humps';
+
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 import { cartItemsVar, clearCart } from './cartItems';
+import { JsonApiLink } from "apollo-link-json-api";
+
 
 
 // ---------------------------------------------------------------------------
+// Currently not used
 const cache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -37,8 +41,11 @@ const cache = new InMemoryCache({
 });
 
 // Set up authenication
-const httpLink = createHttpLink({
-  uri: 'https://ss.albernirentals.com/graphql',
+const httpLink = createHttpLink({});
+const jsonApiLink = new JsonApiLink({
+  uri: process.env.REACT_APP_JSON_URL_WITH_END_SLASH,
+  fieldNameNormalizer: camelize,
+  typeNameNormalizer: (type) => pascalize(type), // TODO: not working. Required for fragments
 });
 
 
@@ -56,7 +63,8 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : null,
+      Accept: "application/json",
+      Authorization: token ? `Bearer ${token}` : null,
     }
   }));
 
@@ -100,11 +108,12 @@ export const clearApolloCache = () => {
 
 // The final Apollo client
 export const apolloClient = new ApolloClient({
-  link: from([
+  link: ApolloLink.from([
     authMiddleware,
     logoutLink,
+    jsonApiLink,
     httpLink,
   ]),
-  cache: cache,
+  cache,
   // typeDefs
 });

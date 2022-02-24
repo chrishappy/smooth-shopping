@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router";
-import { isLoggedIn } from "../helpers/login";
+import { checkUserUuidAsync, isLoggedIn } from "../helpers/login";
 
 const RequireAuth = () => {
   let location = useLocation();
@@ -11,6 +11,9 @@ const RequireAuth = () => {
     // than dropping them off on the home page.
     return <Navigate to="/login" state={{ from: location }} />;
   }
+
+  // Check if the User's uuid exists. If not, create it.
+  checkUserUuidAsync();
 
   return <Outlet />;
 }

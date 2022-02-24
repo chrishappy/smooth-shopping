@@ -17,14 +17,22 @@ import { CartCheckoutButton } from "../components/cart-checkout-button";
 
 import './categories/category'; // for math-button-style
 import MainContentLoader from '../components/main-content-loader';
+import { getUserUuid } from '../helpers/login';
 
 const CartPage = () => {
+
+  const userUuid = getUserUuid();
+
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
   const cartTotalReactive = useReactiveVar(cartTotalVar);
 
+  console.log(cartIdsAndQuantities.keys());
+
   const { loading, error, data } = useQuery(GET_PRODUCTS_FOR_CART, {
     variables: {
-      productIds: [...cartIdsAndQuantities.keys()],
+      productIds: [...cartIdsAndQuantities.keys()].map(
+        (curr, i) => `&filter[cart][condition][value][${i}]=${curr}`).join(''),
+      userUuid,
     },
   });
 
@@ -34,9 +42,8 @@ const CartPage = () => {
     );
   }
 
-  const totalCredits = loading ? 0 : parseFloat(data.currentUserContext.creditsRemaining);
-  const cartItems = loading ? [] : data.nodeQuery.entities;
-  const userId = loading ? -1 : data.currentUserContext.uid;
+  const totalCredits = loading ? 0 : parseFloat(data.currentUser.creditsRemaining);
+  const cartItems = loading ? [] : data.products;
 
   return (
     <>
@@ -132,7 +139,7 @@ const CartPage = () => {
               disabled={cartItems.length === 0 || cartTotalReactive > totalCredits}
               clearCart={clearCart}
               orderData={{
-                uid: userId,
+                uid: userUuid,
                 title: `Order`, // - ${format(new Date(), 'yyyy-MM-dd')} TODO: Set timezone
                 orderItems: cartIdsAndQuantities,
               }}/>

@@ -129,3 +129,23 @@ fetch(
   .then(response => response.json())
   .then(data => console.log(data))
 ```
+
+### Testing persisted queries
+
+```js
+const queryVersion = `5dc606485ae49b1f92b6094993e3600957b39360`;
+const queryId = `1`;
+
+fetch(
+  `https://ss.albernirentals.com/graphql?query=${queryVersion}:${queryId}}`,
+  {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer %ACCESS_TOKEN%`,
+      "content-type": "application/json",
+    },
+  },)
+  .then(response => response.json())
+  .then(data => console.log(data))
+```
+

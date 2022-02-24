@@ -1,8 +1,22 @@
-# Getting Started with Create React App
+# Smooth Shopping (CRA)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Persist queries
+
+*Update:* This workflow is abandoned. Therefore, switching to JSON API.
+
+Currently, to harden the app, we persist queries and only allow non-admin users to run persisted queries.
+
+Later on, we may switch to v4 of Drupal's GraphQL module, but currently, not investing the time.
+
+```bash
+npx persistgraphql src/helpers/queries.jsx src/helpers/extracted_queries.json --js --extension=jsx
+```
+
 ## Available Scripts
+
+Note: you can also use `npm run [...]` instead of yarn.
 
 In the project directory, you can run:
 

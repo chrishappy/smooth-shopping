@@ -5,14 +5,27 @@
  */
 
 import { clearApolloCache } from "./cache";
+import { encodeURIComponentOrNull } from "./generic";
 
 // The constant for the local storage variable storing the JWT value
 const LOCAL_STORAGE_JWT_TOKEN = 'JWT_AUTHENICATION';
 
-// Get JWT key
-export const getJwtString = () => localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN) || null;
+// The constant for the local storage variable storing the JWT value
+const LOCAL_STORAGE_CURRENT_USER_UUID = 'CURRENT_USER_UUID';
 
-// Helper function for convience. Return whether the user is currently logged in
+// A object of all the tokens
+const LOCAL_STORAGE_USER_KEYS = {
+  LOCAL_STORAGE_JWT_TOKEN,
+  LOCAL_STORAGE_CURRENT_USER_UUID
+};
+
+// Get JWT key
+export const getJwtString = () => encodeURIComponentOrNull(localStorage.getItem(LOCAL_STORAGE_JWT_TOKEN));
+
+// Get User Uuid 
+export const getUserUuid = () => encodeURIComponentOrNull(localStorage.getItem(LOCAL_STORAGE_CURRENT_USER_UUID));
+
+// Helper function for convenience. Return whether the user is currently logged in
 export const isLoggedIn = () => !!getJwtString();
 
 /**
@@ -24,17 +37,40 @@ export const isLoggedIn = () => !!getJwtString();
 export const loginAsync = async (username, password) => {
   const jwt = await authenicationAsync(username, password);
 
-  // console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
+  console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
 
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
     console.log('User successfully logged in');
+
+    // Check if the User's uuid exists. If not, create it.
+    await checkUserUuidAsync();
+
     return true;
   }
   
   console.warn('Unable to authenicate user');
   return false;
 };
+
+/**
+ * Updates the UserUuid if not already set
+ * @returns boolean
+ */
+export const checkUserUuidAsync = async () => {
+  if (getUserUuid() === null) {
+    // Get User ID
+    const userUuid = await fetchUserUuid();
+    if (userUuid) {
+      localStorage.setItem(LOCAL_STORAGE_CURRENT_USER_UUID, userUuid);
+    }
+    else {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 /**
  * Get the JWT key with a fetch call
@@ -51,7 +87,7 @@ const authenicationAsync = async (username, password) => {
   const loginStr = loginStrBase64.toString('base64');
 
   // ENSURE this is https:// for security
-  return fetch('https://ss.albernirentals.com/jwt/token?_format=json', {
+  return fetch(`${process.env.REACT_APP_ROOT_DOMAIN}/jwt/token?_format=json`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -61,10 +97,28 @@ const authenicationAsync = async (username, password) => {
 }
 
 /**
+ * Fetch the current user's uuid. Requires the JWT string.
+ */
+const fetchUserUuid = async () => {
+  return fetch(`${process.env.REACT_APP_JSON_URL_WITH_END_SLASH}/`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getJwtString()}`
+    },
+  })
+  .then(response => response.json())
+  .then(data => data.meta.links.me.meta.id);
+}
+
+/**
  * Log out user
  */
 export const logoutCurrentUser = () => {
-  localStorage.removeItem(LOCAL_STORAGE_JWT_TOKEN);
+  // Clear all local storage keys
+  Object.keys(LOCAL_STORAGE_USER_KEYS).forEach((key) => {
+    localStorage.removeItem(LOCAL_STORAGE_USER_KEYS[key]);
+  });
 
   clearApolloCache();
 };

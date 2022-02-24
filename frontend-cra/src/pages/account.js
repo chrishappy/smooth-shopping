@@ -2,14 +2,18 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { Typography, Button, Box } from '@mui/material';
 import Seo from "../components/seo"
-import { logoutCurrentUser } from "../helpers/login";
+import { getUserUuid, logoutCurrentUser } from "../helpers/login";
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/main-content-loader";
 
 const Account = () => {
 
-  const { loading, error, data } = useQuery(GET_USER_STATS);
+  const { loading, error, data } = useQuery(GET_USER_STATS, {
+    variables: {
+      userUuid: getUserUuid(),
+    }
+  });
 
   if (error) {
     return (
@@ -22,7 +26,8 @@ const Account = () => {
       <MainContentLoader />
     )
   }
-  const userData = data.currentUserContext;
+
+  const userData = data.currentUser;
 
   return (
     <>
@@ -63,7 +68,7 @@ const Account = () => {
             // borderRadius: '20px',
             // fontWeight: 'bold',
             // padding: '0 10%',
-            marginTop: '3rem'
+            marginTop: '2rem'
           }}
           onClick={() => {
             logoutCurrentUser();
