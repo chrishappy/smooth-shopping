@@ -18,7 +18,7 @@ export const cartTotalVar = makeVar(0.0);
  * Increase the quantity of a product in the cart
  * 
  * @param {float} product the product to add to the cart. Require the fields:
- *  - entityId
+ *  - id
  *  - fieldCredit
  *  - fieldQuantity
  * @param {float|int} addQuantity the amount to add to product
@@ -28,19 +28,19 @@ export const AddOrderItem = (product, addQuantity) => {
   let currItems = cartItemsVar();
 
   // Update quantity
-  if (!currItems.has(product.entityId)) {
-    currItems.set(product.entityId, 0.0);
+  if (!currItems.has(product.id)) {
+    currItems.set(product.id, 0.0);
   }
 
   // If the quantity exceeds the max quantity, add the remaining
-  if (currItems.get(product.entityId) + addQuantity > product.fieldQuantity) {
-    console.warn(`Quantity Exceeded for ${product.entityLabel}`);
+  if (currItems.get(product.id) + addQuantity > product.fieldQuantity) {
+    console.warn(`Quantity Exceeded for ${product.title}`);
     // TODO: show users a notice
 
-    addQuantity = product.fieldQuantity - currItems.get(product.entityId); 
+    addQuantity = product.fieldQuantity - currItems.get(product.id); 
   }
 
-  currItems.set(product.entityId, currItems.get(product.entityId) + addQuantity);
+  currItems.set(product.id, currItems.get(product.id) + addQuantity);
   cartItemsVar(currItems);
 
   // Update cart total
@@ -53,7 +53,7 @@ export const AddOrderItem = (product, addQuantity) => {
  * Reduce the quantity of a product in the cart
  * 
  * @param {float} product the product to minus from the cart. Require 
- *                        `entityId` and `fieldCredit` fields
+ *                        `id` and `fieldCredit` fields
  * @param {float|int} minusQuantity the amount to minus from product
  * @returns {object} the cart items
  */
@@ -61,14 +61,14 @@ export const MinusOrderItem = (product, minusQuantity) => {
   let currItems = cartItemsVar();
 
   // Update quantity
-  if (!currItems.has(product.entityId)) {
-    currItems.set(product.entityId, 0.0);
+  if (!currItems.has(product.id)) {
+    currItems.set(product.id, 0.0);
   }
-  currItems.set(product.entityId, currItems.get(product.entityId) - minusQuantity);
+  currItems.set(product.id, currItems.get(product.id) - minusQuantity);
 
   // Remove is necessary
-  if (currItems.get(product.entityId) <= 0) {
-    currItems.delete(product.entityId);
+  if (currItems.get(product.id) <= 0) {
+    currItems.delete(product.id);
   }
   
   cartItemsVar(currItems);
