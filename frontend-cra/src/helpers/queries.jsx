@@ -150,6 +150,30 @@ export const GET_PRODUCTS_FOR_CART = gql`
 `;
 
 /**
+ * Get orders of current user
+ * 
+ * Note: Backend restricts users to only view their own orders.
+ */
+export const GET_USERS_ORDERS = gql`
+  query GetUsersOrders {
+    orders @jsonapi(path: "node/order/?filter[status]=1&include=field_order_items.field_product") {
+      id
+      created
+      fieldTotalOrderAmount
+      fieldOrderItems {
+        drupalInternalId
+        fieldQuantity
+        fieldProduct {
+          title
+          fieldCredit
+          fieldQuantity
+        }
+      }
+    }
+  }
+`;
+
+/**
  * Create and Update an Order
  * 
  * Types Schema
@@ -197,4 +221,5 @@ export const CREATE_AND_UPDATE_ORDER = gql`
       }
     }
   }
-`
+`;
+
