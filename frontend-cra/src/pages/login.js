@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Stack, TextField, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Seo from "../components/seo"
-import { isLoggedIn, loginAsync } from "../helpers/login";
+import { isLoggedIn, loginAsync } from "../helpers/loginHelper";
 import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/snackbar";
 
 const LoginPage = () => {

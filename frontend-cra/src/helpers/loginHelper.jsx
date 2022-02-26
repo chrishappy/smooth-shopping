@@ -5,7 +5,7 @@
  */
 
 import { clearApolloCache } from "./cache";
-import { encodeURIComponentOrNull } from "./generic";
+import { encodeURIComponentOrNull } from "./genericHelper";
 
 // The constant for the local storage variable storing the JWT value
 const LOCAL_STORAGE_JWT_TOKEN = 'JWT_AUTHENICATION';

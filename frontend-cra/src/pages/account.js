@@ -2,7 +2,7 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { Typography, Button, Box } from '@mui/material';
 import Seo from "../components/seo"
-import { getUserUuid, logoutCurrentUser } from "../helpers/login";
+import { getUserUuid, logoutCurrentUser } from "../helpers/loginHelper";
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/main-content-loader";

@@ -15,8 +15,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import CachedIcon from '@mui/icons-material/Cached';
 
 import { GET_PRODUCTS_OF_CATEGORY } from '../../helpers/queries';
-import { AddOrderItem, hasNoMoreQuantity, useMaxAndMinQuantitiesForProduct } from '../../helpers/cartItems';
-import { hasExistentProperty } from '../../helpers/generic'
+import { AddOrderItem, hasNoMoreQuantity, useMaxAndMinQuantitiesForProduct } from '../../helpers/cartHelper';
+import { hasExistentProperty } from '../../helpers/genericHelper'
 import MainContentLoader from '../../components/main-content-loader';
 import GoCheckoutButton from '../../components/go-checkout-button';
 import './category.css'
@@ -101,7 +101,7 @@ export const ProductListInfinityScroll = ({ queryInfo: {loading, error, data, fe
       <ProductDialog 
         selectedProduct={selectedProduct} 
         reactOpen={[isOpen, setOpen]}
-        quantities={maxAndMinQuantities} />
+        maxAndMinQuantities={maxAndMinQuantities} />
     </>
   );
 }
@@ -153,8 +153,8 @@ export const Products = ({ setProduct, setOpen, data }) => {
   );
 }
 
-export const ProductDialog = ({reactOpen, quantities, selectedProduct}) => {
-  const [minQuantity, maxQuantity] = quantities;
+export const ProductDialog = ({reactOpen, maxAndMinQuantities, selectedProduct}) => {
+  const [maxQuantity, minQuantity] = maxAndMinQuantities;
   const [selectedProductCount, setCount] = React.useState(1.0);
   const [isOpen, setOpen] = reactOpen;
 

@@ -19,7 +19,7 @@ import Category from './pages/categories/category';
 import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
 import './App.css';
-import { restoreCartItems, storeCartItems } from './helpers/cartItems';
+import { restoreCartItems, storeCartItems } from './helpers/cartHelper';
 import SearchProducts from './pages/search-page';
 import PastOrders from './pages/past-orders';
 

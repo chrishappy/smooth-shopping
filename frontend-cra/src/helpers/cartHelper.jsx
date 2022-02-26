@@ -4,7 +4,7 @@ import { getUnixTime } from "date-fns";
 import { startOfMonth } from "date-fns/esm";
 import { zonedTimeToUtc } from "date-fns-tz"
 import { apolloCachePersistor } from "./cache";
-import { addToOrCreateMapEntry } from "./generic";
+import { addToOrCreateMapEntry } from "./genericHelper";
 import { GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH } from "./queries";
 
 /**
@@ -74,7 +74,7 @@ export const useMaxAndMinQuantitiesForProduct = (product) => {
   // Calculate the min quantity a user can buy
   const minQuantity = Math.min(maxQuantity, 1.0); // In case no more elements (e.g. maxQuantity is zero)
 
-  return [minQuantity, maxQuantity];
+  return [maxQuantity, minQuantity];
 }
 
 /**
@@ -87,11 +87,11 @@ export const useMaxAndMinQuantitiesForProduct = (product) => {
  * @param {float|int} addQuantity the amount to add to product
  * @returns {object} the cart items
  */
-export const AddOrderItem = (product, addQuantity) => {
+export const AddOrderItem = (product, addQuantity, maxQuantity) => {
   let currItems = cartItemsVar();
 
-  // If the quantity exceeds the max quantity, add the remaining
-  if (currItems.get(product.nid) + addQuantity > product.fieldQuantity) {
+  // If the quantity exceeds the maximum, add the remaining
+  if (currItems.get(product.nid) + addQuantity > maxQuantity) {
     console.warn(`Quantity Exceeded for ${product.title}`);
 
     addQuantity = product.fieldQuantity - currItems.get(product.nid); 

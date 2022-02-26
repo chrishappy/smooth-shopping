@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Outlet } from "react-router"
-import { isLoggedIn } from "../helpers/login"
+import { isLoggedIn } from "../helpers/loginHelper"
 
 import CustomizedSnackbar from "./snackbar"
 import Header from "./header"

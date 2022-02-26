@@ -1,23 +1,19 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
-import { cartItemsVar, AddOrderItem, cartTotalVar, MinusOrderItem } from "../helpers/cartItems";
+import { cartItemsVar, cartTotalVar } from "../helpers/cartHelper";
 import Seo from "../components/seo"
 
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack';
-
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import IconButton from '@mui/material/IconButton';
 import { CardMedia } from "@mui/material";
 import { CartCheckoutButton } from "../components/cart-checkout-button";
 
 import './categories/category'; // for math-button-style
 import MainContentLoader from '../components/main-content-loader';
-import { getUserUuid } from '../helpers/login';
+import { getUserUuid } from '../helpers/loginHelper';
+import ProductAddRemoveButtons from '../components/product-add-remove-buttons';
 
 const CartPage = () => {
 
@@ -45,6 +41,7 @@ const CartPage = () => {
   const totalCredits = loading ? 0 : parseFloat(data.currentUser.creditsRemaining);
   const cartItems = loading ? [] : data.products;
 
+
   // Disabled data for cart-checkout-button
   const disabledData = {
     notEnoughCredits: cartTotalReactive > totalCredits,
@@ -63,7 +60,7 @@ const CartPage = () => {
 
       <hr />
 
-      <Box className="cart-items">
+      <Box className="cart-items" sx={{ paddingBottom: '3rem'}}>
         { loading
             ? <MainContentLoader />
             : <></>
@@ -95,34 +92,8 @@ const CartPage = () => {
                   </Typography>
                 </CardContent>
               </Box>
-              {/* TODO: Make this a component along with the one in category */}
-              <Box sx={{  display: 'flex', flex: '1 0 auto', textAlign: 'center', maxWidth: '2.1rem', margin: '0 0.7rem 0 0' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
-                  <Stack direction="column">
-                    <IconButton
-                      className='math-button-style'
-                      sx={{ height: '1.1em', width: '1.1em' }}
-                      onClick={() => {
-                        AddOrderItem(cartItem, 1);
-                      }}
-                      disabled={cartIdsAndQuantities.get(cartItem.nid) >= cartItem.fieldQuantity}>
-                      <AddIcon sx={{ fontSize: 12, }} />
-                    </IconButton>
-                    <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-                      <span>{ cartIdsAndQuantities.get(cartItem.nid) }</span> {/* TODO: Find less hacky solution? */}
-                    </Box>
-                    <IconButton
-                      className='math-button-style'
-                      sx={{ height: '1.1em', width: '1.1em' }}
-                      onClick={() => {
-                        MinusOrderItem(cartItem, 1);
-                      }}
-                      >
-                      <RemoveIcon sx={{ fontSize: 12, }} />
-                    </IconButton>
-                  </Stack>
-                </Box>
-              </Box>
+              <ProductAddRemoveButtons 
+                selectedProduct={cartItem} />
             </Box>
           </Card>
         ))}

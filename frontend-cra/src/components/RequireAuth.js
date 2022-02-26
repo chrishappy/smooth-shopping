@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router";
-import { isLoggedIn } from "../helpers/login";
+import { isLoggedIn } from "../helpers/loginHelper";
 
 const RequireAuth = () => {
   let location = useLocation();

@@ -10,8 +10,8 @@ import { camelize, pascalize } from 'humps';
 
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
-import { getJwtString, logoutCurrentUser } from './login';
-import { clearCart } from './cartItems';
+import { getJwtString, logoutCurrentUser } from './loginHelper';
+import { clearCart } from './cartHelper';
 
 
 

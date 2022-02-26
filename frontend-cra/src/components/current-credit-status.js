@@ -2,8 +2,8 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
-import { cartTotalVar } from "../helpers/cartItems";
-import { getUserUuid } from "../helpers/login";
+import { cartTotalVar } from "../helpers/cartHelper";
+import { getUserUuid } from "../helpers/loginHelper";
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const CurrentCredits = () => {
