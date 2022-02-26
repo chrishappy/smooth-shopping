@@ -15,11 +15,12 @@ const Account = () => {
     }
   });
 
-  if (error) {
-    return (
-      'There was an error.'
-    );
-  }
+  let userData = {
+    familyName: 'ERROR',
+    numberOfFamilyMembers: -1.0,
+    totalCredits: -1.0,
+    creditsRemaining: -1.0,
+  };
 
   if (loading) {
     return (
@@ -27,7 +28,9 @@ const Account = () => {
     )
   }
 
-  const userData = data.currentUser;
+  if (!error) {
+    userData = data.currentUser;
+  }
 
   return (
     <>

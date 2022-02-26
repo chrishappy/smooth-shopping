@@ -43,7 +43,6 @@ function Categories() {
   }
 
   const { categories } = data;
-  console.log(categories[0].fieldImage);
 
   return <ImageList>
     {categories.map((category) => (

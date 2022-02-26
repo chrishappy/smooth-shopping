@@ -6,12 +6,14 @@ A file containing the reason behind some of the design decisions.
 
 Because Drupal's GraphQL module is either 1) insecure or 2) requires too much work to set up initially
 
-### Use the unmaintained plugin `https://github.com/rsullivan00/apollo-link-json-api`. 
+### Use the (not actively maintained) plugin `https://github.com/rsullivan00/apollo-link-json-api`. 
+
+Although it's not actively maintained, I think we could switch to Apollo's REST API pretty easily.
 
 Installed using:
 
 ```bash
-$ npm install apollo-link-json-api apollo-link @apollo/client graphql graphql-anywhere qs humps camelcase apollo-link-rest --save
+$ npm install apollo-link-json-api apollo-link-rest apollo-link @apollo/client graphql graphql-anywhere qs humps camelcase apollo-link-rest --save
 ```
 
 **Note**: We must use `fieldNameNormalizer: camelCase,` when creating a JsonApi (or RestApi) link, because GraphQL does not suppose snack_case field names.

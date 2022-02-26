@@ -26,7 +26,7 @@ export const getJwtString = () => encodeURIComponentOrNull(localStorage.getItem(
 export const getUserUuid = () => encodeURIComponentOrNull(localStorage.getItem(LOCAL_STORAGE_CURRENT_USER_UUID));
 
 // Helper function for convenience. Return whether the user is currently logged in
-export const isLoggedIn = () => !!getJwtString();
+export const isLoggedIn = () => !!getJwtString() || !!getUserUuid();
 
 /**
  * Use this function when the user is logging in the first time

@@ -9,7 +9,8 @@ import { gql } from "@apollo/client";
  */
 export const GET_USER_STATS = gql`
 query GetUserStats($userUuid: String!) {
-  currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {
+  currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {      
+    id,
     familyName: fieldSsFamilyName
     creditsRemaining: fieldSsCurrentCredit
     totalCredits: fieldSsMonthlyCredit
@@ -48,6 +49,7 @@ const coreProductFieldsFragment = gql`
   fragment CoreProductFields on NodeProduct {
     # Start fragment
     id
+    drupalInternalNid
     title
     path {
       alias
@@ -55,6 +57,7 @@ const coreProductFieldsFragment = gql`
     fieldImage {
       imageStyleUri {
         productCategory
+        popupLargeImage
       }
       alt       # This and below does not currently work
       title
@@ -85,30 +88,6 @@ export const GET_ALL_PRODUCTS = gql`
   query GetAllProducts {
     products @jsonapi(path: "node/product/?filter[status]=1&include=field_image") {
       ...CoreProductFields
-      # Start fragment
-      id
-      title
-      path {
-        alias
-      }
-      fieldImage {
-        imageStyleUri {
-          productCategory
-          popupLargeImage
-        }
-        alt       # This and below does not currently work
-        title
-        width
-        height    # Up to here
-      }
-      fieldCredit
-      fieldQuantity
-      fieldExpired
-      fieldLimitPerClient
-      body {
-        processed
-      }
-      # End fragment
     }
   }
 `;
@@ -124,33 +103,10 @@ export const GET_ALL_PRODUCTS = gql`
 &filter[st1][condition][memberOf]=search-terms
  */
 export const SEARCH_FOR_PRODUCT = gql`
-query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String) {
-  products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms"
-    ) {
-      # Start fragment
-      id
-      title
-      path {
-        alias
-      }
-      fieldImage {
-        imageStyleUri {
-          productCategory
-          popupLargeImage
-        }
-        alt       # This and below does not currently work
-        title
-        width
-        height    # Up to here
-      }
-      fieldCredit
-      fieldQuantity
-      fieldExpired
-      fieldLimitPerClient
-      body {
-        processed
-      }
-      # End fragment
+  ${coreProductFieldsFragment}
+  query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String) {
+    products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms") {
+      ...CoreProductFields
     }
   }
 `
@@ -166,30 +122,6 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
   query GetCategoryProducts($categoryId: Int!) {
     products(categoryId: $categoryId) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image") {
       ...CoreProductFields
-      # Start fragment
-      id
-      title
-      path {
-        alias
-      }
-      fieldImage {
-        imageStyleUri {
-          productCategory
-          popupLargeImage
-        }
-        alt       # This and below does not currently work
-        title
-        width
-        height    # Up to here
-      }
-      fieldCredit
-      fieldQuantity
-      fieldExpired
-      fieldLimitPerClient
-      body {
-        processed
-      }
-      # End fragment
     }
   }
 `;
@@ -205,37 +137,14 @@ export const GET_PRODUCTS_FOR_CART = gql`
   # Get the products by ids
   query GetProductsByIds($productIds:[String], $userUuid: String!) {
     currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {
+      id,
       # familyName: fieldSsFamilyName
       creditsRemaining: fieldSsCurrentCredit
       # totalCredits: fieldSsMonthlyCredit
       # numberOfFamilyMembers: fieldSsPersonCount
     }
-    products(productIds: $productIds) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=id&filter[cart][condition][operator]=IN{args.productIds}&include=field_image") {
+    products(productIds: $productIds) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=nid&filter[cart][condition][operator]=IN{args.productIds}&include=field_image") {
       ...CoreProductFields
-      # Start fragment
-      id
-      title
-      path {
-        alias
-      }
-      fieldImage {
-        imageStyleUri {
-          productCategory
-          popupLargeImage
-        }
-        alt       # This and below does not currently work
-        title
-        width
-        height    # Up to here
-      }
-      fieldCredit
-      fieldQuantity
-      fieldExpired
-      fieldLimitPerClient
-      body {
-        processed
-      }
-      # End fragment
     }
   }
 `;
@@ -247,7 +156,6 @@ export const GET_PRODUCTS_FOR_CART = gql`
  * @code
  *   SsOrderCreateAndUpdateInput {
  *     "title" = "String",
- *     "uid" = "Int!",
  *     "fieldStatus" = "String",
  *     "orderItems" = "[SsOrderItem]"
  *   }
@@ -263,7 +171,6 @@ export const GET_PRODUCTS_FOR_CART = gql`
  *   {
  *     "order": {
  *       "title": "Some Order",
- *       "uid": 6,
  *       "fieldStatus": "SUBMITTED",
  *       "orderItems": [
  *          {
@@ -281,39 +188,12 @@ export const GET_PRODUCTS_FOR_CART = gql`
  */
 export const CREATE_AND_UPDATE_ORDER = gql`
   mutation CreateAndUpdateOrder($order:SsOrderCreateAndUpdateInput!) {
-    createAndUpdateOrder(input: $order) {
-      errors
-      violations {
-        code
-        message
-        path
-      }
-      entity {
-        ... on NodeOrder {
-          nid
-          title
-          fieldTotalOrderAmount
-          fieldStatus {
-            entity {
-              entityLabel
-            }
-          }
-          fieldOrderItems {
-            entity {
-              ... on ParagraphProductItem {
-                fieldProduct {
-                  entity {
-                    ... on NodeProduct {
-                      title
-                      fieldQuantity
-                    }
-                  }
-                }
-                fieldQuantity
-              }
-            }
-          }
-        }
+    createAndUpdateOrder(input: $order) @rest(path: "custom/create-and-update-orders", method: "POST", type: "CreateAndUpdateInputResponse") {
+      error
+      data {
+        id
+        title
+        uid
       }
     }
   }

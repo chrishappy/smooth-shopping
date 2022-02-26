@@ -4,29 +4,30 @@ import {
   InMemoryCache,
   createHttpLink,
 } from '@apollo/client';
+import { JsonApiLink } from 'apollo-link-json-api';
+import { RestLink } from 'apollo-link-rest';
 import { camelize, pascalize } from 'humps';
 
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
 import { cartItemsVar, clearCart } from './cartItems';
-import { JsonApiLink } from "apollo-link-json-api";
 
 
 
 // ---------------------------------------------------------------------------
 // Currently not used
 const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        cartItems: {
-          read() {
-            return cartItemsVar();
-          }
-        },
-      }
-    },
+  // typePolicies: {
+  //   Query: {
+  //     fields: {
+  //       cartItems: {
+  //         read() {
+  //           return cartItemsVar();
+  //         }
+  //       },
+  //     }
+  //   },
     // NodeProduct: {
     //   fields: {
     //     localQuantity: {
@@ -37,15 +38,24 @@ const cache = new InMemoryCache({
     //     }
     //   }
     // }
-  }
+  // }
 });
 
-// Set up authenication
+// Set up http links
 const httpLink = createHttpLink({});
+
+const restLink = new RestLink({
+  uri: process.env.REACT_APP_REST_URL_WITH_END_SLASH,
+  fieldNameNormalizer: camelize,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 const jsonApiLink = new JsonApiLink({
   uri: process.env.REACT_APP_JSON_URL_WITH_END_SLASH,
   fieldNameNormalizer: camelize,
-  typeNameNormalizer: (type) => pascalize(type), // TODO: not working. Required for fragments
+  typeNameNormalizer: pascalize,
 });
 
 
@@ -63,7 +73,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      Accept: "application/json",
+      Accept: 'application/json',
       Authorization: token ? `Bearer ${token}` : null,
     }
   }));
@@ -111,6 +121,7 @@ export const apolloClient = new ApolloClient({
   link: ApolloLink.from([
     authMiddleware,
     logoutLink,
+    restLink,
     jsonApiLink,
     httpLink,
   ]),

@@ -1,6 +1,6 @@
  .product-dialog {
   height: 100%;
-  /* padding-bottom: 8.3rem; */
+  padding-bottom: 8.3rem;
 }
 
 .product-dialog__img,
@@ -8,8 +8,9 @@
   height: 100%;
   width: auto;
   text-align: center;
+  /*
   -o-object-fit: cover;
-     object-fit: cover;
+     object-fit: cover; */
 }
 
 .product-dialog__content {

@@ -38,9 +38,7 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
           createOrder({
             variables: {
               order: {
-                uid: parseInt(orderData.uid),
                 title: orderData.title,
-                // fieldStatus: "SUBMITTED",
                 orderItems: getOrderItemsFormatted(orderData.orderItems),
               }
             }
@@ -74,6 +72,7 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
 }
 
 function getOrderItemsFormatted(orderItems) {
+  console.log([...orderItems.entries()]);
   return [...orderItems.entries()].map(([productId, quantity]) => {
     return {
       productId: parseInt(productId), 

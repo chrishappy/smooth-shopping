@@ -28,19 +28,19 @@ export const AddOrderItem = (product, addQuantity) => {
   let currItems = cartItemsVar();
 
   // Update quantity
-  if (!currItems.has(product.id)) {
-    currItems.set(product.id, 0.0);
+  if (!currItems.has(product.drupalInternalNid)) {
+    currItems.set(product.drupalInternalNid, 0.0);
   }
 
   // If the quantity exceeds the max quantity, add the remaining
-  if (currItems.get(product.id) + addQuantity > product.fieldQuantity) {
+  if (currItems.get(product.drupalInternalNid) + addQuantity > product.fieldQuantity) {
     console.warn(`Quantity Exceeded for ${product.title}`);
     // TODO: show users a notice
 
-    addQuantity = product.fieldQuantity - currItems.get(product.id); 
+    addQuantity = product.fieldQuantity - currItems.get(product.drupalInternalNid); 
   }
 
-  currItems.set(product.id, currItems.get(product.id) + addQuantity);
+  currItems.set(product.drupalInternalNid, currItems.get(product.drupalInternalNid) + addQuantity);
   cartItemsVar(currItems);
 
   // Update cart total
@@ -61,14 +61,14 @@ export const MinusOrderItem = (product, minusQuantity) => {
   let currItems = cartItemsVar();
 
   // Update quantity
-  if (!currItems.has(product.id)) {
-    currItems.set(product.id, 0.0);
+  if (!currItems.has(product.drupalInternalNid)) {
+    currItems.set(product.drupalInternalNid, 0.0);
   }
-  currItems.set(product.id, currItems.get(product.id) - minusQuantity);
+  currItems.set(product.drupalInternalNid, currItems.get(product.drupalInternalNid) - minusQuantity);
 
   // Remove is necessary
-  if (currItems.get(product.id) <= 0) {
-    currItems.delete(product.id);
+  if (currItems.get(product.drupalInternalNid) <= 0) {
+    currItems.delete(product.drupalInternalNid);
   }
   
   cartItemsVar(currItems);
