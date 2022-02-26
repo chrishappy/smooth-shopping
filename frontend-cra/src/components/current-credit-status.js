@@ -4,6 +4,7 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import { cartTotalVar } from "../helpers/cartItems";
 import { getUserUuid } from "../helpers/login";
+// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const CurrentCredits = () => {
 
@@ -26,7 +27,7 @@ const CurrentCredits = () => {
   let userData;
   if (loading) {
     userData = {
-      creditsRemaining: 0.00,
+      creditsRemaining: cartTotalReactive,
       totalCredits: 0.00,
     };
   }
@@ -38,26 +39,24 @@ const CurrentCredits = () => {
 
   return (
     <Link
-        to="/cart/"
-        style={{
-          color: 'white',
-          textDecoration: 'none'
-        }}
-      >
+      to="/cart/"
+      style={{
+        color: 'white',
+        textDecoration: 'none'
+      }}>
       <div
         style={{
           textAlign: 'center',
           display: 'flex',
           alignItems: 'center'
-        }}
-      >
+        }}>
         {/* <ShoppingCartIcon fontSize="large" /> */}
         <h3 style={{ margin: 0, color: currentCredits >= 0 ? '#75F348' : '#F34848', fontSize: '2rem' }}>
-            { // TODO: Make formatting better?
-              currentCredits >= 0 
-                ? <>${currentCredits}</>
-                : <>-${currentCredits * -1}</>
-            }
+          { // TODO: Make formatting better?
+            currentCredits >= 0 
+              ? <>${currentCredits}</>
+              : <>-${currentCredits * -1}</>
+          }
         </h3>
         <div style={{
           textAlign: 'left',
