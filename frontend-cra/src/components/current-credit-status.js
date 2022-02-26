@@ -9,7 +9,7 @@ import { getUserUuid } from "../helpers/login";
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS, {
-    fetchPolicy: "network-only",
+    // fetchPolicy: "network-only", // do not cache
     variables: {
       userUuid: getUserUuid(),
     },

@@ -73,7 +73,7 @@ const CartPage = () => {
               height={cartItem.fieldImage.height} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardContent sx={{ flex: '1 0 auto' }}>
+                <CardContent sx={{ flex: '1 1 auto' }}>
                   <h4 className="cart-item__title">
                     { cartItem.title }
                   </h4>
@@ -89,12 +89,12 @@ const CartPage = () => {
                 </CardContent>
               </Box>
               {/* TODO: Make this a component along with the one in category */}
-              <Box sx={{  display: 'flex', flex: '1 0 auto', textAlign: 'center', maxWidth: '2.1rem', margin: '0 0.7rem' }}>
+              <Box sx={{  display: 'flex', flex: '1 0 auto', textAlign: 'center', maxWidth: '2.1rem', margin: '0 0.7rem 0 0' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
                   <Stack direction="column">
                     <IconButton
                       className='math-button-style'
-                      sx={{ height: '1.1em', width: '1.1em', background: '#fff' }}
+                      sx={{ height: '1.1em', width: '1.1em' }}
                       onClick={() => {
                         AddOrderItem(cartItem, 1);
                       }}

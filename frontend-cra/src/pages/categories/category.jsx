@@ -86,6 +86,7 @@ export const ProductListInfinityScroll = ({ queryInfo: {loading, error, data, fe
         onEnter={() => {
           console.log('fetching more products')
           if (!error && !loading) {
+             // TODO: Prevent fetching more if no more items to fetch?
             fetchMore({
               variables: {
                 offset: data.products.length,

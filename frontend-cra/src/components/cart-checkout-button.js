@@ -43,6 +43,7 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
               }
             }
           }).then(() => {
+            console.log("Clearing cache");
             // https://www.apollographql.com/docs/react/data/refetching/
             clearApolloCache();
             apolloClient.refetchQueries({

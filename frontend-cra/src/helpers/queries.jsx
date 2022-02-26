@@ -23,7 +23,7 @@ query GetUserStats($userUuid: String!) {
 
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {
-    categories(vocabulary: "product_categories") @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]={args.vocabulary}&include=field_image") {
+    categories(vocabulary: "product_categories") @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]={args.vocabulary}&include=field_image&sort=id") {
       id
       name
       path {
@@ -101,7 +101,7 @@ const coreProductFieldsFragment = gql`
 export const GET_ALL_PRODUCTS = gql`
   # Get the products in a category
   query GetAllProducts($offset: Int) {
-    products(offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&page[offset]={args.offset}") {
+    products(offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&page[offset]={args.offset}&sort=title") {
       ...CoreProductFields
     }
   }
@@ -119,7 +119,7 @@ export const GET_ALL_PRODUCTS = gql`
 &filter[st1][condition][memberOf]=search-terms
  */
 export const SEARCH_FOR_PRODUCT = gql`  query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String, $offset: Int) {
-    products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms&page[offset]={args.offset}") {
+    products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms&page[offset]={args.offset}&sort=id") {
       ...CoreProductFields
     }
   }
@@ -133,7 +133,7 @@ export const SEARCH_FOR_PRODUCT = gql`  query SearchByWord($searchTerm1:String, 
 export const GET_PRODUCTS_OF_CATEGORY = gql`  
   # Get the products in a category
   query GetCategoryProducts($categoryId: Int!, $offset: Int) {
-    products(categoryId: $categoryId, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image&page[offset]={args.offset}") {
+    products(categoryId: $categoryId, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image&page[offset]={args.offset}&sort=id") {
       ...CoreProductFields
     }
   }
@@ -155,7 +155,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
       # totalCredits: fieldSsMonthlyCredit
       # numberOfFamilyMembers: fieldSsPersonCount
     }
-    products(productIds: $productIds, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=nid&filter[cart][condition][operator]=IN{args.productIds}&include=field_image&page[offset]={args.offset}") {
+    products(productIds: $productIds, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=nid&filter[cart][condition][operator]=IN{args.productIds}&include=field_image&page[offset]={args.offset}&sort=id") {
       ...CoreProductFields
     }
   }
@@ -165,11 +165,13 @@ export const GET_PRODUCTS_FOR_CART = gql`
 /**
  * Get orders of current user
  * 
+ * TODO: Add the currentUser's Uuid to context and filter here (for performance)
+ * 
  * Note: Backend restricts users to only view their own orders.
  */
 export const GET_USERS_ORDERS = gql`
   query GetUsersOrders {
-    orders @jsonapi(path: "node/order/?filter[status]=1&include=field_order_items.field_product") {
+    orders @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items.field_product") {
       id
       created
       fieldTotalOrderAmount
@@ -196,7 +198,7 @@ export const GET_USERS_ORDERS = gql`
  */
 export const GET_PAST_ORDER_QUANTITIES = gql`
   query GetPastOrdersQuantities {
-    orders @jsonapi(path: "node/order/?filter[status]=1&sort=-created&include=field_order_items") {
+    orders @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items") {
       id
       created
       fieldOrderItems {
@@ -222,7 +224,7 @@ export const GET_PAST_ORDER_QUANTITIES = gql`
  */
 export const GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH = gql`
   query GetPastOrdersQuantities($firstDayOfCurrentMonthTimestamp: Int!) {
-    orders(firstDay: $firstDayOfCurrentMonthTimestamp) @jsonapi(path: "node/order/?filter[status]=1&sort=-created&filter[recent][condition][path]=created&filter[recent][condition][operator]=%3E%3D&filter[recent][condition][value]={args.firstDay}&include=field_order_items") {
+    orders(firstDay: $firstDayOfCurrentMonthTimestamp) @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&filter[recent][condition][path]=created&filter[recent][condition][operator]=%3E%3D&filter[recent][condition][value]={args.firstDay}&include=field_order_items") {
       id
       created
       fieldOrderItems {
