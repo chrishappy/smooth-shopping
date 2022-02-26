@@ -1,6 +1,6 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
-import { cartItemsVar, AddOrderItem, cartTotalVar, MinusOrderItem, clearCart } from "../helpers/cartItems";
+import { cartItemsVar, AddOrderItem, cartTotalVar, MinusOrderItem } from "../helpers/cartItems";
 import Seo from "../components/seo"
 
 import Card from '@mui/material/Card';
@@ -44,6 +44,13 @@ const CartPage = () => {
 
   const totalCredits = loading ? 0 : parseFloat(data.currentUser.creditsRemaining);
   const cartItems = loading ? [] : data.products;
+
+  // Disabled data for cart-checkout-button
+  const disabledData = {
+    notEnoughCredits: cartTotalReactive > totalCredits,
+    noItemsInCart: cartItems.length === 0,
+  }
+  disabledData['isDisabled'] = disabledData.notEnoughCredits || disabledData.noItemsInCart;
 
   return (
     <>
@@ -136,8 +143,7 @@ const CartPage = () => {
 
           <Box sx={{ textAlign: 'center' }}>
             <CartCheckoutButton 
-              disabled={cartItems.length === 0 || cartTotalReactive > totalCredits}
-              clearCart={clearCart}
+              disabledData={disabledData}
               orderData={{
                 uid: userUuid,
                 title: `App Order`, // - ${format(new Date(), 'yyyy-MM-dd')} TODO: Set timezone

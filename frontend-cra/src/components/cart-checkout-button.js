@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { Button } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { useMutation } from "@apollo/client";
 import { CREATE_AND_UPDATE_ORDER } from "../helpers/queries";
 import Dialog from '@mui/material/Dialog';
@@ -10,9 +11,18 @@ import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
 import { apolloClient, clearApolloCache } from "../helpers/cache";
 
-export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
+export const CartCheckoutButton = ({disabledData, orderData}) => {
   // TODO: Display old orders somewhere
   const [createOrder, {loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
+  const {isDisabled, notEnoughCredits, noItemsInCart} = disabledData;
+
+  let buttonText = 'Confirm Order';
+  if (noItemsInCart) {
+    buttonText = 'No items';
+  }
+  else if (notEnoughCredits) {
+    buttonText = 'Not Enough Credits';
+  }
 
   // For dialogs
   const [open, setOpen] = React.useState(false);
@@ -29,8 +39,8 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
           color: '#000',
           backgroundColor: '#75F348',
         }}
-        disabled={disabled}
-        startIcon={<CheckCircleIcon />}
+        disabled={isDisabled}
+        startIcon={!isDisabled ? <CheckCircleIcon /> : <CancelIcon />}
         onClick={() => {
           setOpen(true);
           // setCartCleared(false);
@@ -51,7 +61,7 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
             });
           });
         }}>
-        Confirm Order
+        {buttonText}
       </LoadingButton>
 
       <Dialog
@@ -59,7 +69,7 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
         onClose={() => {setOpen(false)}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <DialogContent sx={{ minWidth: '25rem' }}>
+        <DialogContent sx={{ minWidth: '25rem', maxWidth: '90vw' }}>
           {error 
             ? <p>There was an error. Please contact the House of Omeed</p> // TODO: Abstract?
             : <p>We have received your order.</p> }

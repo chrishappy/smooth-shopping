@@ -144,6 +144,11 @@ export const clearApolloCache = () => {
   if (!apolloCachePersistor) {
     return;
   }
+
+  // Clear the memory
+  apolloClient.resetStore();
+
+  // Clear the persist cache
   apolloCachePersistor.purge();
 
   // Clear the cart cache too

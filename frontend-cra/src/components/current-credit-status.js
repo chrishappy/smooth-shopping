@@ -9,7 +9,7 @@ import { getUserUuid } from "../helpers/login";
 const CurrentCredits = () => {
 
   const { loading, error, data } = useQuery(GET_USER_STATS, {
-    // fetchPolicy: "network-only", // do not cache
+    fetchPolicy: "network-only", // TODO: avoid requiring this
     variables: {
       userUuid: getUserUuid(),
     },
@@ -25,10 +25,10 @@ const CurrentCredits = () => {
   }
 
   let userData;
-  if (loading) {
+  if (loading || !data.currentUser) {
     userData = {
       creditsRemaining: cartTotalReactive,
-      totalCredits: 0.00,
+      totalCredits: -1,
     };
   }
   else {
@@ -55,7 +55,7 @@ const CurrentCredits = () => {
           { // TODO: Make formatting better?
             currentCredits >= 0 
               ? <>${currentCredits}</>
-              : <>-${currentCredits * -1}</>
+              : <>-${Math.abs(currentCredits)}</>
           }
         </h3>
         <div style={{
