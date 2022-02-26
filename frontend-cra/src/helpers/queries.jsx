@@ -20,7 +20,7 @@ query GetUserStats($userUuid: String!) {
 `
 
 // Get the images of the main product categories
-
+// TODO: Support 50+ categories (implement pagination)
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetCategories {
     categories(vocabulary: "product_categories") @jsonapi(path: "taxonomy_term/product_categories/?filter[vid.meta.drupal_internal__target_id]={args.vocabulary}&include=field_image&sort=id") {
@@ -166,12 +166,13 @@ export const GET_PRODUCTS_FOR_CART = gql`
  * Get orders of current user
  * 
  * TODO: Add the currentUser's Uuid to context and filter here (for performance)
+ * TODO: Implement pagination (when customer has 50+ orders)
  * 
  * Note: Backend restricts users to only view their own orders.
  */
 export const GET_USERS_ORDERS = gql`
-  query GetUsersOrders {
-    orders @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items.field_product") {
+  query GetUsersOrders($offset: Int) {
+    orders(offset: $offset) @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items.field_product&page[offset]={args.offset}") {
       id
       created
       fieldTotalOrderAmount
@@ -192,39 +193,16 @@ export const GET_USERS_ORDERS = gql`
 `;
 
 /**
- * Get orders of current user, sorted by created date descending (most recent first)
- * 
- * Note: Backend restricts users to only view their own orders.
- */
-export const GET_PAST_ORDER_QUANTITIES = gql`
-  query GetPastOrdersQuantities {
-    orders @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items") {
-      id
-      created
-      fieldOrderItems {
-        id
-        fieldQuantity
-        fieldProduct {
-          id
-          meta {
-            nid: drupalInternalTargetId
-          }
-          
-        }
-      }
-    }
-  }
-`;
-
-/**
  * Get orders of current user, sorted by created date descending (most recent first),
  * and filtered by >= firstDayOfCurrentMonth
+ * 
+ * TODO: Implement pagination (when customer has 50+ orders)
  * 
  * Note: Backend restricts users to only view their own orders.
  */
 export const GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH = gql`
-  query GetPastOrdersQuantities($firstDayOfCurrentMonthTimestamp: Int!) {
-    orders(firstDay: $firstDayOfCurrentMonthTimestamp) @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&filter[recent][condition][path]=created&filter[recent][condition][operator]=%3E%3D&filter[recent][condition][value]={args.firstDay}&include=field_order_items") {
+  query GetPastOrdersQuantities($firstDayOfCurrentMonthTimestamp: Int!, $offset: Int) {
+    pastQuantities(firstDay: $firstDayOfCurrentMonthTimestamp, offset: $offset) @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&filter[recent][condition][path]=created&filter[recent][condition][operator]=%3E%3D&filter[recent][condition][value]={args.firstDay}&include=field_order_items") {
       id
       created
       fieldOrderItems {
