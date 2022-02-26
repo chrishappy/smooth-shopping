@@ -5,7 +5,7 @@ import Seo from "../components/seo"
 import { getUserUuid, logoutCurrentUser } from "../helpers/loginHelper";
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
-import MainContentLoader from "../components/main-content-loader";
+import MainContentLoader from "../components/MainContentLoader";
 
 const Account = () => {
 

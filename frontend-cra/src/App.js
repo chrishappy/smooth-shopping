@@ -9,13 +9,13 @@ import LoginPage from './pages/login';
 import CartPage from './pages/cart';
 import AccountPage from './pages/account';
 import NotFoundPage from './pages/404';
-import Layout from './components/layout';
+import Layout from './components/Layout';
 
 import {
   ApolloProvider,
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
 import { apolloClient, apolloCachePersistor } from './helpers/cache';
-import Category from './pages/categories/category';
+import Category from './pages/categories/Category';
 import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
 import './App.css';

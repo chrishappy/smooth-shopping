@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { AddOrderItem, MinusOrderItem, useMaxAndMinQuantitiesForProduct } from "../helpers/cartHelper";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import './product-add-remove-button.css'
 
 
 const ProductAddRemoveButtons = ({

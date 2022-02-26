@@ -4,7 +4,7 @@ import { Box, Stack, TextField, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Seo from "../components/seo"
 import { isLoggedIn, loginAsync } from "../helpers/loginHelper";
-import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/snackbar";
+import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/Snackbar";
 
 const LoginPage = () => {
 

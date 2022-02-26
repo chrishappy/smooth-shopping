@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { IconButton, Stack } from "@mui/material"
-import MainContentLoader from "../components/main-content-loader";
+import MainContentLoader from "../components/MainContentLoader";
 import { GET_USERS_ORDERS } from "../helpers/queries";
 import CachedIcon from '@mui/icons-material/Cached';
 

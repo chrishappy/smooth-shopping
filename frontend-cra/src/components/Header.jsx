@@ -1,10 +1,8 @@
 import * as React from "react"
-// import { navigate } from "gatsby";
-// import { connect } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import CurrentCreditStatus from "./current-credit-status";
+import CurrentCreditStatus from "./HeaderCreditStatus";
 import IconButton from '@mui/material/IconButton';
-import CustomSearchIcon from "./search-icon";
+import CustomSearchIcon from "./SearchIcon";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const Header = () => {

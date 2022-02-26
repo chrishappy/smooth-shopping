@@ -10,8 +10,8 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 import Seo from "../components/seo"
 import { GET_ALL_PRODUCTS, GET_PRODUCT_CATEGORIES } from "../helpers/queries";
-import MainContentLoader from "../components/main-content-loader";
-import { ProductListInfinityScroll } from "./categories/category";
+import MainContentLoader from "../components/MainContentLoader";
+import ProductListInfinityScroll from "../components/ProductListInfiniteScroll";
 
 const HomePage = () => (
   <>

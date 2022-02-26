@@ -1,0 +1,16 @@
+.math-button-style {
+  border: 2px solid rgba(0, 0, 0, 0.7) !important;
+  /* color: black; */
+  font-weight: bold;
+  margin: 0 0.3rem;
+  border-radius: 50%;
+}
+
+.math-button-style[disabled] {
+  border-color: rgba(0, 0, 0, 0.3)  !important;
+}
+
+.math-button-style--small {
+  width: 1.1em;
+  height: 1.1em;
+}

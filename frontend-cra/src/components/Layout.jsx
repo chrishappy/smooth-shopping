@@ -2,9 +2,9 @@ import * as React from "react"
 import { Outlet } from "react-router"
 import { isLoggedIn } from "../helpers/loginHelper"
 
-import CustomizedSnackbar from "./snackbar"
-import Header from "./header"
-import Footer from "./footer"
+import CustomizedSnackbar from "./Snackbar"
+import Header from "./Header"
+import Footer from "./Footer"
 import "./layout.css"
 import "./custom.css"
 

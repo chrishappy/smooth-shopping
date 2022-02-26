@@ -8,12 +8,12 @@ import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box'
 import { CardMedia } from "@mui/material";
-import { CartCheckoutButton } from "../components/cart-checkout-button";
+import { CartCheckoutButton } from "../components/CartCheckoutButton";
 
-import './categories/category'; // for math-button-style
-import MainContentLoader from '../components/main-content-loader';
+import './categories/Category'; // for math-button-style
+import MainContentLoader from '../components/MainContentLoader';
 import { getUserUuid } from '../helpers/loginHelper';
-import ProductAddRemoveButtons from '../components/product-add-remove-buttons';
+import ProductAddRemoveButtons from '../components/ProductAddRemoveButtons';
 
 const CartPage = () => {
   const userUuid = getUserUuid();
