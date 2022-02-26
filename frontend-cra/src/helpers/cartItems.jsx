@@ -32,7 +32,6 @@ export const usePreviousOrderQuantities = () => {
   // created dates are stored in UTC, thus need UTC
   const firstDayOfCurrentMonthInUTC = zonedTimeToUtc(startOfMonth(new Date()), 'America/Vancouver');
   const firstDayOfCurrentMonthTimestamp = getUnixTime(firstDayOfCurrentMonthInUTC);
-  console.log(firstDayOfCurrentMonthTimestamp);
 
   const {loading, error, data} = useQuery(GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH, {
     variables: {

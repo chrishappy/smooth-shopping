@@ -11,7 +11,7 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Seo from "../components/seo"
 import { GET_ALL_PRODUCTS, GET_PRODUCT_CATEGORIES } from "../helpers/queries";
 import MainContentLoader from "../components/main-content-loader";
-import { ProductList } from "./categories/category";
+import { ProductListInfinityScroll } from "./categories/category";
 
 const HomePage = () => (
   <>
@@ -69,13 +69,19 @@ function Categories() {
 }
 
 function AllProductsInfiniteScroll() {
-  const { loading, error, data } = useQuery(GET_ALL_PRODUCTS);
+  const { loading, error, data, fetchMore } = useQuery(GET_ALL_PRODUCTS, {
+    variables: {
+      offset: 0,
+    }
+  });
+
+  console.log(data);
 
   return (
     <>
       <h2 style={{textAlign: 'center', marginTop: '2em', }}>All Products</h2>
-      <ProductList
-        queryInfo={{loading, error, data}}
+      <ProductListInfinityScroll
+        queryInfo={{loading, error, data, fetchMore}}
         />
     </>
   )

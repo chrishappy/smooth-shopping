@@ -43,7 +43,7 @@ export const GET_PRODUCT_CATEGORIES = gql`
 `;
 
 /**
- * Products fields
+ * Core Products fields across the queries
  */
 const coreProductFieldsFragment = gql`
   fragment CoreProductFields on NodeProduct {
@@ -71,30 +71,41 @@ const coreProductFieldsFragment = gql`
     body {
       processed
     }
-    links {
-      next {
-        href
-      }
-    }
     # End fragment
   }
 `;
 
 /**
+ * Core Products fields with meta data across the queries
+ * Requires `@jsonapi(..., includeJsonapi: true)`.
+ * @see https://github.com/rsullivan00/apollo-link-json-api
+ */
+/* const coreProductFieldsWithMetaFragment = gql`
+  fragment CoreProductFieldsWithMeta on NodeProduct {
+    graphql {
+        ...CoreProductFields
+      }
+      jsonapi {
+        links {
+          next {
+            href
+          }
+        }
+      }
+  }
+`; */
+
+/**
  * Get the products of a category
- * 
- * TODO: Support pagination
- * See: /jsonapi_data/node/product/?filter[status]=1&include=field_image&page[offset]=50&page[limit]=50
  */ 
 export const GET_ALL_PRODUCTS = gql`
-  ${coreProductFieldsFragment}
-
   # Get the products in a category
   query GetAllProducts($offset: Int) {
-    products(offset: $offset, limit: 50) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&page[offset]={args.offset}&page[limit]={args.limit}") {
+    products(offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&page[offset]={args.offset}") {
       ...CoreProductFields
     }
   }
+  ${coreProductFieldsFragment}
 `;
 
 /**
@@ -107,28 +118,26 @@ export const GET_ALL_PRODUCTS = gql`
 &filter[st1][condition][value]={args.st1}
 &filter[st1][condition][memberOf]=search-terms
  */
-export const SEARCH_FOR_PRODUCT = gql`
-  ${coreProductFieldsFragment}
-  query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String, $offset: Int) {
-    products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3, offset: $offset, limit: 50) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms&page[offset]={args.offset}&page[limit]={args.limit}") {
+export const SEARCH_FOR_PRODUCT = gql`  query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String, $offset: Int) {
+    products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms&page[offset]={args.offset}") {
       ...CoreProductFields
     }
   }
+  ${coreProductFieldsFragment}
 `
 
 /**
  * Get the products of a category
  * 
  */ 
-export const GET_PRODUCTS_OF_CATEGORY = gql`
-  ${coreProductFieldsFragment}
-  
+export const GET_PRODUCTS_OF_CATEGORY = gql`  
   # Get the products in a category
   query GetCategoryProducts($categoryId: Int!, $offset: Int) {
-    products(categoryId: $categoryId, offset: $offset, limit: 50) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image&page[offset]={args.offset}&page[limit]={args.limit}") {
+    products(categoryId: $categoryId, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image&page[offset]={args.offset}") {
       ...CoreProductFields
     }
   }
+  ${coreProductFieldsFragment}
 `;
 
 /**
@@ -137,21 +146,20 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
  * @param $category the name of the product category
  */ 
 export const GET_PRODUCTS_FOR_CART = gql`
-  ${coreProductFieldsFragment}
-
   # Get the products by ids
   query GetProductsByIds($productIds:[String], $userUuid: String!, $offset: Int) {
-    currentUser(userUuid: $userUuid, offset: $offset, limit: 50) @jsonapi(path: "user/user/{args.userUuid}") {
+    currentUser(userUuid: $userUuid, offset: $offset) @jsonapi(path: "user/user/{args.userUuid}") {
       id,
       # familyName: fieldSsFamilyName
       creditsRemaining: fieldSsCurrentCredit
       # totalCredits: fieldSsMonthlyCredit
       # numberOfFamilyMembers: fieldSsPersonCount
     }
-    products(productIds: $productIds, offset: $offset, limit: 50) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=nid&filter[cart][condition][operator]=IN{args.productIds}&include=field_image&page[offset]={args.offset}&page[limit]={args.limit}") {
+    products(productIds: $productIds, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=nid&filter[cart][condition][operator]=IN{args.productIds}&include=field_image&page[offset]={args.offset}") {
       ...CoreProductFields
     }
   }
+  ${coreProductFieldsFragment}
 `;
 
 /**

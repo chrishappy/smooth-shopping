@@ -22,16 +22,17 @@ import GoCheckoutButton from '../../components/go-checkout-button';
 import './category.css'
 import { Link } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import { Waypoint } from 'react-waypoint';
+
 
 const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
   const { title, categoryId } = location.state;
 
-  const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
+  const { loading, error, data, refetch, fetchMore } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { categoryId },
+    offset: 0,
   });
-
-  console.log(data);
 
   return (
     <>
@@ -51,26 +52,25 @@ const CategoryProducts = () => {
           </IconButton>
         </div>
       </Stack>
-      <ProductList
-        queryInfo={{loading, error, data}}
+      <ProductListInfinityScroll
+        queryInfo={{loading, error, data, fetchMore}}
         />
     </>
   )
 }
 
-export const ProductList = ({ queryInfo: {loading, error, data}}) => {
+export const ProductListInfinityScroll = ({ queryInfo: {loading, error, data, fetchMore}}) => {
 
   // For Dialog Product
   const [selectedProduct, setProduct] = React.useState({});
   const [isOpen, setOpen] = React.useState(false);
 
   if (error) {
-    console.log(error);
+    console.error(error);
   }
 
   // Calculate the max and min quantity a user can buy
-  const maxAndMinQuantities = useMaxAndMinQuantitiesForProduct(selectedProduct);
-
+  const maxAndMinQuantities = useMaxAndMinQuantitiesForProduct(selectedProduct);  
   return (
     <>
       { loading
@@ -82,6 +82,19 @@ export const ProductList = ({ queryInfo: {loading, error, data}}) => {
                 setOpen={setOpen}
                 data={data} />
       }
+      <Waypoint
+        onEnter={() => {
+          console.log('fetching more products')
+          if (!error && !loading) {
+            fetchMore({
+              variables: {
+                offset: data.products.length,
+              }
+            });
+          }
+        }}
+        topOffset={Math.ceil(window.outerHeight/2)}
+         />
       <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
