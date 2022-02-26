@@ -2,6 +2,10 @@
 
 A file containing the reason behind some of the design decisions.
 
+**Remaining Tasks**
+ - [ ] Fetch more than 50 orders by implementing a pagination loop
+ - [ ] Use proper timezones for fetching all orders of this month
+
 ## Use JSON API
 
 Because Drupal's GraphQL module is either 1) insecure or 2) requires too much work to set up initially
@@ -23,7 +27,9 @@ $ npm install apollo-link-json-api apollo-link-rest apollo-link @apollo/client g
 To limit the number of items a client can buy a month (e.g. max 2 bags of rice per client), we will:
  1. Fetch the content of previous orders and calculate how many of each product they had already checked out
 
-Previous solution:
+Use `date-fns` to calculate the first day of this month.
+
+**Previous solution:**
  1. Create a field on the user entity
     - ~Store the product id and quantity bought this month~ (Wait, can this information be collected from past orders?)
 

@@ -72,10 +72,9 @@ function AllProductsInfiniteScroll() {
   const { loading, error, data, fetchMore } = useQuery(GET_ALL_PRODUCTS, {
     variables: {
       offset: 0,
+      limit: 10,
     }
   });
-
-  console.log(data);
 
   return (
     <>

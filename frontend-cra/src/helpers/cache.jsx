@@ -22,7 +22,9 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         products: { // @see https://www.apollographql.com/docs/react/pagination/core-api/#improving-the-merge-function
-          read(existing, {
+          // Note: Always return all products
+          // TODO: Support paging (allow to find subset while infinite scrolling?)
+          /* read(existing, {
             args: {
               // Default to returning the entire cached list,
               // if offset and limit are not provided.
@@ -31,7 +33,7 @@ const cache = new InMemoryCache({
             } = {},
           }) {
             return existing && existing.slice(offset, offset + limit);
-          },
+          }, */
           // we want to combine queries with different offsets, but keep separate
           // queries with different values of the following values
           keyArgs: [
@@ -46,6 +48,7 @@ const cache = new InMemoryCache({
             for (let i = 0; i < incoming.length; ++i) {
               merged[offset + i] = incoming[i];
             }
+            console.log({merged, incoming});
             return merged;
           },
         }

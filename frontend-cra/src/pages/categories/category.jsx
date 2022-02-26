@@ -90,11 +90,12 @@ export const ProductListInfinityScroll = ({ queryInfo: {loading, error, data, fe
             fetchMore({
               variables: {
                 offset: data.products.length,
+                limit: 50, // for GET_ALL_PRODUCTS
               }
             });
           }
         }}
-        topOffset={Math.ceil(window.outerHeight/2)}
+        bottomOffset={'-1000px'} // Load more products when user is near the end
          />
       <GoCheckoutButton />
       <ProductDialog 

@@ -45,7 +45,7 @@ export const usePreviousOrderQuantities = () => {
 
   // Loop over and set the values of previous orders within this month
   let pastOrderQuantities = new Map();
-  data.orders.forEach((order) => {
+  data.pastQuantities.forEach((order) => {
     order.fieldOrderItems.forEach((curr) => {
       addToOrCreateMapEntry(
         pastOrderQuantities,
