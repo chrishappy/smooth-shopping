@@ -10,12 +10,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import CachedIcon from '@mui/icons-material/Cached';
 
 import { GET_PRODUCTS_OF_CATEGORY } from '../../helpers/queries';
-import { AddOrderItem, hasNoMoreQuantity, useMaxAndMinQuantitiesForProduct } from '../../helpers/cartHelper';
+import { AddOrderItem, hasNoMoreQuantity, usePreviousOrderQuantitiesUpdater } from '../../helpers/cartHelper';
 import { hasExistentProperty } from '../../helpers/genericHelper'
 import MainContentLoader from '../../components/main-content-loader';
 import GoCheckoutButton from '../../components/go-checkout-button';
@@ -23,6 +21,7 @@ import './category.css'
 import { Link } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
+import ProductAddRemoveButtons from '../../components/product-add-remove-buttons';
 
 
 const CategoryProducts = () => {
@@ -33,6 +32,9 @@ const CategoryProducts = () => {
     variables: { categoryId },
     offset: 0,
   });
+
+  // Update the clientLimit quantities
+  usePreviousOrderQuantitiesUpdater();
 
   return (
     <>
@@ -70,7 +72,6 @@ export const ProductListInfinityScroll = ({ queryInfo: {loading, error, data, fe
   }
 
   // Calculate the max and min quantity a user can buy
-  const maxAndMinQuantities = useMaxAndMinQuantitiesForProduct(selectedProduct);  
   return (
     <>
       { loading
@@ -100,8 +101,7 @@ export const ProductListInfinityScroll = ({ queryInfo: {loading, error, data, fe
       <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
-        reactOpen={[isOpen, setOpen]}
-        maxAndMinQuantities={maxAndMinQuantities} />
+        reactOpen={[isOpen, setOpen]} />
     </>
   );
 }
@@ -153,8 +153,7 @@ export const Products = ({ setProduct, setOpen, data }) => {
   );
 }
 
-export const ProductDialog = ({reactOpen, maxAndMinQuantities, selectedProduct}) => {
-  const [maxQuantity, minQuantity] = maxAndMinQuantities;
+export const ProductDialog = ({reactOpen, selectedProduct}) => {
   const [selectedProductCount, setCount] = React.useState(1.0);
   const [isOpen, setOpen] = reactOpen;
 
@@ -162,11 +161,6 @@ export const ProductDialog = ({reactOpen, maxAndMinQuantities, selectedProduct})
     setOpen(false);
     setTimeout(() => setCount(1.0), 500); // Revert to one
   };
-
-  // If the quantity is zero, set the count to be zero too to deactivate the buttons
-  if (maxQuantity === 0.0 && selectedProductCount !== 0.0 && isOpen) {
-    setCount(0.0);
-  }
 
   return (
     <Dialog
@@ -204,29 +198,20 @@ export const ProductDialog = ({reactOpen, maxAndMinQuantities, selectedProduct})
             {hasExistentProperty(selectedProduct, 'body') ? parse(selectedProduct.body.processed) : null}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Stack direction="row" sx={{ alignContent: 'center' }}>
-              <IconButton
-                className="math-button-style"
-                onClick={() => {
-                  const count = Math.max(selectedProductCount-1, minQuantity);
-                  setCount(count);
-                }}
-                disabled={selectedProductCount === minQuantity}>
-                <RemoveIcon sx={{ fontSize: 22 }} />
-              </IconButton>
-              <Box id="modal-product-count" sx={{ mt: 0.8, ml: 1, mr: 1 }}>
-                {selectedProductCount}
-              </Box>
-              <IconButton
-                className="math-button-style"
-                onClick={() => {
-                  const count = Math.min(selectedProductCount + 1, maxQuantity);
-                  setCount(count);
-                }}
-                disabled={selectedProductCount === maxQuantity}>
-                <AddIcon sx={{ fontSize: 22 }} />
-              </IconButton>
-            </Stack>
+            <ProductAddRemoveButtons
+              selectedProduct={selectedProduct}
+              currentQuantity={selectedProductCount}
+              direction="row"
+              iconFontSize={22}
+              onAddOrderItemClick={(maxQuantity) => {
+                const count = Math.min(selectedProductCount+1, maxQuantity);
+                setCount(count);
+              }}
+              onMinusOrderItemClick={(minQuantity) => {
+                const count = Math.max(selectedProductCount-1, minQuantity);
+                setCount(count);
+              }}
+              enableMinQuantityCheck={true} />
             <div style={{marginRight: 'auto'}}></div>
             <Button variant="contained"
               sx={{

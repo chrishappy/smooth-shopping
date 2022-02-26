@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, TextField } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import "./custom-search-icon.css";
+import "./search-icon.css";
 
 const CustomSearchIcon = () => {
 

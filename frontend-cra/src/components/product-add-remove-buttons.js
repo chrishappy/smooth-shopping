@@ -1,45 +1,61 @@
 import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import { AddOrderItem, cartItemsVar, MinusOrderItem, useMaxAndMinQuantitiesForProduct } from "../helpers/cartHelper";
+import { AddOrderItem, MinusOrderItem, useMaxAndMinQuantitiesForProduct } from "../helpers/cartHelper";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { useReactiveVar } from "@apollo/client";
 
 
-const ProductAddRemoveButtons = ({selectedProduct}) => {
+const ProductAddRemoveButtons = ({
+  selectedProduct,
+  currentQuantity,
+  direction = "column",
+  iconFontSize = 12,
+  onMinusOrderItemClick = () => {
+    MinusOrderItem(selectedProduct, 1);
+  },
+  onAddOrderItemClick = (maxQuantity) => {
+    AddOrderItem(selectedProduct, 1, maxQuantity);
+  },
+  enableMinQuantityCheck = false,
+}) => {
   
   // Max and min quantities
-  const [maxQuantity] = useMaxAndMinQuantitiesForProduct(selectedProduct);  
-  const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
+  const [maxQuantity, minQuantity] = useMaxAndMinQuantitiesForProduct(selectedProduct);  
 
+  // If the quantity is zero, set the count to be zero too to deactivate the buttons
+  if (maxQuantity === 0.0 && currentQuantity !== 0.0) {
+    currentQuantity = 0.0;
+  }
+
+  console.log(maxQuantity);
   return (
-    <Box sx={{  display: 'flex', flex: '1 0 auto', textAlign: 'center', maxWidth: '2.1rem', margin: '0 0.7rem 0 0' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
-        <Stack direction="column">
-          <IconButton
-            className='math-button-style'
-            sx={{ height: '1.1em', width: '1.1em' }}
-            onClick={() => {
-              AddOrderItem(selectedProduct, 1, maxQuantity);
-            }}
-            disabled={cartIdsAndQuantities.get(selectedProduct.nid) >= selectedProduct.fieldQuantity}>
-            <AddIcon sx={{ fontSize: 12, }} />
-          </IconButton>
-          <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-            <span>{ cartIdsAndQuantities.get(selectedProduct.nid) }</span>
-          </Box>
-          <IconButton
-            className='math-button-style'
-            sx={{ height: '1.1em', width: '1.1em' }}
-            onClick={() => {
-              MinusOrderItem(selectedProduct, 1);
-            }}
-            >
-            <RemoveIcon sx={{ fontSize: 12, }} />
-          </IconButton>
-        </Stack>
+    <Stack direction={direction} justifyContent={'center'} alignContent={'center'}>
+      <IconButton
+        sx={{ order: direction === 'row' ? 1 : null }}
+        className='math-button-style'
+        onClick={() => {
+          onAddOrderItemClick(maxQuantity);
+        }}
+        disabled={currentQuantity >= maxQuantity}>
+        <AddIcon sx={{ fontSize: iconFontSize, }} />
+      </IconButton>
+      <Box 
+        className="modal-product-count" 
+        sx={{ margin: '0.4em 0.5em' }}
+        >
+        <span>{ currentQuantity }</span>
       </Box>
-    </Box>
+      <IconButton
+        className='math-button-style'
+        sx={{ order: direction === 'row' ? -1 : null }}
+        onClick={() => {
+          onMinusOrderItemClick(minQuantity);
+        }}
+        disabled={enableMinQuantityCheck 
+          && currentQuantity <= minQuantity}>
+        <RemoveIcon sx={{ fontSize: iconFontSize, }} />
+      </IconButton>
+    </Stack>
   )
 }
 

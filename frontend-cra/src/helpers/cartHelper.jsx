@@ -1,5 +1,5 @@
 
-import { makeVar, useQuery, useReactiveVar } from "@apollo/client";
+import { makeVar, useLazyQuery, useReactiveVar } from "@apollo/client";
 import { getUnixTime } from "date-fns";
 import { startOfMonth } from "date-fns/esm";
 import { zonedTimeToUtc } from "date-fns-tz"
@@ -21,54 +21,83 @@ const LOCAL_STORAGE_CART_TOTAL = 'LOCAL_STORAGE_CART_TOTAL';
 export const cartTotalVar = makeVar(0.0);
 
 // Store how many of each product a user has already purchased
-export const previousOrderQuantities = makeVar(new Map());
+export const previousOrderQuantitiesVar = makeVar(new Map());
 
 /**
  * Update the previousOrderQuantities
  * 
  * @returns object same features of useQuery
  */
-export const usePreviousOrderQuantities = () => {
+export const usePreviousOrderQuantitiesUpdater = async () => {
   // created dates are stored in UTC, thus need UTC
+  // TODO: Ensure that the timezone is implemented correctly
   const firstDayOfCurrentMonthInUTC = zonedTimeToUtc(startOfMonth(new Date()), 'America/Vancouver');
   const firstDayOfCurrentMonthTimestamp = getUnixTime(firstDayOfCurrentMonthInUTC);
 
-  const {loading, error, data} = useQuery(GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH, {
+  const [getPastQuantities] = useLazyQuery(GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH, {
     variables: {
       firstDayOfCurrentMonthTimestamp
     }
   });
 
-  if (loading) {  return;  }
+  return getPastQuantities()
+    .then(({data}) => {
+      // Loop over and set the values of previous orders within this month
+      let pastOrderQuantities = new Map();
+      data.pastQuantities.forEach((order) => {
+        order.fieldOrderItems.forEach((curr) => {
+          addToOrCreateMapEntry(
+            pastOrderQuantities,
+            curr.fieldProduct.meta.nid,
+            parseFloat(curr.fieldQuantity));
+        });
+      })
 
-  if (error) {  console.error(error);  }
+      // Update previous quantities
+      previousOrderQuantitiesVar(pastOrderQuantities);
 
-  // Loop over and set the values of previous orders within this month
-  let pastOrderQuantities = new Map();
-  data.pastQuantities.forEach((order) => {
-    order.fieldOrderItems.forEach((curr) => {
-      addToOrCreateMapEntry(
-        pastOrderQuantities,
-        curr.fieldProduct.meta.nid,
-        parseFloat(curr.fieldQuantity));
-    });
-  })
+      return true;
+    })
+    .catch(({error}) => {
+      console.error(`Error getting past quantities: ${JSON.stringify(error)}`)
 
-  // Update previous quantities
-  previousOrderQuantities(pastOrderQuantities);
+      return false;
+    })
 }
 
-export const useMaxAndMinQuantitiesForProduct = (product) => {
-  usePreviousOrderQuantities();
+/**
+ * 
+ * @param {NodeProduct|object} product the node product with an nid, fieldQuanity, and fieldLimitPerClient
+ * @returns {[float, float]} maxQuantity (the maximum a client can purchase), minQuantity (1 or 0)
+ */
+export const useMaxAndMinQuantitiesForProduct = (product) => {  
+  return staticMaxAndMinQuantitiesForProduct({
+    product,
+    cartItems: useReactiveVar(cartItemsVar),
+    previousOrderQuantities: useReactiveVar(previousOrderQuantitiesVar),
+  });
+}
+
+/**
+ * 
+ * @param {object} options E.g. { product, cartItems = cartItemsVar, previousOrderQuantities = previousOrderQuantitiesVar }
+}
+ * @returns 
+ */
+export const staticMaxAndMinQuantitiesForProduct = ({
+  product, 
+  cartItems = cartItemsVar, 
+  previousOrderQuantities = previousOrderQuantitiesVar
+}) => {
 
   // Get previous quantities from the stores
-  const cartProductQuantity = parseFloat(useReactiveVar(cartItemsVar).get(product.nid)) || 0.0;
-  const pastOrderQuantities = parseFloat(useReactiveVar(previousOrderQuantities).get(product.nid)) || 0.0;
+  const cartProductQuantity = parseFloat(cartItems.get(product.nid)) || 0.0;
+  const pastOrderQuantities = parseFloat(previousOrderQuantities.get(product.nid)) || 0.0;
 
   // Calculate the max quantity a user can buy
   const maxQuantityWithoutLimit = parseFloat(product.fieldQuantity || 0.0) - cartProductQuantity;
   const maxQuantityWithLimit = parseFloat(product.fieldLimitPerClient || Infinity) - pastOrderQuantities - cartProductQuantity;
-  
+
   const maxQuantity = Math.min(maxQuantityWithoutLimit, maxQuantityWithLimit);
 
   // Calculate the min quantity a user can buy
@@ -87,15 +116,16 @@ export const useMaxAndMinQuantitiesForProduct = (product) => {
  * @param {float|int} addQuantity the amount to add to product
  * @returns {object} the cart items
  */
-export const AddOrderItem = (product, addQuantity, maxQuantity) => {
+export const AddOrderItem = (product, addQuantity) => {
   let currItems = cartItemsVar();
 
   // If the quantity exceeds the maximum, add the remaining
-  if (currItems.get(product.nid) + addQuantity > maxQuantity) {
-    console.warn(`Quantity Exceeded for ${product.title}`);
+  // console.log([currItems.get(product.nid), addQuantity, maxQuantity])
+  // if (currItems.get(product.nid) + addQuantity > maxQuantity) {
+  //   console.warn(`Quantity Exceeded for ${product.title}`);
 
-    addQuantity = product.fieldQuantity - currItems.get(product.nid); 
-  }
+  //   addQuantity = maxQuantity - currItems.get(product.nid); 
+  // }
 
   addToOrCreateMapEntry(currItems, product.nid, addQuantity);
   cartItemsVar(currItems);

@@ -16,9 +16,7 @@ import { getUserUuid } from '../helpers/loginHelper';
 import ProductAddRemoveButtons from '../components/product-add-remove-buttons';
 
 const CartPage = () => {
-
   const userUuid = getUserUuid();
-
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
   const cartTotalReactive = useReactiveVar(cartTotalVar);
 
@@ -60,7 +58,7 @@ const CartPage = () => {
 
       <hr />
 
-      <Box className="cart-items" sx={{ paddingBottom: '3rem'}}>
+      <Box className="cart-items" sx={{ paddingBottom: '11rem'}}>
         { loading
             ? <MainContentLoader />
             : <></>
@@ -92,8 +90,11 @@ const CartPage = () => {
                   </Typography>
                 </CardContent>
               </Box>
-              <ProductAddRemoveButtons 
-                selectedProduct={cartItem} />
+              <Box sx={{  display: 'flex', flex: '0 0 auto', textAlign: 'center', margin: '0 0.7rem 0 0' }}>
+                <ProductAddRemoveButtons 
+                  selectedProduct={cartItem}
+                  currentQuantity={cartIdsAndQuantities.get(cartItem.nid)} />
+              </Box>
             </Box>
           </Card>
         ))}
