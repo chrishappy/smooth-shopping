@@ -5,6 +5,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 import { hasNoMoreQuantity } from '../helpers/cartHelper';
 import { Link } from '@mui/material';
+import './ProductList.css'
 
 export const ProductList = ({ setProduct, setOpen, data }) => {
   const { products } = data;

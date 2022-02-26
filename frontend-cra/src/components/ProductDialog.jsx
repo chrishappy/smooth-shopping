@@ -12,7 +12,7 @@ import { AddOrderItem } from '../helpers/cartHelper';
 import { hasExistentProperty } from '../helpers/genericHelper'
 import ProductAddRemoveButtons from './ProductAddRemoveButtons';
 
-import './product-dialog.css';
+import './ProductDialog.css';
 
 
 export const ProductDialog = ({reactOpen, selectedProduct}) => {

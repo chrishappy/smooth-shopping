@@ -5,7 +5,7 @@ import { isLoggedIn } from "../helpers/loginHelper"
 import CustomizedSnackbar from "./Snackbar"
 import Header from "./Header"
 import Footer from "./Footer"
-import "./layout.css"
+import "./Layout.css"
 import "./custom.css"
 
 const Layout = () => {
