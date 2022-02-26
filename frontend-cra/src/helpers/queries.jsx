@@ -161,9 +161,10 @@ export const GET_USERS_ORDERS = gql`
       created
       fieldTotalOrderAmount
       fieldOrderItems {
-        drupalInternalId
+        id
         fieldQuantity
         fieldProduct {
+          id
           title
           fieldCredit
           fieldQuantity

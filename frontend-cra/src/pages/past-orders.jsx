@@ -1,11 +1,12 @@
 import { useQuery } from "@apollo/client";
-import { Stack } from "@mui/material"
+import { IconButton, Stack } from "@mui/material"
 import MainContentLoader from "../components/main-content-loader";
 import { GET_USERS_ORDERS } from "../helpers/queries";
+import CachedIcon from '@mui/icons-material/Cached';
 
 const PastOrders = () => {
 
-  const {loading, error, data} = useQuery(GET_USERS_ORDERS);
+  const {loading, error, data, refetch} = useQuery(GET_USERS_ORDERS);
 
   if (error) {
     return (
@@ -25,6 +26,17 @@ const PastOrders = () => {
         direction="row" 
         sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
         <h1>Past Orders</h1>
+        <div>
+          <IconButton
+            color="primary"
+            aria-label={'Refresh page'}
+            onClick={() => {
+              console.log('Clear caches');
+              refetch();
+            }} >
+            <CachedIcon />
+          </IconButton>
+        </div>
       </Stack>
         <pre>
           {JSON.stringify(data, null, 2)}
