@@ -21,7 +21,7 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        products: { // see: https://www.apollographql.com/docs/react/pagination/core-api/#improving-the-merge-function
+        products: { // @see https://www.apollographql.com/docs/react/pagination/core-api/#improving-the-merge-function
           read(existing, {
             args: {
               // Default to returning the entire cached list,
@@ -32,7 +32,13 @@ const cache = new InMemoryCache({
           }) {
             return existing && existing.slice(offset, offset + limit);
           },
-          keyArgs: [],
+          // we want to combine queries with different offsets, but keep separate
+          // queries with different values of the following values
+          keyArgs: [
+            'st1', 'st2', 'st3',    // for search
+            'categoryId',           // for category pages
+            'productIds',           // for cart
+          ],
           merge(existing, incoming, { args: { offset = 0 }}) {
             // Slicing is necessary because the existing data is
             // immutable, and frozen in development.

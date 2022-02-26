@@ -148,7 +148,7 @@ export const GET_PRODUCTS_OF_CATEGORY = gql`
 export const GET_PRODUCTS_FOR_CART = gql`
   # Get the products by ids
   query GetProductsByIds($productIds:[String], $userUuid: String!, $offset: Int) {
-    currentUser(userUuid: $userUuid, offset: $offset) @jsonapi(path: "user/user/{args.userUuid}") {
+    currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {
       id,
       # familyName: fieldSsFamilyName
       creditsRemaining: fieldSsCurrentCredit

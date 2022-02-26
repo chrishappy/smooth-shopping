@@ -42,16 +42,13 @@ export const CartCheckoutButton = ({disabled, orderData, clearCart}) => {
                 orderItems: getOrderItemsFormatted(orderData.orderItems),
               }
             }
-          });
-
-          // TODO: Not working & hacky. Need to refresh quantities of items in cart.
-          // https://www.apollographql.com/docs/react/data/refetching/
-          setTimeout(() => {
+          }).then(() => {
+            // https://www.apollographql.com/docs/react/data/refetching/
             clearApolloCache();
             apolloClient.refetchQueries({
               include: 'all',
             });
-          }, 1500);
+          });
         }}>
         Confirm Order
       </LoadingButton>

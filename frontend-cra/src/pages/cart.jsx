@@ -31,6 +31,7 @@ const CartPage = () => {
       productIds: [...cartIdsAndQuantities.keys()].map(
         (curr, i) => `&filter[cart][condition][value][${i}]=${curr}`).join(''),
       userUuid,
+      offset: 0,
     },
   });
 
