@@ -1,8 +1,11 @@
 
 import { makeVar, useQuery, useReactiveVar } from "@apollo/client";
+import { getUnixTime } from "date-fns";
+import { startOfMonth } from "date-fns/esm";
+import { zonedTimeToUtc } from "date-fns-tz"
 import { apolloCachePersistor } from "./cache";
 import { addToOrCreateMapEntry } from "./generic";
-import { GET_PAST_ORDER_QUANTITIES } from "./queries";
+import { GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH } from "./queries";
 
 /**
  * Stores the product ids and quantities in a dictionary:
@@ -26,13 +29,22 @@ export const previousOrderQuantities = makeVar(new Map());
  * @returns object same features of useQuery
  */
 export const usePreviousOrderQuantities = () => {
-  const {loading, error, data} = useQuery(GET_PAST_ORDER_QUANTITIES);
+  // created dates are stored in UTC, thus need UTC
+  const firstDayOfCurrentMonthInUTC = zonedTimeToUtc(startOfMonth(new Date()), 'America/Vancouver');
+  const firstDayOfCurrentMonthTimestamp = getUnixTime(firstDayOfCurrentMonthInUTC);
+  console.log(firstDayOfCurrentMonthTimestamp);
+
+  const {loading, error, data} = useQuery(GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH, {
+    variables: {
+      firstDayOfCurrentMonthTimestamp
+    }
+  });
 
   if (loading) {  return;  }
 
   if (error) {  console.error(error);  }
 
-  // Loop over and set the values of previous orders
+  // Loop over and set the values of previous orders within this month
   let pastOrderQuantities = new Map();
   data.orders.forEach((order) => {
     order.fieldOrderItems.forEach((curr) => {
@@ -57,15 +69,13 @@ export const useMaxAndMinQuantitiesForProduct = (product) => {
   // Calculate the max quantity a user can buy
   const maxQuantityWithoutLimit = parseFloat(product.fieldQuantity || 0.0) - cartProductQuantity;
   const maxQuantityWithLimit = parseFloat(product.fieldLimitPerClient || Infinity) - pastOrderQuantities - cartProductQuantity;
+  
   const maxQuantity = Math.min(maxQuantityWithoutLimit, maxQuantityWithLimit);
 
   // Calculate the min quantity a user can buy
   const minQuantity = Math.min(maxQuantity, 1.0); // In case no more elements (e.g. maxQuantity is zero)
 
-  return {
-    maxQuantity, 
-    minQuantity
-  };
+  return [minQuantity, maxQuantity];
 }
 
 /**

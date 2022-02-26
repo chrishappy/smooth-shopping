@@ -19,6 +19,32 @@ import { clearCart } from './cartItems';
 // Currently not used
 const cache = new InMemoryCache({
   typePolicies: {
+    Query: {
+      fields: {
+        products: { // see: https://www.apollographql.com/docs/react/pagination/core-api/#improving-the-merge-function
+          read(existing, {
+            args: {
+              // Default to returning the entire cached list,
+              // if offset and limit are not provided.
+              offset = 0,
+              limit = existing ? existing.length: 0,
+            } = {},
+          }) {
+            return existing && existing.slice(offset, offset + limit);
+          },
+          keyArgs: [],
+          merge(existing, incoming, { args: { offset = 0 }}) {
+            // Slicing is necessary because the existing data is
+            // immutable, and frozen in development.
+            const merged = existing ? existing.slice(0) : [];
+            for (let i = 0; i < incoming.length; ++i) {
+              merged[offset + i] = incoming[i];
+            }
+            return merged;
+          },
+        }
+      }
+    }
   //   Query: {
   //     fields: {
   //       cartItems: {

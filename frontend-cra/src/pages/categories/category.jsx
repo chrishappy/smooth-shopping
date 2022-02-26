@@ -27,21 +27,11 @@ const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
   const { title, categoryId } = location.state;
 
-  // For Dialog Product
-  const [selectedProduct, setProduct] = React.useState({});
-  const [isOpen, setOpen] = React.useState(false);
-
-  
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { categoryId },
   });
 
-  if (error) {
-    console.log(error);
-  }
-
-  // Calculate the max and min quantity a user can buy
-  const maxAndMinQuantities = useMaxAndMinQuantitiesForProduct(selectedProduct);
+  console.log(data);
 
   return (
     <>
@@ -61,6 +51,28 @@ const CategoryProducts = () => {
           </IconButton>
         </div>
       </Stack>
+      <ProductList
+        queryInfo={{loading, error, data}}
+        />
+    </>
+  )
+}
+
+export const ProductList = ({ queryInfo: {loading, error, data}}) => {
+
+  // For Dialog Product
+  const [selectedProduct, setProduct] = React.useState({});
+  const [isOpen, setOpen] = React.useState(false);
+
+  if (error) {
+    console.log(error);
+  }
+
+  // Calculate the max and min quantity a user can buy
+  const maxAndMinQuantities = useMaxAndMinQuantitiesForProduct(selectedProduct);
+
+  return (
+    <>
       { loading
           ? <MainContentLoader />
           : error 
@@ -76,7 +88,7 @@ const CategoryProducts = () => {
         reactOpen={[isOpen, setOpen]}
         quantities={maxAndMinQuantities} />
     </>
-  )
+  );
 }
 
 export const Products = ({ setProduct, setOpen, data }) => {
@@ -127,13 +139,13 @@ export const Products = ({ setProduct, setOpen, data }) => {
 }
 
 export const ProductDialog = ({reactOpen, quantities, selectedProduct}) => {
-  const {maxQuantity, minQuantity} = quantities;
+  const [minQuantity, maxQuantity] = quantities;
   const [selectedProductCount, setCount] = React.useState(1.0);
   const [isOpen, setOpen] = reactOpen;
 
   const handleClose = () => {
     setOpen(false);
-    setCount(1.0); // Revert to one
+    setTimeout(() => setCount(1.0), 500); // Revert to one
   };
 
   // If the quantity is zero, set the count to be zero too to deactivate the buttons
@@ -209,6 +221,7 @@ export const ProductDialog = ({reactOpen, quantities, selectedProduct}) => {
                 fontWeight: 'bold',
                 padding: '0 10%'
               }}
+              disabled={selectedProductCount === 0.0}
               onClick={() => {                 
                 AddOrderItem(selectedProduct, selectedProductCount);
                 handleClose();
