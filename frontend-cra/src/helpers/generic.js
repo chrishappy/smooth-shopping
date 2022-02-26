@@ -18,3 +18,15 @@ export const hasExistentProperty = (obj, prop) => {
 export const encodeURIComponentOrNull = (str) => {
   return encodeURIComponent(str || '') || null
 }
+
+/**
+ * Add a value to a map entry. If it does not exist, create it.
+ * @param {Map} map the map to operate on
+ * @param {string|int} key the key of the entry to operate on
+ * @param {float|int} valueToAdd the value to add to the entry
+ */
+export const addToOrCreateMapEntry = (map, key, valueToAdd) => {
+  let previousValue = map.get(key) || 0.0;
+  map.set(key, previousValue + valueToAdd);
+
+}

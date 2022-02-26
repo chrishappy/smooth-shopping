@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   BrowserRouter,
   Routes,
@@ -13,7 +14,7 @@ import Layout from './components/layout';
 import {
   ApolloProvider,
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
-import { apolloClient, cachePersistor } from './helpers/cache';
+import { apolloClient, apolloCachePersistor } from './helpers/cache';
 import Category from './pages/categories/category';
 import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/home';
@@ -31,7 +32,7 @@ const App = () => {
       restoreCartItems();
 
       // Set client + restore persistor
-      await cachePersistor.restore();
+      await apolloCachePersistor.restore();
       setClient(apolloClient);
 
       // Store cart items before unloading

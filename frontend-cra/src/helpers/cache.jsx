@@ -11,14 +11,14 @@ import { camelize, pascalize } from 'humps';
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './login';
-import { cartItemsVar, clearCart } from './cartItems';
+import { clearCart } from './cartItems';
 
 
 
 // ---------------------------------------------------------------------------
 // Currently not used
 const cache = new InMemoryCache({
-  // typePolicies: {
+  typePolicies: {
   //   Query: {
   //     fields: {
   //       cartItems: {
@@ -31,14 +31,14 @@ const cache = new InMemoryCache({
     // NodeProduct: {
     //   fields: {
     //     localQuantity: {
-    //       read(data, data2) {
-    //         console.log({ data, data2 });
-    //         return 1; //cartItemsVar();
+    //       read(data, options) {
+    //         console.log({ data, options });
+            
     //       }
     //     }
     //   }
     // }
-  // }
+  }
 });
 
 // Set up http links
@@ -57,7 +57,6 @@ const jsonApiLink = new JsonApiLink({
   fieldNameNormalizer: camelize,
   typeNameNormalizer: pascalize,
 });
-
 
 // Set up authenication
 // https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-request-logic
@@ -97,7 +96,7 @@ const logoutLink = onError((err) => {
 })
 
 // await before instantiating ApolloClient, else queries might run before the cache is persisted
-export const cachePersistor = new CachePersistor({
+export const apolloCachePersistor = new CachePersistor({
   cache,
   storage: new LocalStorageWrapper(window.localStorage),
 });
@@ -107,10 +106,10 @@ export const cachePersistor = new CachePersistor({
  * @returns undefined|null
  */
 export const clearApolloCache = () => {
-  if (!cachePersistor) {
+  if (!apolloCachePersistor) {
     return;
   }
-  cachePersistor.purge();
+  apolloCachePersistor.purge();
 
   // Clear the cart cache too
   clearCart();

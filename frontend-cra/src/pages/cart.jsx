@@ -61,7 +61,7 @@ const CartPage = () => {
             : <></>
         }
         {cartItems.map((cartItem) => (
-          <Card sx={{ display: 'flex', margin: '1em 0' }} key={cartItem.drupalInternalNid}>
+          <Card sx={{ display: 'flex', margin: '1em 0' }} key={cartItem.nid}>
             <CardMedia
               component="img"
               sx={{ width: '125px', lineHeight: '0' }}
@@ -78,7 +78,7 @@ const CartPage = () => {
                   </h4>
                   <Box sx={{ mb:1, fontSize: '15' }}>
                     <span>${ parseFloat(cartItem.fieldCredit) } </span>
-                    <span>x { cartIdsAndQuantities.get(cartItem.drupalInternalNid) }</span> {/* TODO: Find less hacky solution? */}
+                    <span>x { cartIdsAndQuantities.get(cartItem.nid) }</span> {/* TODO: Find less hacky solution? */}
                   </Box>
                   <Typography variant="body2" color="text.secondary" component="div">
                     {cartItem.fieldExpired 
@@ -97,11 +97,11 @@ const CartPage = () => {
                       onClick={() => {
                         AddOrderItem(cartItem, 1);
                       }}
-                      disabled={cartIdsAndQuantities.get(cartItem.drupalInternalNid) >= cartItem.fieldQuantity}>
+                      disabled={cartIdsAndQuantities.get(cartItem.nid) >= cartItem.fieldQuantity}>
                       <AddIcon sx={{ fontSize: 12, }} />
                     </IconButton>
                     <Box className="modal-product-count" sx={{ ml:0.5, mr:0.5, fontSize: 15 }}>
-                      <span>{ cartIdsAndQuantities.get(cartItem.drupalInternalNid) }</span> {/* TODO: Find less hacky solution? */}
+                      <span>{ cartIdsAndQuantities.get(cartItem.nid) }</span> {/* TODO: Find less hacky solution? */}
                     </Box>
                     <IconButton
                       className='math-button-style'

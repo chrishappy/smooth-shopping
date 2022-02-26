@@ -49,7 +49,7 @@ const coreProductFieldsFragment = gql`
   fragment CoreProductFields on NodeProduct {
     # Start fragment
     id
-    drupalInternalNid
+    nid: drupalInternalNid
     title
     path {
       alias
@@ -162,12 +162,38 @@ export const GET_USERS_ORDERS = gql`
       fieldTotalOrderAmount
       fieldOrderItems {
         id
+        pid: drupalInternalId
         fieldQuantity
         fieldProduct {
           id
           title
           fieldCredit
           fieldQuantity
+          fieldLimitPerClient
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * Get orders of current user
+ * 
+ * Note: Backend restricts users to only view their own orders.
+ */
+export const GET_PAST_ORDER_QUANTITIES = gql`
+  query GetPastOrdersQuantities {
+    orders @jsonapi(path: "node/order/?filter[status]=1&include=field_order_items") {
+      id
+      fieldOrderItems {
+        id
+        fieldQuantity
+        fieldProduct {
+          id
+          meta {
+            nid: drupalInternalTargetId
+          }
+          
         }
       }
     }

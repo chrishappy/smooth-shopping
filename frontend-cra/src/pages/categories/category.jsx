@@ -1,6 +1,6 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import ImageList from '@mui/material/ImageList';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -15,7 +15,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import CachedIcon from '@mui/icons-material/Cached';
 
 import { GET_PRODUCTS_OF_CATEGORY } from '../../helpers/queries';
-import { AddOrderItem, cartItemsVar } from '../../helpers/cartItems';
+import { AddOrderItem, hasNoMoreQuantity, useMaxAndMinQuantitiesForProduct } from '../../helpers/cartItems';
 import { hasExistentProperty } from '../../helpers/generic'
 import MainContentLoader from '../../components/main-content-loader';
 import GoCheckoutButton from '../../components/go-checkout-button';
@@ -26,10 +26,12 @@ import { useLocation } from 'react-router-dom';
 const CategoryProducts = () => {
   const location = useLocation(); // https://ui.dev/react-router-pass-props-to-link/
   const { title, categoryId } = location.state;
+
+  // For Dialog Product
   const [selectedProduct, setProduct] = React.useState({});
   const [isOpen, setOpen] = React.useState(false);
+
   
-  console.log(categoryId);
   const { loading, error, data, refetch } = useQuery(GET_PRODUCTS_OF_CATEGORY, {
     variables: { categoryId },
   });
@@ -37,6 +39,9 @@ const CategoryProducts = () => {
   if (error) {
     console.log(error);
   }
+
+  // Calculate the max and min quantity a user can buy
+  const maxAndMinQuantities = useMaxAndMinQuantitiesForProduct(selectedProduct);
 
   return (
     <>
@@ -56,7 +61,7 @@ const CategoryProducts = () => {
           </IconButton>
         </div>
       </Stack>
-      { loading 
+      { loading
           ? <MainContentLoader />
           : error 
             ? <p>{error.message}</p>
@@ -68,14 +73,13 @@ const CategoryProducts = () => {
       <GoCheckoutButton />
       <ProductDialog 
         selectedProduct={selectedProduct} 
-        isOpen={isOpen}
-        setOpen={setOpen} />
+        reactOpen={[isOpen, setOpen]}
+        quantities={maxAndMinQuantities} />
     </>
   )
 }
 
 export const Products = ({ setProduct, setOpen, data }) => {
-
   const { products } = data;
 
   // If no content
@@ -97,8 +101,8 @@ export const Products = ({ setProduct, setOpen, data }) => {
           underline="none"
           key={product.id}
           className="product-listing"
-          disabled={product.fieldQuantity <= 0.0 ? true : false}
-          tabIndex={product.fieldQuantity <= 0.0 ? -1 : null}
+          disabled={hasNoMoreQuantity(product) ? true : false}
+          tabIndex={hasNoMoreQuantity(product) <= 0.0 ? -1 : null}
           onClick={(e) => {
             e.preventDefault();
             setProduct(product);
@@ -122,16 +126,20 @@ export const Products = ({ setProduct, setOpen, data }) => {
   );
 }
 
-export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
-  const productQuantity = parseFloat(useReactiveVar(cartItemsVar).get(selectedProduct.id)) || 0.0;
-  const maxQuantity = parseFloat(selectedProduct.fieldQuantity || 0.0) - productQuantity;
-  const minQuantity = Math.min(maxQuantity, 1.0); // In case no more elements (e.g. maxQuantity is zero)
+export const ProductDialog = ({reactOpen, quantities, selectedProduct}) => {
+  const {maxQuantity, minQuantity} = quantities;
   const [selectedProductCount, setCount] = React.useState(1.0);
+  const [isOpen, setOpen] = reactOpen;
 
   const handleClose = () => {
     setOpen(false);
     setCount(1.0); // Revert to one
   };
+
+  // If the quantity is zero, set the count to be zero too to deactivate the buttons
+  if (maxQuantity === 0.0 && selectedProductCount !== 0.0 && isOpen) {
+    setCount(0.0);
+  }
 
   return (
     <Dialog
@@ -180,9 +188,7 @@ export const ProductDialog = ({isOpen, setOpen, selectedProduct}) => {
                 <RemoveIcon sx={{ fontSize: 22 }} />
               </IconButton>
               <Box id="modal-product-count" sx={{ mt: 0.8, ml: 1, mr: 1 }}>
-                {maxQuantity === 0.0 // TODO: Remove hack: how to detect if maxQuantity is zero?
-                    ? 0.0
-                    : selectedProductCount}
+                {selectedProductCount}
               </Box>
               <IconButton
                 className="math-button-style"
