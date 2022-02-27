@@ -43,38 +43,35 @@ const PastOrders = () => {
         { pastOrders.length } orders
       </Typography>
       <hr /> */}
-      <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-        <Typography sx={{ width: '80%', flexShrink: 0 }}>Date of Order</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Cost</Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'row', padding: '0 10px', marginBottom: '5px'}}>
+        <Typography sx={{ flex: '3', fontWeight: 'bold' }}>Date of Order</Typography>
+        <Typography sx={{ flex: '1', color: 'text.secondary', fontWeight: 'bold' }}>Cost</Typography>
       </Box>
 
       {pastOrders.map((order) => (
-        <Accordion key={order.id}>
+        <Accordion key={order.id} disableGutters>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1bh-content"
             id={order.id} // id="panel1bh-header"
           >
             <Typography sx={{ width: '80%', flexShrink: 0 }}>{order.created}</Typography>
+            {/* TODO: parse date... */}
             <Typography sx={{ color: 'text.secondary' }}>${order.fieldTotalOrderAmount}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box>
               {order.fieldOrderItems.map((item) => (
-                <div key={item.id} sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography sx={{ width: '80%', flexShrink: 0 }}>{item.fieldProduct.title}</Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>{Math.trunc(item.fieldQuantity)} x ${item.fieldProduct.fieldCredit}</Typography>
+                <Box key={item.id} sx={{ display: 'flex', flexDirection: 'row' }}>
+                  <Typography sx={{ flex: '2' }}>{item.fieldProduct.title}</Typography>
+                  <Typography sx={{ flex: '1', color: 'text.secondary' }}>{Math.trunc(item.fieldQuantity)} x ${item.fieldProduct.fieldCredit}</Typography>
                   {/* TODO: figure out how to add polyfill for Math.trunc (https://github.com/behnammodi/polyfill/blob/master/math.polyfill.js) */}
-                </div>
+                </Box>
               ))}
             </Box>
           </AccordionDetails>
         </Accordion>
       ))}
-
-      <pre>
-        {JSON.stringify(data, null, 2)}
-      </pre>
     </>
   )
 }
