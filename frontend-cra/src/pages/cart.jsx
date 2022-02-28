@@ -7,13 +7,15 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box'
-import { CardMedia } from "@mui/material";
+import { Button, CardMedia, Stack } from "@mui/material";
 import { CartCheckoutButton } from "../components/CartCheckoutButton";
 
 import './categories/Category'; // for math-button-style
 import MainContentLoader from '../components/MainContentLoader';
 import { getUserUuid } from '../helpers/loginHelper';
 import ProductAddRemoveButtons from '../components/ProductAddRemoveButtons';
+import { ChevronRight } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
   const userUuid = getUserUuid();
@@ -50,7 +52,18 @@ const CartPage = () => {
   return (
     <>
       <Seo title="Cart Page" />
-      <h1>Your Cart</h1>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" alignContent="center" sx={{ mb: 4 }}>
+        <h1 style={{ margin: 0, }}>Your Cart</h1>
+        <Box>
+          <Link
+            to="/past-orders"
+            style={{ marginTop: '0.5em', opacity: 0.8, textDecoration: 'none' }}
+          >
+            <span style={{ verticalAlign: 'middle' }}>Past Orders </span>
+            <ChevronRight  style={{ verticalAlign: 'middle', fontSize: '0.8em' }} />
+          </Link>
+        </Box>
+      </Stack>
 
       <Typography component="div" variant="body2" sx={{ textAlign: 'right', fontWeight: 'bold' }}>
         { cartItems.length } items

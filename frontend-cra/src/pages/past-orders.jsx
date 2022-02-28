@@ -25,7 +25,7 @@ const PastOrders = () => {
     <>
       <Stack 
         direction="row" 
-        sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
+        sx={{ alignContent: 'center', justifyContent: 'space-between', mb: 1 }}>
         <h1>Past Orders</h1>
         <div>
           <IconButton
@@ -44,9 +44,12 @@ const PastOrders = () => {
         { pastOrders.length } orders
       </Typography>
       <hr /> */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', padding: '0 10px', marginBottom: '5px'}}>
-        <Typography sx={{ width: '73%', fontWeight: 'bold' }}>Date of Order</Typography>
-        <Typography sx={{ color: 'text.secondary', fontWeight: 'bold' }}>Credits</Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'row', padding: '0.4em 0.8em', backgroundColor: '#aaa', }}>
+        <Typography 
+          sx={{ width: '73%', fontWeight: 'bold', fontSize: '0.9em', }}>Date of Order</Typography>
+        <Typography 
+          color="text.secondary" 
+          sx={{ fontWeight: 'bold', fontSize: '0.9em', }}>Credits</Typography>
       </Box>
 
       {pastOrders.map((order) => (
@@ -58,7 +61,6 @@ const PastOrders = () => {
             sx={{ background: '#eee'}}
           >
             <Typography sx={{ width: '80%', flexShrink: 0 }}>{format(parseISO(order.created), 'PP p')}</Typography>
-            {/* TODO: parse date... */}
             <Typography sx={{ color: 'text.secondary' }}>${order.fieldTotalOrderAmount}</Typography>
           </AccordionSummary>
           <AccordionDetails>
