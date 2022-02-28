@@ -7,7 +7,7 @@ import { ProductDialog } from './ProductDialog';
 
 const ProductListInfinityScroll = (
   { queryInfo: {loading, error, data, fetchMore},
-  showCheckoutButton = true,
+  showCheckoutButton = true, // Currently not used
 }) => {
 
   // For Dialog Product
