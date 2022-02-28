@@ -2,7 +2,7 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
 import { cartItemsVar, cartTotalVar } from "../helpers/cartHelper";
 import Seo from "../components/seo"
-import { Button, Box, Typography, Card, CardContent, CardMedia, Stack } from "@mui/material";
+import { Button, Box, Typography, Card, CardContent, CardMedia, Stack, ButtonBase } from "@mui/material";
 import { CartCheckoutButton } from "../components/CartCheckoutButton";
 
 import './categories/Category'; // for math-button-style
@@ -50,23 +50,21 @@ const CartPage = () => {
       <Stack direction="row" justifyContent="space-between" alignItems="center" alignContent="center" sx={{ mb: 4 }}>
         <h1 style={{ margin: 0, }}>Your Cart</h1>
         <Box>
-          <Link
+          <Button
             to="/past-orders"
-            style={{ opacity: 0.8, textDecoration: 'none' }}
-          >
-            <Button 
-              variant="text" 
-              style={{ 
-                marginTop: '0.8em', 
-                verticalAlign: 'middle', 
-                fontSize: '0.7em', 
-                color: '#333', 
-                border: '2px solid #aaa' 
-              }}>
-                <span  sx={{ verticalAlign: 'middle' }}>View History</span>
-                <ChevronRight sx={{ verticalAlign: 'middle', fontSize: '1.2em' }}/>
-              </Button>
-          </Link>
+            component={Link}
+            variant="text" 
+            style={{ 
+              marginTop: '0.8em', 
+              verticalAlign: 'middle', 
+              fontSize: '0.7em', 
+              color: '#333', 
+              border: '2px solid #aaa',
+              opacity: 0.8,
+            }}>
+              <span  sx={{ verticalAlign: 'middle' }}>View History</span>
+              <ChevronRight sx={{ verticalAlign: 'middle', fontSize: '1.2em' }}/>
+            </Button>
         </Box>
       </Stack>
 

@@ -24,13 +24,20 @@ const CustomSearchIcon = () => {
       <Box
         className="search-form__inner">
         <Box className={open ? "search-form__keys search-form__keys--open" : "search-form__keys"}>
-          <TextField 
+          {open 
+            ? <TextField 
               id="search__keys" 
               type="text"
               variant="filled" 
               label="Search..."
+              inputRef={input => input && input.focus()}
+              onBlur={() => {
+                setOpen(false);
+              }}
               sx={{ background: '#fff', mb: '2rem', width: '100%' }} 
               onInput={(e) => setKeys(e.target.value)}/>
+            : <></>
+          }
         </Box>
         <IconButton
           className="search-form__icon"
@@ -38,10 +45,10 @@ const CustomSearchIcon = () => {
           component={Button}
           style={{ color: 'white' }}
           aria-label={'search'}
+          disabled={open && keys.length === 0}
           onClick={(e) => {
             e.preventDefault();
             if (open) {
-              setOpen(false);
               if (keys.length > 0) {
                 navigator(`/search?keys=${encodeURIComponent(keys)}`);
               }
