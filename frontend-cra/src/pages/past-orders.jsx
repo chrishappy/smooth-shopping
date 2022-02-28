@@ -5,6 +5,7 @@ import { IconButton, Stack, Typography, Accordion, AccordionSummary, AccordionDe
 import { GET_USERS_ORDERS } from "../helpers/queries";
 import CachedIcon from '@mui/icons-material/Cached';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { format, parseISO } from 'date-fns';
 
 const PastOrders = () => {
   const {loading, error, data, refetch} = useQuery(GET_USERS_ORDERS);
@@ -44,8 +45,8 @@ const PastOrders = () => {
       </Typography>
       <hr /> */}
       <Box sx={{ display: 'flex', flexDirection: 'row', padding: '0 10px', marginBottom: '5px'}}>
-        <Typography sx={{ flex: '3', fontWeight: 'bold' }}>Date of Order</Typography>
-        <Typography sx={{ flex: '1', color: 'text.secondary', fontWeight: 'bold' }}>Cost</Typography>
+        <Typography sx={{ width: '73%', fontWeight: 'bold' }}>Date of Order</Typography>
+        <Typography sx={{ color: 'text.secondary', fontWeight: 'bold' }}>Credits</Typography>
       </Box>
 
       {pastOrders.map((order) => (
@@ -54,17 +55,18 @@ const PastOrders = () => {
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1bh-content"
             id={order.id} // id="panel1bh-header"
+            sx={{ background: '#eee'}}
           >
-            <Typography sx={{ width: '80%', flexShrink: 0 }}>{order.created}</Typography>
+            <Typography sx={{ width: '80%', flexShrink: 0 }}>{format(parseISO(order.created), 'PP p')}</Typography>
             {/* TODO: parse date... */}
             <Typography sx={{ color: 'text.secondary' }}>${order.fieldTotalOrderAmount}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box>
               {order.fieldOrderItems.map((item) => (
-                <Box key={item.id} sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography sx={{ flex: '2' }}>{item.fieldProduct.title}</Typography>
-                  <Typography sx={{ flex: '1', color: 'text.secondary' }}>{Math.trunc(item.fieldQuantity)} x ${item.fieldProduct.fieldCredit}</Typography>
+                <Box key={item.id} sx={{ display: 'flex', flexDirection: 'row', }}>
+                  <Typography sx={{ flex: '2', fontSize: '0.95em', }}>{item.fieldProduct.title}</Typography>
+                  <Typography sx={{ flex: '1', color: 'text.secondary', fontSize: '0.9em', }}>{Math.trunc(item.fieldQuantity)} x ${item.fieldProduct.fieldCredit}</Typography>
                   {/* TODO: figure out how to add polyfill for Math.trunc (https://github.com/behnammodi/polyfill/blob/master/math.polyfill.js) */}
                 </Box>
               ))}

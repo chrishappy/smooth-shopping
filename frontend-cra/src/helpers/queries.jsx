@@ -176,7 +176,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
  */
 export const GET_USERS_ORDERS = gql`
   query GetUsersOrders($offset: Int) {
-    orders(offset: $offset) @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items.field_product&page[offset]={args.offset}") {
+    orders(offset: 0) @jsonapi(path: "node/order/?filter[status]=1&sort=-created,id&include=field_order_items.field_product&page[offset]={args.offset}") {
       id
       created
       fieldTotalOrderAmount

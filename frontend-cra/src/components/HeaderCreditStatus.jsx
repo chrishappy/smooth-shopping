@@ -28,7 +28,7 @@ const CurrentCredits = () => {
   if (loading || !data.currentUser) {
     userData = {
       creditsRemaining: cartTotalReactive,
-      totalCredits: -1,
+      totalCredits: 0.0,
     };
   }
   else {
