@@ -73,7 +73,8 @@ export const ProductDialog = ({reactOpen, selectedProduct}) => {
                 const count = Math.max(selectedProductCount-1, minQuantity);
                 setCount(count);
               }}
-              enableMinQuantityCheck={true} />
+              enableMinQuantityCheck={true}
+              showZeroIfMaxQuantityIsZero={true} />
             <div style={{marginRight: 'auto'}}></div>
             <Button variant="contained"
               sx={{

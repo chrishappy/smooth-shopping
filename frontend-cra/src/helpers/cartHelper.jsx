@@ -21,6 +21,7 @@ const LOCAL_STORAGE_CART_TOTAL = 'LOCAL_STORAGE_CART_TOTAL';
 export const cartTotalVar = makeVar(0.0);
 
 // Store how many of each product a user has already purchased
+const LOCAL_STORAGE_PREVIOUS_ORDER_QUANTITIES = 'LOCAL_STORAGE_PREVIOUS_ORDER_QUANTITIES';
 export const previousOrderQuantitiesVar = makeVar(new Map());
 
 /**
@@ -40,7 +41,7 @@ export const usePreviousOrderQuantitiesUpdater = async () => {
     }
   });
 
-  return getPastQuantities()
+  return () => getPastQuantities()
     .then(({data}) => {
       // Loop over and set the values of previous orders within this month
       let pastOrderQuantities = new Map();
@@ -51,7 +52,9 @@ export const usePreviousOrderQuantitiesUpdater = async () => {
             curr.fieldProduct.meta.nid,
             parseFloat(curr.fieldQuantity));
         });
-      })
+      });
+
+      console.log(pastOrderQuantities);
 
       // Update previous quantities
       previousOrderQuantitiesVar(pastOrderQuantities);
@@ -93,6 +96,8 @@ export const staticMaxAndMinQuantitiesForProduct = ({
   // Get previous quantities from the stores
   const cartProductQuantity = parseFloat(cartItems.get(product.nid)) || 0.0;
   const pastOrderQuantities = parseFloat(previousOrderQuantities.get(product.nid)) || 0.0;
+
+  console.log(`Past orders : ${previousOrderQuantities.get(product.nid)}`);
 
   // Calculate the max quantity a user can buy
   const maxQuantityWithoutLimit = parseFloat(product.fieldQuantity || 0.0) - cartProductQuantity;
@@ -181,10 +186,16 @@ const updateCartTotal = (price, quantity) => {
  */
 export const restoreCartItems = () => {
   const cartItems = window.localStorage.getItem(LOCAL_STORAGE_CART_ITEMS_VAR);
+  const pastOrderQuantities = window.localStorage.getItem(LOCAL_STORAGE_PREVIOUS_ORDER_QUANTITIES);
   const cartTotal = window.localStorage.getItem(LOCAL_STORAGE_CART_TOTAL);
-  if (cartItems !== null && cartTotal !== null) {
-    const array = JSON.parse(cartItems);
-    cartItemsVar(new Map(array));
+
+  if (cartItems !== null && cartTotal !== null && pastOrderQuantities !== null) {
+    const cartItemsAsArray = JSON.parse(cartItems);
+    cartItemsVar(new Map(cartItemsAsArray));
+    
+    const pastOrderQuantitiesAsArray = JSON.parse(pastOrderQuantities);
+    cartItemsVar(new Map(pastOrderQuantitiesAsArray));
+
     cartTotalVar(JSON.parse(cartTotal));
   }
 }
@@ -195,6 +206,9 @@ export const restoreCartItems = () => {
 export const storeCartItems = () => {
   const cartItems = JSON.stringify(Array.from(cartItemsVar()));
   window.localStorage.setItem(LOCAL_STORAGE_CART_ITEMS_VAR, cartItems);
+  
+  const pastOrderQuantities = JSON.stringify(Array.from(cartItemsVar()));
+  window.localStorage.setItem(LOCAL_STORAGE_PREVIOUS_ORDER_QUANTITIES, pastOrderQuantities);
 
   const cartTotal = JSON.stringify(cartTotalVar());
   window.localStorage.setItem(LOCAL_STORAGE_CART_TOTAL, cartTotal);
@@ -205,6 +219,7 @@ export const storeCartItems = () => {
  */
 export const clearCart = () => {
   cartItemsVar(new Map());
+  previousOrderQuantitiesVar(new Map());
   cartTotalVar(0.0);
 
   // Clear the Apollo cache

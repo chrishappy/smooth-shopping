@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton';
 import CachedIcon from '@mui/icons-material/Cached';
 
 import { GET_PRODUCTS_OF_CATEGORY } from '../../helpers/queries';
-import { usePreviousOrderQuantitiesUpdater } from '../../helpers/cartHelper';
 import { useLocation } from 'react-router-dom';
 import ProductListInfinityScroll from '../../components/ProductListInfiniteScroll';
 
@@ -19,7 +18,7 @@ const CategoryProducts = () => {
   });
 
   // Update the clientLimit quantities
-  usePreviousOrderQuantitiesUpdater();
+  // usePreviousOrderQuantitiesUpdater();
 
   return (
     <>

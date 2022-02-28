@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from "@apollo/client";
 import MainContentLoader from "../components/MainContentLoader";
-import { IconButton, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Box, Table, TableRow, TableCell } from "@mui/material"
+import { IconButton, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Box, Table, TableRow, TableCell, TableBody } from "@mui/material"
 import { GET_USERS_ORDERS } from "../helpers/queries";
 import CachedIcon from '@mui/icons-material/Cached';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -64,20 +64,22 @@ const PastOrders = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Table sx={{ fontSize: '0.95em', margin: 0 }} size="small">
-              {order.fieldOrderItems.map((item) => (
-                <TableRow key={item.id} >
-                  <TableCell >{item.fieldProduct.title}</TableCell>
-                  <TableCell sx={{ color: 'text.secondary', textAlign: 'right', padding: 0 }}>{Math.trunc(item.fieldQuantity)}</TableCell>
-                  {/* TODO: figure out how to add polyfill for Math.trunc (https://github.com/behnammodi/polyfill/blob/master/math.polyfill.js) */}
-                  <TableCell sx={{
-                    color: 'text.secondary', 
-                    textAlign: 'center', 
-                    padding: '0 0.4em', 
-                    width: 0
-                  }}>x</TableCell>
-                  <TableCell  sx={{ color: 'text.secondary', textAlign: 'right', padding: 0, width: 0 }}>${item.fieldProduct.fieldCredit}</TableCell>
-                </TableRow>
-              ))}
+              <TableBody>
+                {order.fieldOrderItems.map((item) => (
+                  <TableRow key={item.id} >
+                    <TableCell >{item.fieldProduct.title}</TableCell>
+                    <TableCell sx={{ color: 'text.secondary', textAlign: 'right', padding: 0 }}>{Math.trunc(item.fieldQuantity)}</TableCell>
+                    {/* TODO: figure out how to add polyfill for Math.trunc (https://github.com/behnammodi/polyfill/blob/master/math.polyfill.js) */}
+                    <TableCell sx={{
+                      color: 'text.secondary', 
+                      textAlign: 'center', 
+                      padding: '0 0.4em', 
+                      width: 0
+                    }}>x</TableCell>
+                    <TableCell  sx={{ color: 'text.secondary', textAlign: 'right', padding: 0, width: 0 }}>${item.fieldProduct.fieldCredit}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </AccordionDetails>
         </Accordion>

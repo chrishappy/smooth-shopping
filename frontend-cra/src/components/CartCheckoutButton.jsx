@@ -9,7 +9,8 @@ import { CREATE_AND_UPDATE_ORDER } from "../helpers/queries";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
-import { apolloClient, clearApolloCache } from "../helpers/cache";
+import { clearApolloCache } from "../helpers/cache";
+import { usePreviousOrderQuantitiesUpdater } from "../helpers/cartHelper";
 
 export const CartCheckoutButton = ({disabledData, orderData}) => {
   // TODO: Display old orders somewhere
@@ -27,6 +28,41 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
   // For dialogs
   const [open, setOpen] = React.useState(false);
 
+  // Update previous order quanities for limit per product per client
+  const previousOrderQuantitiesUpdator = usePreviousOrderQuantitiesUpdater();
+  
+  // Create Order Handler
+  const createOrderHandlerAsync = async () => {
+    setOpen(true);
+    
+    // TODO: Validate the order before submitting
+    // Create a new function in cartHelper
+    // 1. use the promise in usePreviousOrderQuantitiesUpdater(), then
+    // 2. loop over all the products in the cart and check that the quantity
+    //      that is not greater than the maximum
+    // 3. if it is, make the color red and disable the button
+
+    await createOrder({
+      variables: {
+        order: {
+          title: orderData.title,
+          orderItems: getOrderItemsFormatted(orderData.orderItems),
+        }
+      }
+    }).then(async () => {
+      console.log("Clearing cache");
+
+      return new Promise.all([
+        clearApolloCache(true),
+        previousOrderQuantitiesUpdator(),
+      ]);
+    }).then(() => true)
+    .catch((err) => {
+      console.err(`Can't clear cache: ${err}`);
+      return false;
+    });
+  };
+
   return (
     <>
       <LoadingButton
@@ -41,32 +77,7 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
         }}
         disabled={isDisabled}
         startIcon={!isDisabled ? <CheckCircleIcon /> : <CancelIcon />}
-        onClick={() => {
-          setOpen(true);
-          
-          // TODO: Validate the order before submitting
-          // Create a new function in cartHelper
-          // 1. use the promise in usePreviousOrderQuantitiesUpdater(), then
-          // 2. loop over all the products in the cart and check that the quantity
-          //      that is not greater than the maximum
-          // 3. if it is, make the color red and disable the button
-
-          createOrder({
-            variables: {
-              order: {
-                title: orderData.title,
-                orderItems: getOrderItemsFormatted(orderData.orderItems),
-              }
-            }
-          }).then(() => {
-            console.log("Clearing cache");
-            // https://www.apollographql.com/docs/react/data/refetching/
-            clearApolloCache();
-            apolloClient.refetchQueries({
-              include: 'all',
-            });
-          });
-        }}>
+        onClick={createOrderHandlerAsync}>
         {buttonText}
       </LoadingButton>
 

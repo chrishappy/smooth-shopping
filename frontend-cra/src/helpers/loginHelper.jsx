@@ -100,7 +100,7 @@ const authenicationAsync = async (username, password) => {
  * Fetch the current user's uuid. Requires the JWT string.
  */
 const fetchUserUuid = async () => {
-  return fetch(`${process.env.REACT_APP_JSON_URL_WITH_END_SLASH}/`, {
+  return fetch(`${process.env.REACT_APP_JSON_URL_WITH_END_SLASH}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

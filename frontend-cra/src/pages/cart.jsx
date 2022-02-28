@@ -2,7 +2,7 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
 import { cartItemsVar, cartTotalVar } from "../helpers/cartHelper";
 import Seo from "../components/seo"
-import { Button, Box, Typography, Card, CardContent, CardMedia, Stack, ButtonBase } from "@mui/material";
+import { Button, Box, Typography, Card, CardContent, CardMedia, Stack, Link } from "@mui/material";
 import { CartCheckoutButton } from "../components/CartCheckoutButton";
 
 import './categories/Category'; // for math-button-style
@@ -10,13 +10,14 @@ import MainContentLoader from '../components/MainContentLoader';
 import { getUserUuid } from '../helpers/loginHelper';
 import ProductAddRemoveButtons from '../components/ProductAddRemoveButtons';
 import { ChevronRight } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link as ReactLink } from 'react-router-dom';
 
 const CartPage = () => {
   const userUuid = getUserUuid();
   const cartIdsAndQuantities = useReactiveVar(cartItemsVar);
   const cartTotalReactive = useReactiveVar(cartTotalVar);
 
+  // Get data for cart
   const { loading, error, data } = useQuery(GET_PRODUCTS_FOR_CART, {
     variables: {
       productIds: [...cartIdsAndQuantities.keys()].map(
@@ -79,41 +80,46 @@ const CartPage = () => {
             ? <MainContentLoader />
             : <></>
         }
-        {cartItems.map((cartItem) => (
-          <Card sx={{ display: 'flex', margin: '1em 0' }} key={cartItem.nid}>
-            <CardMedia
-              component="img"
-              sx={{ width: '125px', lineHeight: '0' }}
-              src={cartItem.fieldImage.imageStyleUri.popupLargeImage}
-              alt={cartItem.fieldImage.alt}
-              title={cartItem.fieldImage.title}
-              width={cartItem.fieldImage.width}
-              height={cartItem.fieldImage.height} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <CardContent sx={{ flex: '1 1 auto' }}>
-                  <h4 className="cart-item__title">
-                    { cartItem.title }
-                  </h4>
-                  <Box sx={{ mb:1, fontSize: '15' }}>
-                    <span>${ parseFloat(cartItem.fieldCredit) } </span>
-                    <span>x { cartIdsAndQuantities.get(cartItem.nid) }</span> {/* TODO: Find less hacky solution? */}
+        { cartItems.length >= 1
+            ? cartItems.map((cartItem) => (
+              <Card sx={{ display: 'flex', margin: '1em 0' }} key={cartItem.nid}>
+                <CardMedia
+                  component="img"
+                  sx={{ width: '125px', lineHeight: '0' }}
+                  src={cartItem.fieldImage.imageStyleUri.popupLargeImage}
+                  alt={cartItem.fieldImage.alt}
+                  title={cartItem.fieldImage.title}
+                  width={cartItem.fieldImage.width}
+                  height={cartItem.fieldImage.height} />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: '1' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <CardContent sx={{ flex: '1 1 auto' }}>
+                      <h4 className="cart-item__title">
+                        { cartItem.title }
+                      </h4>
+                      <Box sx={{ mb:1, fontSize: '15' }}>
+                        <span>${ parseFloat(cartItem.fieldCredit) } </span>
+                        <span>x { cartIdsAndQuantities.get(cartItem.nid) }</span> {/* TODO: Find less hacky solution? */}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary" component="div">
+                        {cartItem.fieldExpired 
+                          ? <strong>Expired</strong>
+                          : <em>Not Expired</em>}
+                      </Typography>
+                    </CardContent>
                   </Box>
-                  <Typography variant="body2" color="text.secondary" component="div">
-                    {cartItem.fieldExpired 
-                      ? <strong>Expired</strong>
-                      : <em>Not Expired</em>}
-                  </Typography>
-                </CardContent>
+                  <Box sx={{  display: 'flex', flex: '0 0 auto', textAlign: 'center', margin: '0 0.7rem 0 0' }}>
+                    <ProductAddRemoveButtons 
+                      selectedProduct={cartItem}
+                      currentQuantity={cartIdsAndQuantities.get(cartItem.nid)} />
+                  </Box>
+                </Box>
+              </Card>))
+            : <Box textAlign="center" color="text.secondary" fontStyle={'italic'}>
+                No items currently in cart. <br />
+                <Link to="/" component={ReactLink} underline="hover">Continue shopping!</Link>
               </Box>
-              <Box sx={{  display: 'flex', flex: '0 0 auto', textAlign: 'center', margin: '0 0.7rem 0 0' }}>
-                <ProductAddRemoveButtons 
-                  selectedProduct={cartItem}
-                  currentQuantity={cartIdsAndQuantities.get(cartItem.nid)} />
-              </Box>
-            </Box>
-          </Card>
-        ))}
+        }
       </Box>
       
       <Box className="cart-confirm-order-wrapper mui-fixed">

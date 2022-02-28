@@ -23,6 +23,7 @@ const cache = new InMemoryCache({
       fields: {
         products: { // @see https://www.apollographql.com/docs/react/pagination/core-api/#improving-the-merge-function
           // Note: Always return all products
+          // TODO: Switch to using a Cursor
           // TODO: Support paging (allow to find subset while infinite scrolling?)
           /* read(existing, {
             args: {
@@ -140,19 +141,31 @@ export const apolloCachePersistor = new CachePersistor({
  * Clear the ApolloClient and Cart cache
  * @returns undefined|null
  */
-export const clearApolloCache = () => {
-  if (!apolloCachePersistor) {
-    return;
-  }
-
-  // Clear the memory
-  apolloClient.resetStore();
-
-  // Clear the persist cache
-  apolloCachePersistor.purge();
-
+export const clearApolloCache = async (refetchQueries = false) => {
   // Clear the cart cache too
   clearCart();
+
+  // Promises to run
+  const promisesToRun = [
+    // Clear the memory
+    apolloClient && apolloClient.resetStore(),
+
+    // Refetch Queries
+    // @see https://www.apollographql.com/docs/react/data/refetching/
+    refetchQueries && apolloClient && apolloClient.refetchQueries({
+      include: 'all',
+    }),
+    
+    // Clear the persist cache
+    apolloCachePersistor && apolloCachePersistor.purge(),
+  ];
+
+
+  return new Promise.all(
+    // Remove promises that are falsely: null, false, undefined, or empty
+    promisesToRun.filter((promise) => !!promise)
+  );
+
 };
 
 // The final Apollo client

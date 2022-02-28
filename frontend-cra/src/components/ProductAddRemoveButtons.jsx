@@ -18,13 +18,14 @@ const ProductAddRemoveButtons = ({
     AddOrderItem(selectedProduct, 1, maxQuantity);
   },
   enableMinQuantityCheck = false,
+  showZeroIfMaxQuantityIsZero = false,
 }) => {
   
   // Max and min quantities
   const [maxQuantity, minQuantity] = useMaxAndMinQuantitiesForProduct(selectedProduct);  
 
   // If the quantity is zero, set the count to be zero too to deactivate the buttons
-  if (maxQuantity === 0.0 && currentQuantity !== 0.0) {
+  if (showZeroIfMaxQuantityIsZero && maxQuantity === 0.0) {
     currentQuantity = 0.0;
   }
 

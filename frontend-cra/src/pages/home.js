@@ -13,19 +13,21 @@ import { GET_ALL_PRODUCTS, GET_PRODUCT_CATEGORIES } from "../helpers/queries";
 import MainContentLoader from "../components/MainContentLoader";
 import ProductListInfinityScroll from "../components/ProductListInfiniteScroll";
 
-const HomePage = () => (
-  <>
-    <Seo title="Home" />
-    <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
-    <div className="categories-wrap">
-      {/* <h2>Categories</h2> */}
-      <Categories/>
-    </div>
-    <div>
-      <AllProductsInfiniteScroll />
-    </div>
-  </>
-);
+const HomePage = () => {
+  return (
+    <>
+      <Seo title="Home" />
+      <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
+      <div className="categories-wrap">
+        {/* <h2>Categories</h2> */}
+        <Categories/>
+      </div>
+      <div>
+        <AllProductsInfiniteScroll />
+      </div>
+    </>
+  )
+};
 
 function Categories() {
   const { loading, error, data } = useQuery(GET_PRODUCT_CATEGORIES);

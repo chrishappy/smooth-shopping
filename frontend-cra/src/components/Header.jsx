@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useNavigate, useLocation } from "react-router-dom";
-import CurrentCreditStatus from "./HeaderCreditStatus";
+import CurrentCreditStatus from "./CurrentCreditStatus";
 import IconButton from '@mui/material/IconButton';
 import CustomSearchIcon from "./SearchIcon";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';

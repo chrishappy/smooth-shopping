@@ -13,6 +13,7 @@ const ProductListInfinityScroll = (
   // For Dialog Product
   const [selectedProduct, setProduct] = React.useState({});
   const [isOpen, setOpen] = React.useState(false);
+  const [fetchMoreIsLoading, setFetchMoreIsLoading] = React.useState(false);
 
   if (error) {
     console.error(error);
@@ -30,17 +31,24 @@ const ProductListInfinityScroll = (
                 setOpen={setOpen}
                 data={data} />
       }
+      { fetchMoreIsLoading
+          ? <MainContentLoader />
+          : <></>
+      }
       <Waypoint
         onEnter={() => {
           console.log('fetching more products')
           if (!error && !loading) {
-             // TODO: Prevent fetching more if no more items to fetch?
+            // TODO: Prevent fetching more if no more items to fetch?
+            setFetchMoreIsLoading(true);
             fetchMore({
               variables: {
                 offset: data.products.length,
                 limit: 50, // for GET_ALL_PRODUCTS
               }
-            });
+            })
+            .then(() => setFetchMoreIsLoading(false))
+            .error((err) => console.err(`Error fetching more data ${err}`));
           }
         }}
         bottomOffset={'-1000px'} // Load more products when user is near the end
