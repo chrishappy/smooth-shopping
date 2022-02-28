@@ -1,6 +1,6 @@
 import React from 'react';
 import MainContentLoader from './MainContentLoader';
-import GoCheckoutButton from './GoCheckoutButton';
+import GoToCartButton from './GoToCartButton';
 import { Waypoint } from 'react-waypoint';
 import { ProductList } from './ProductList';
 import { ProductDialog } from './ProductDialog';
@@ -46,7 +46,7 @@ const ProductListInfinityScroll = (
         bottomOffset={'-1000px'} // Load more products when user is near the end
          />
       {showCheckoutButton 
-        ? <GoCheckoutButton />
+        ? <GoToCartButton />
         : ''
       }
       <ProductDialog 

@@ -43,7 +43,13 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
         startIcon={!isDisabled ? <CheckCircleIcon /> : <CancelIcon />}
         onClick={() => {
           setOpen(true);
-          // setCartCleared(false);
+          
+          // TODO: Validate the order before submitting
+          // Create a new function in cartHelper
+          // 1. use the promise in usePreviousOrderQuantitiesUpdater(), then
+          // 2. loop over all the products in the cart and check that the quantity
+          //      that is not greater than the maximum
+          // 3. if it is, make the color red and disable the button
 
           createOrder({
             variables: {
