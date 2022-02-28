@@ -34,7 +34,7 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
         component={Button} 
         variant="contained" 
         sx={{
-          padding: '0.5rem 2rem',
+          padding: '0.5rem 3rem',
           margin: '1rem 0',
           color: '#000',
           backgroundColor: '#75F348',

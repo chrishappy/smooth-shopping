@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from "@apollo/client";
 import MainContentLoader from "../components/MainContentLoader";
-import { IconButton, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Box } from "@mui/material"
+import { IconButton, Stack, Typography, Accordion, AccordionSummary, AccordionDetails, Box, Table, TableRow, TableCell } from "@mui/material"
 import { GET_USERS_ORDERS } from "../helpers/queries";
 import CachedIcon from '@mui/icons-material/Cached';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -25,7 +25,7 @@ const PastOrders = () => {
     <>
       <Stack 
         direction="row" 
-        sx={{ alignContent: 'center', justifyContent: 'space-between', mb: 1 }}>
+        sx={{ alignContent: 'center', justifyContent: 'space-between', mb: 3 }}>
         <h1>Past Orders</h1>
         <div>
           <IconButton
@@ -44,12 +44,11 @@ const PastOrders = () => {
         { pastOrders.length } orders
       </Typography>
       <hr /> */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', padding: '0.4em 0.8em', backgroundColor: '#aaa', }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', padding: '0.4em 0.8em', backgroundColor: '#444', }}>
         <Typography 
-          sx={{ width: '73%', fontWeight: 'bold', fontSize: '0.9em', }}>Date of Order</Typography>
-        <Typography 
-          color="text.secondary" 
-          sx={{ fontWeight: 'bold', fontSize: '0.9em', }}>Credits</Typography>
+          sx={{ width: '73%', fontWeight: 'bold', fontSize: '0.9em', color: '#f7f1f1' }}>Date of Order</Typography>
+        <Typography
+          sx={{ fontWeight: 'bold', fontSize: '0.9em', color: '#f7f1f1' }}>Total</Typography>
       </Box>
 
       {pastOrders.map((order) => (
@@ -64,18 +63,27 @@ const PastOrders = () => {
             <Typography sx={{ color: 'text.secondary' }}>${order.fieldTotalOrderAmount}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Box>
+            <Table sx={{ fontSize: '0.95em', margin: 0 }} size="small">
               {order.fieldOrderItems.map((item) => (
-                <Box key={item.id} sx={{ display: 'flex', flexDirection: 'row', }}>
-                  <Typography sx={{ flex: '2', fontSize: '0.95em', }}>{item.fieldProduct.title}</Typography>
-                  <Typography sx={{ flex: '1', color: 'text.secondary', fontSize: '0.9em', }}>{Math.trunc(item.fieldQuantity)} x ${item.fieldProduct.fieldCredit}</Typography>
+                <TableRow key={item.id} >
+                  <TableCell >{item.fieldProduct.title}</TableCell>
+                  <TableCell sx={{ color: 'text.secondary', textAlign: 'right', padding: 0 }}>{Math.trunc(item.fieldQuantity)}</TableCell>
                   {/* TODO: figure out how to add polyfill for Math.trunc (https://github.com/behnammodi/polyfill/blob/master/math.polyfill.js) */}
-                </Box>
+                  <TableCell sx={{
+                    color: 'text.secondary', 
+                    textAlign: 'center', 
+                    padding: '0 0.4em', 
+                    width: 0
+                  }}>x</TableCell>
+                  <TableCell  sx={{ color: 'text.secondary', textAlign: 'right', padding: 0, width: 0 }}>${item.fieldProduct.fieldCredit}</TableCell>
+                </TableRow>
               ))}
-            </Box>
+            </Table>
           </AccordionDetails>
         </Accordion>
       ))}
+
+      <Box sx={{padding: '2em 0'}}></Box>
     </>
   )
 }

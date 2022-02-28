@@ -2,12 +2,7 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { GET_PRODUCTS_FOR_CART } from "../helpers/queries";
 import { cartItemsVar, cartTotalVar } from "../helpers/cartHelper";
 import Seo from "../components/seo"
-
-import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
-import CardContent from '@mui/material/CardContent';
-import Box from '@mui/material/Box'
-import { Button, CardMedia, Stack } from "@mui/material";
+import { Button, Box, Typography, Card, CardContent, CardMedia, Stack } from "@mui/material";
 import { CartCheckoutButton } from "../components/CartCheckoutButton";
 
 import './categories/Category'; // for math-button-style
@@ -57,10 +52,20 @@ const CartPage = () => {
         <Box>
           <Link
             to="/past-orders"
-            style={{ marginTop: '0.5em', opacity: 0.8, textDecoration: 'none' }}
+            style={{ opacity: 0.8, textDecoration: 'none' }}
           >
-            <span style={{ verticalAlign: 'middle' }}>Past Orders </span>
-            <ChevronRight  style={{ verticalAlign: 'middle', fontSize: '0.8em' }} />
+            <Button 
+              variant="text" 
+              style={{ 
+                marginTop: '0.8em', 
+                verticalAlign: 'middle', 
+                fontSize: '0.7em', 
+                color: '#333', 
+                border: '2px solid #aaa' 
+              }}>
+                <span  sx={{ verticalAlign: 'middle' }}>View History</span>
+                <ChevronRight sx={{ verticalAlign: 'middle', fontSize: '1.2em' }}/>
+              </Button>
           </Link>
         </Box>
       </Stack>
