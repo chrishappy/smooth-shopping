@@ -100,10 +100,6 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   // get the authentication token from local storage if it exists
   const token = getJwtString();
 
-  if (!token) {
-    console.error(`The JWT string is somehow null or empty. Value: ${JSON.stringify(token)}`)
-  }
-
   // Add the authorization to the headers
   operation.setContext(({ headers = {} }) => ({
     headers: {
