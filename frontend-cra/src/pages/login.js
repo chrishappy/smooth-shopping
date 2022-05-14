@@ -19,7 +19,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Load the previous quantity updator
-  const previousOrderQuanitiesUpdator = usePreviousOrderQuantitiesUpdater();
+  const previousOrderQuanitiesUpdater = usePreviousOrderQuantitiesUpdater();
   
   const submitLoginForm = async (e) => {
     e.preventDefault();
@@ -33,7 +33,8 @@ const LoginPage = () => {
       await loginAsync(username, password)
         .then(async (loggedInSuccessfully) => {
           if (loggedInSuccessfully) {
-            await previousOrderQuanitiesUpdator();
+            console.log(previousOrderQuanitiesUpdater);
+            await previousOrderQuanitiesUpdater();
             navigate('/');
           }
           else {

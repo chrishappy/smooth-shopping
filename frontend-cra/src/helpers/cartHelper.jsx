@@ -29,7 +29,7 @@ export const previousOrderQuantitiesVar = makeVar(new Map());
  * 
  * @returns object same features of useQuery
  */
-export const usePreviousOrderQuantitiesUpdater = async () => {
+export const usePreviousOrderQuantitiesUpdater = () => {
   // created dates are stored in UTC, thus need UTC
   // TODO: Ensure that the timezone is implemented correctly
   const firstDayOfCurrentMonthInUTC = zonedTimeToUtc(startOfMonth(new Date()), 'America/Vancouver');
@@ -41,7 +41,8 @@ export const usePreviousOrderQuantitiesUpdater = async () => {
     }
   });
 
-  return () => getPastQuantities()
+  // Return a function that can be called later
+  return async () => getPastQuantities()
     .then(({data}) => {
       // Loop over and set the values of previous orders within this month
       let pastOrderQuantities = new Map();
