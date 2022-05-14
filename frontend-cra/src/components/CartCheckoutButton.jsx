@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
 import { clearApolloCache } from "../helpers/cache";
 import { usePreviousOrderQuantitiesUpdater } from "../helpers/cartHelper";
+import { debuggingIsOn } from "../helpers/genericHelper";
 
 export const CartCheckoutButton = ({disabledData, orderData}) => {
   // TODO: Display old orders somewhere
@@ -50,7 +51,9 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
         }
       }
     }).then(async () => {
-      console.log("Clearing cache");
+      if (debuggingIsOn()) {
+        console.log("Clearing cache");
+      }
 
       return new Promise.all([
         clearApolloCache(true),

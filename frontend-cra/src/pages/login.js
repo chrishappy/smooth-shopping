@@ -6,6 +6,7 @@ import Seo from "../components/seo"
 import { isLoggedIn, loginAsync } from "../helpers/loginHelper";
 import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/Snackbar";
 import { usePreviousOrderQuantitiesUpdater } from "../helpers/cartHelper";
+import { debuggingIsOn } from "../helpers/genericHelper";
 
 const LoginPage = () => {
 
@@ -26,14 +27,17 @@ const LoginPage = () => {
     setIsLoading(true);
 
     if (username.length === 0 && password.length === 0) {
-      console.log("Can't login: inputs are empty");
+      if (debuggingIsOn()) {
+        console.error("Can't login: inputs are empty");
+      }
     }
     else {
-      console.log("Login");
+      if (debuggingIsOn()) {
+        console.log("Login");
+      }
       await loginAsync(username, password)
         .then(async (loggedInSuccessfully) => {
           if (loggedInSuccessfully) {
-            console.log(previousOrderQuanitiesUpdater);
             await previousOrderQuanitiesUpdater();
             navigate('/');
           }

@@ -37,7 +37,6 @@ const ProductListInfinityScroll = (
       }
       <Waypoint
         onEnter={() => {
-          console.log('fetching more products')
           if (!error && !loading) {
             // TODO: Prevent fetching more if no more items to fetch?
             setFetchMoreIsLoading(true);

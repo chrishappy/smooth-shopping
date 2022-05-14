@@ -44,7 +44,6 @@ const SearchProducts = () => {
             color="primary"
             aria-label={'Refresh page'}
             onClick={() => {
-              console.log('Clear caches');
               refetch();
             }} >
             <CachedIcon />

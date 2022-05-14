@@ -5,7 +5,7 @@
  */
 
 import { clearApolloCache } from "./cache";
-import { encodeURIComponentOrNull } from "./genericHelper";
+import { debuggingIsOn, encodeURIComponentOrNull } from "./genericHelper";
 
 // The constant for the local storage variable storing the JWT value
 const LOCAL_STORAGE_JWT_TOKEN = 'JWT_AUTHENICATION';
@@ -37,11 +37,15 @@ export const isLoggedIn = () => !!getJwtString() || !!getUserUuid();
 export const loginAsync = async (username, password) => {
   const jwt = await authenicationAsync(username, password);
 
-  console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
+  if (debuggingIsOn()) {
+    console.log(`Authenication returns: ${JSON.stringify(jwt, null, 2)}`);
+  }
 
   if (jwt.hasOwnProperty('token')) {
     localStorage.setItem(LOCAL_STORAGE_JWT_TOKEN, jwt.token);
-    console.log('User successfully logged in');
+    if (debuggingIsOn()) {
+      console.log('User successfully logged in');
+    }
 
     // Check if the User's uuid exists. If not, create it.
     await checkUserUuidAsync();
@@ -49,7 +53,10 @@ export const loginAsync = async (username, password) => {
     return true;
   }
   
-  console.warn('Unable to authenicate user');
+  if (debuggingIsOn()) {
+    console.warn('Unable to authenicate user');
+  }
+  
   return false;
 };
 

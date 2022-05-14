@@ -12,6 +12,7 @@ import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUser } from './loginHelper';
 import { clearCart } from './cartHelper';
+import { debuggingIsOn } from './genericHelper';
 
 
 
@@ -49,7 +50,6 @@ const cache = new InMemoryCache({
             for (let i = 0; i < incoming.length; ++i) {
               merged[offset + i] = incoming[i];
             }
-            console.log({merged, incoming});
             return merged;
           },
         }
@@ -68,7 +68,6 @@ const cache = new InMemoryCache({
     //   fields: {
     //     localQuantity: {
     //       read(data, options) {
-    //         console.log({ data, options });
             
     //       }
     //     }
@@ -99,6 +98,10 @@ const jsonApiLink = new JsonApiLink({
 const authMiddleware = new ApolloLink((operation, forward) => {
   // get the authentication token from local storage if it exists
   const token = getJwtString();
+
+  if (debuggingIsOn() && !token) {
+    console.error(`The JWT string is somehow null or empty. Value: ${JSON.stringify(token)}`)
+  }
 
   // Add the authorization to the headers
   operation.setContext(({ headers = {} }) => ({

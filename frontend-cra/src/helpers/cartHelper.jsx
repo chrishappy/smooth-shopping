@@ -4,7 +4,7 @@ import { getUnixTime } from "date-fns";
 import { startOfMonth } from "date-fns/esm";
 import { zonedTimeToUtc } from "date-fns-tz"
 import { apolloCachePersistor } from "./cache";
-import { addToOrCreateMapEntry } from "./genericHelper";
+import { addToOrCreateMapEntry, debuggingIsOn } from "./genericHelper";
 import { GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH } from "./queries";
 
 /**
@@ -55,7 +55,9 @@ export const usePreviousOrderQuantitiesUpdater = () => {
         });
       });
 
-      console.log(pastOrderQuantities);
+      if (debuggingIsOn()) {
+        console.log(pastOrderQuantities);
+      }
 
       // Update previous quantities
       previousOrderQuantitiesVar(pastOrderQuantities);
@@ -98,7 +100,9 @@ export const staticMaxAndMinQuantitiesForProduct = ({
   const cartProductQuantity = parseFloat(cartItems.get(product.nid)) || 0.0;
   const pastOrderQuantities = parseFloat(previousOrderQuantities.get(product.nid)) || 0.0;
 
-  console.log(`Past orders : ${previousOrderQuantities.get(product.nid)}`);
+  if (debuggingIsOn()) {
+    console.log(`Past orders : ${previousOrderQuantities.get(product.nid)}`);
+  }
 
   // Calculate the max quantity a user can buy
   const maxQuantityWithoutLimit = parseFloat(product.fieldQuantity || 0.0) - cartProductQuantity;
@@ -126,7 +130,6 @@ export const AddOrderItem = (product, addQuantity) => {
   let currItems = cartItemsVar();
 
   // If the quantity exceeds the maximum, add the remaining
-  // console.log([currItems.get(product.nid), addQuantity, maxQuantity])
   // if (currItems.get(product.nid) + addQuantity > maxQuantity) {
   //   console.warn(`Quantity Exceeded for ${product.title}`);
 

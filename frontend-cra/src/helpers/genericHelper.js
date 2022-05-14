@@ -28,5 +28,11 @@ export const encodeURIComponentOrNull = (str) => {
 export const addToOrCreateMapEntry = (map, key, valueToAdd) => {
   let previousValue = map.get(key) || 0.0;
   map.set(key, previousValue + valueToAdd);
+}
 
+/**
+ * If debug is on
+ */
+export const debuggingIsOn = () => {
+  return process.env.NODE_ENV === 'development';
 }

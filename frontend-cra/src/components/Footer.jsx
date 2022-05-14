@@ -105,16 +105,18 @@ const Footer = () => {
           Need Help?
         </Typography>
         <Button variant="contained"
+          href="tel:1-604-565-4464"
+          target="_blank"
           style={helpButtonStyle}
           sx={{ mb: 1 }}
           onClick={() => {
-            console.log('todo');
             handleClose();
-          }}><CallIcon sx={{marginRight: '0.3em'}} />Call</Button>
+          }}><CallIcon sx={{marginRight: '0.3em'}} />Call (604) 565-4464</Button>
         <Button variant="contained"
+          href="mailto:office@houseofomeed.ca"
+          target="_blank"
           style={helpButtonStyle}
           onClick={() => {
-            console.log('todo');
             handleClose();
           }}><EmailIcon sx={{marginRight: '0.3em'}}/>Send Request</Button>
       </Stack>
