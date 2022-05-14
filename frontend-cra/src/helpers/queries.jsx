@@ -14,7 +14,7 @@ query GetUserStats($userUuid: String!) {
     familyName: fieldSsFamilyName
     creditsRemaining: fieldSsCurrentCredit
     totalCredits: fieldSsMonthlyCredit
-    numberOfFamilyMembers: fieldSsPersonCount
+    familySize: fieldSsPersonCount
     phone: fieldSsPhone
     address: fieldSsAddress {
       province: administrativeArea
@@ -164,7 +164,7 @@ export const GET_PRODUCTS_FOR_CART = gql`
       # familyName: fieldSsFamilyName
       creditsRemaining: fieldSsCurrentCredit
       # totalCredits: fieldSsMonthlyCredit
-      # numberOfFamilyMembers: fieldSsPersonCount
+      # familySize: fieldSsPersonCount
     }
     products(productIds: $productIds, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[cart][condition][path]=nid&filter[cart][condition][operator]=IN{args.productIds}&include=field_image&page[offset]={args.offset}&sort=title,id") {
       ...CoreProductFields

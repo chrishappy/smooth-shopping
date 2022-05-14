@@ -6,6 +6,7 @@ import { GET_USERS_ORDERS } from "../helpers/queries";
 import CachedIcon from '@mui/icons-material/Cached';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { format, parseISO } from 'date-fns';
+import { formatFloat } from '../helpers/genericHelper';
 
 const PastOrders = () => {
   const {loading, error, data, refetch} = useQuery(GET_USERS_ORDERS);
@@ -67,15 +68,14 @@ const PastOrders = () => {
                 {order.fieldOrderItems.map((item) => (
                   <TableRow key={item.id} >
                     <TableCell >{item.fieldProduct.title}</TableCell>
-                    <TableCell sx={{ color: 'text.secondary', textAlign: 'right', padding: 0 }}>{Math.trunc(item.fieldQuantity)}</TableCell>
-                    {/* TODO: figure out how to add polyfill for Math.trunc (https://github.com/behnammodi/polyfill/blob/master/math.polyfill.js) */}
+                    <TableCell sx={{ color: 'text.secondary', textAlign: 'right', padding: 0 }}>{formatFloat(item.fieldQuantity)}</TableCell>
                     <TableCell sx={{
                       color: 'text.secondary', 
                       textAlign: 'center', 
                       padding: '0 0.4em', 
                       width: 0
                     }}>x</TableCell>
-                    <TableCell  sx={{ color: 'text.secondary', textAlign: 'right', padding: 0, width: 0 }}>${item.fieldProduct.fieldCredit}</TableCell>
+                    <TableCell  sx={{ color: 'text.secondary', textAlign: 'right', padding: 0, width: 0 }}>${formatFloat(item.fieldProduct.fieldCredit)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

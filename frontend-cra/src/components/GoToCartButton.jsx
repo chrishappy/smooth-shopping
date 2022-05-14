@@ -47,6 +47,7 @@ const GoToCartButton = () => {
             bottom: '1.5em',
             right: '1em',
             pointer: 'cursor',
+            display: cartItemsCount <= 0 ? 'none' : null,
           }}
           disabled={cartItemsCount <= 0}
           variant="extended"

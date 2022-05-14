@@ -11,6 +11,7 @@ import { getUserUuid } from '../helpers/loginHelper';
 import ProductAddRemoveButtons from '../components/ProductAddRemoveButtons';
 import { ChevronRight } from '@mui/icons-material';
 import { Link as ReactLink } from 'react-router-dom';
+import { formatFloat } from '../helpers/genericHelper';
 
 const CartPage = () => {
   const userUuid = getUserUuid();
@@ -52,8 +53,8 @@ const CartPage = () => {
         <h1 style={{ margin: 0, }}>Your Cart</h1>
         <Box>
           <Button
-            to="/past-orders"
-            component={Link}
+            to="/history"
+            component={ReactLink}
             variant="text" 
             style={{ 
               marginTop: '0.8em', 
@@ -98,7 +99,7 @@ const CartPage = () => {
                         { cartItem.title }
                       </h4>
                       <Box sx={{ mb:1, fontSize: '15' }}>
-                        <span>${ parseFloat(cartItem.fieldCredit) } </span>
+                        <span>${ formatFloat(cartItem.fieldCredit) } </span>
                         <span>x { cartIdsAndQuantities.get(cartItem.nid) }</span> {/* TODO: Find less hacky solution? */}
                       </Box>
                       <Typography variant="body2" color="text.secondary" component="div">

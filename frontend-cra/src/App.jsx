@@ -75,7 +75,7 @@ const App = () => {
                 <Route path=":categorySlug" element={<Category />} />
               </Route>
               <Route path="search" element={<SearchProducts />} />
-              <Route path="past-orders" element={<PastOrders />} />
+              <Route path="history" element={<PastOrders />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>

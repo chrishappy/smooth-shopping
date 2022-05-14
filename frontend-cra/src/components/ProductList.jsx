@@ -6,6 +6,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { hasNoMoreQuantity } from '../helpers/cartHelper';
 import { Link } from '@mui/material';
 import './ProductList.css'
+import { formatFloat } from '../helpers/genericHelper';
 
 export const ProductList = ({ setProduct, setOpen, data }) => {
   const { products } = data;
@@ -45,7 +46,7 @@ export const ProductList = ({ setProduct, setOpen, data }) => {
           <Box className="product-listing__content">
             <h3 className="product-listing__title">{product.title}</h3>
             <Box sx={{ textAlign: 'right', }}>
-              {product.fieldExpired ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${product.fieldCredit}
+              {product.fieldExpired ? <WarningAmberIcon sx={{verticalAlign: 'top', color: 'rgb(250 149 0 / 50%)' }}/> : ''} ${formatFloat(product.fieldCredit)}
             </Box>
           </Box>
         </Link>

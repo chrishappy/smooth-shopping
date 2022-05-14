@@ -36,3 +36,17 @@ export const addToOrCreateMapEntry = (map, key, valueToAdd) => {
 export const debuggingIsOn = () => {
   return process.env.NODE_ENV === 'development';
 }
+
+/**
+ * Format floats (e.g. if XX.00 => XX)
+ */
+export const formatFloat = (number) => {
+  const float = parseFloat(number);
+  // Source: https://stackoverflow.com/a/661569/5771750
+  // Author: kkyy <https://stackoverflow.com/users/64503/kkyy>
+  const roundedNumber = Math.round(float*100)/100;
+  // End source
+
+  const theString = roundedNumber + '';
+  return theString.replace(/\.00$/, '');
+}

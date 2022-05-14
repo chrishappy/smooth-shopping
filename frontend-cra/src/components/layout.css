@@ -70,11 +70,6 @@ abbr[title] {
   cursor: help;
   text-decoration: none;
 }
-b,
-strong {
-  font-weight: inherit;
-  font-weight: bolder;
-}
 dfn {
   font-style: italic;
 }
@@ -373,7 +368,7 @@ p {
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1.45rem;
+  margin-bottom: 1rem;
 }
 pre {
   margin-left: 0;
@@ -456,7 +451,7 @@ b {
   font-weight: bold;
 }
 strong {
-  font-weight: bold;
+  font-weight: 500;
 }
 dt {
   font-weight: bold;
