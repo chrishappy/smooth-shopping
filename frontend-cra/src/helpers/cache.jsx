@@ -161,7 +161,7 @@ export const clearApolloCache = async (refetchQueries = false) => {
   ];
 
 
-  return new Promise.all(
+  return Promise.all(
     // Remove promises that are falsely: null, false, undefined, or empty
     promisesToRun.filter((promise) => !!promise)
   );
