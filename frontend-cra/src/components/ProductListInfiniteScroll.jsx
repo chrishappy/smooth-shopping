@@ -47,7 +47,7 @@ const ProductListInfinityScroll = (
               }
             })
             .then(() => setFetchMoreIsLoading(false))
-            .error((err) => console.err(`Error fetching more data ${err}`));
+            .catch((err) => console.err(`Error fetching more data ${err}`));
           }
         }}
         bottomOffset={'-1000px'} // Load more products when user is near the end
