@@ -6,6 +6,8 @@ import { getUserUuid, logoutCurrentUser } from "../helpers/loginHelper";
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/MainContentLoader";
+import FormattedAddress from "../components/FormattedAddress";
+import FormattedPhoneNumber from "../components/FormattedPhoneNumber";
 
 const Account = () => {
 
@@ -20,6 +22,14 @@ const Account = () => {
     numberOfFamilyMembers: -1.0,
     totalCredits: -1.0,
     creditsRemaining: -1.0,
+    phone: '',
+    address: {
+      province: '',
+      city: '',
+      postalCode: '',
+      addressLine1: '',
+      addressLine2: '',
+    }
   };
 
   if (loading) {
@@ -31,6 +41,8 @@ const Account = () => {
   if (!error) {
     userData = data.currentUser;
   }
+
+  console.log(userData);
 
   return (
     <>
@@ -54,13 +66,25 @@ const Account = () => {
         {/* <MonetizationOnOutlinedIcon sx={{ verticalAlign: 'top' }} />  */}
         <strong> Current Balance:</strong> ${userData.creditsRemaining} <Typography component="span" variant="body2"> of {userData.totalCredits} credits</Typography>
       </p>
-      
-      <hr></hr>
-      </Typography>
 
-      <Typography component="div" color="text.secondary"  variant="body2">
+      <Typography component="div" color="text.secondary"  variant="body2" sx={{marginBottom: 4}}>
         Your credits are renewed on the first of every month. Credits do not roll over.
       </Typography>
+
+      </Typography>
+      
+      <hr></hr>
+
+      { userData.phone.length > 0
+        ? <p>
+            <strong>Phone</strong>: <FormattedPhoneNumber phone={userData.phone} />
+          </p> : '' }
+      { userData.address.addressLine1.length > 0
+        ? <p>
+            <strong>Address</strong>: <br /> 
+            <FormattedAddress address={userData.address} />
+          </p>
+        : '' }
 
       <Box sx={{ textAlign: 'center' }}>
         <Button variant="outlined" component={Link} to="/"
@@ -71,7 +95,7 @@ const Account = () => {
             // borderRadius: '20px',
             // fontWeight: 'bold',
             // padding: '0 10%',
-            marginTop: '2rem'
+            margin: '0 0 2rem'
           }}
           onClick={() => {
             logoutCurrentUser();

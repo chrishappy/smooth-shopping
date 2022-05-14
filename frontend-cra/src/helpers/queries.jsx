@@ -15,6 +15,14 @@ query GetUserStats($userUuid: String!) {
     creditsRemaining: fieldSsCurrentCredit
     totalCredits: fieldSsMonthlyCredit
     numberOfFamilyMembers: fieldSsPersonCount
+    phone: fieldSsPhone
+    address: fieldSsAddress {
+      province: administrativeArea
+      city: locality
+      postalCode
+      addressLine1
+      addressLine2
+    }
   }
 }
 `
