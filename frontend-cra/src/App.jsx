@@ -5,9 +5,9 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import LoginPage from './pages/login';
-import CartPage from './pages/cart';
-import AccountPage from './pages/account';
+import LoginPage from './pages/Login';
+import CartPage from './pages/Cart';
+import AccountPage from './pages/Account';
 import NotFoundPage from './pages/404';
 import Layout from './components/Layout';
 
@@ -17,11 +17,11 @@ import {
 import { apolloClient, apolloCachePersistor } from './helpers/cache';
 import Category from './pages/categories/Category';
 import RequireAuth from './components/RequireAuth';
-import HomePage from './pages/home';
+import HomePage from './pages/Home';
 import './App.css';
 import { restoreCartItems, storeCartItems } from './helpers/cartHelper';
-import SearchProducts from './pages/search-page';
-import PastOrders from './pages/past-orders';
+import SearchProducts from './pages/SearchPage';
+import PastOrders from './pages/PastOrders';
 
 const App = () => {
   const [client, setClient] = React.useState();

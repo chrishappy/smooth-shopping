@@ -8,7 +8,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
-import Seo from "../components/seo"
+import Seo from "../components/Seo"
 import { GET_ALL_PRODUCTS, GET_PRODUCT_CATEGORIES } from "../helpers/queries";
 import MainContentLoader from "../components/MainContentLoader";
 import ProductListInfinityScroll from "../components/ProductListInfiniteScroll";
