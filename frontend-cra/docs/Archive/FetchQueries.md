@@ -1,3 +1,9 @@
+# GraphQL Queries
+
+This file contained vanilla Javascript code to interact with Drupal's GraphQL module.
+
+This documentation is not irrevelant now that we switched to Drupal's JSON:API.
+
 ### Fetch for `page/cart.js`
 
 ```js
@@ -43,7 +49,7 @@ const variables = `
 `;
 
 fetch(
-  `https://ss.albernirentals.com/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
+  `${siteUrl}/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
   {
     method: "GET",
     headers: {
@@ -90,7 +96,7 @@ const variables = `
 `;
 
 fetch(
-  `https://ss.albernirentals.com/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
+  `${siteUrl}/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
   {
     method: "GET",
     headers: {
@@ -118,7 +124,7 @@ const variables = JSON.stringify({
 });
 
 fetch(
-  `https://ss.albernirentals.com/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
+  `${siteUrl}/graphql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(variables)}`,
   {
     method: "GET",
     headers: {
@@ -137,7 +143,7 @@ const queryVersion = `5dc606485ae49b1f92b6094993e3600957b39360`;
 const queryId = `1`;
 
 fetch(
-  `https://ss.albernirentals.com/graphql?query=${queryVersion}:${queryId}}`,
+  `${siteUrl}/graphql?query=${queryVersion}:${queryId}}`,
   {
     method: "GET",
     headers: {
