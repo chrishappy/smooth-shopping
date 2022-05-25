@@ -4,11 +4,17 @@ Empowering food banks to provide their clients with the dignity of choice.
 
 Smooth Shopping enables food banks to allow their clients to shop for goods online using an monthly credit system. In the backend, Smooth Shopping provides an inventory and order processing system.
 
-Created using a Headless Drupal installation with a React app as the frong end.
+Backend: Headless Drupal | Front end: a React app.
 
 Developed in partnership with the [House of Omeed](https://houseofomeed.ca/) during #HACKVAN2021.
 
 Please contact one of the code maintainers to learn more about the project and how you can contribute.
+
+### Helpful Links:
+
+ - [Project Summary](https://docs.google.com/document/d/1LxVs9HN2t5Jb89hmm6zHcytscBZFc2H0bvgCVIMljg4/edit#) (as of October 2021)
+ - [Figma Prototype](https://www.figma.com/file/FPKouXVU4xjwu1OcGjgSuv/Smooth-Shopping?node-id=0%3A1) and [Case Study](https://www.jennyobrecht.com/works/smooth-shopping) by [Jenny Obrecht](https://www.linkedin.com/in/jennyobrecht)
+ - [Frontend Screenshots](frontend\docs\FrontendScreenshots.md) and [Backend Screenshots](backend\docs\BackendScreenshots.md)
 
 ## What the App Needs to Do
 
