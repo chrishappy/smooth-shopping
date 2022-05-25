@@ -13,14 +13,15 @@ body {
   font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: normal;
   word-wrap: break-word;
-  -webkit-font-kerning: normal;
-          font-kerning: normal;
+  font-kerning: normal;
+  -moz-font-feature-settings: "kern", "liga", "clig", "calt";
   -ms-font-feature-settings: "kern", "liga", "clig", "calt";
+  -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
   font-feature-settings: "kern", "liga", "clig", "calt";
   background: #ccc;
 }
 
-.page {
+body > div:first-child {
   max-width: 400px;
   margin: 0 auto;
   background: #fff;
@@ -70,12 +71,23 @@ abbr[title] {
   cursor: help;
   text-decoration: none;
 }
+b,
+strong {
+  font-weight: inherit;
+  font-weight: bolder;
+}
 dfn {
   font-style: italic;
 }
 h1 {
-  margin: 0 0 1.45rem;
-  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: 1.45rem;
   color: inherit;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
@@ -107,7 +119,14 @@ sup {
 img {
   border-style: none;
   max-width: 100%;
-  height: auto;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: 1.45rem;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -120,14 +139,26 @@ samp {
   font-size: 1em;
 }
 figure {
-  padding: 0;
-  margin: 0 0 1.45rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: 1.45rem;
 }
 hr {
   box-sizing: content-box;
   overflow: visible;
-  padding: 0;
-  margin: 0 0 calc(1.45rem - 1px);
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: calc(1.45rem - 1px);
   background: hsla(0, 0%, 0%, 0.2);
   border: none;
   height: 1px;
@@ -368,7 +399,7 @@ p {
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.45rem;
 }
 pre {
   margin-left: 0;
@@ -451,7 +482,7 @@ b {
   font-weight: bold;
 }
 strong {
-  font-weight: 500;
+  font-weight: bold;
 }
 dt {
   font-weight: bold;
