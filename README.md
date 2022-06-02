@@ -1,10 +1,10 @@
 # Smooth Shopping
 
-Empowering food banks to provide their clients with the dignity of choice.
+*Empowering Food Bank Clients with the Dignity of Choice*
 
-Smooth Shopping enables food banks to allow their clients to shop for goods online using an monthly credit system. In the backend, Smooth Shopping provides an inventory and order processing system.
+Smooth Shopping enables food banks to allow their clients to shop for goods online using an monthly credit system. In the backend, Smooth Shopping provides a customer management, inventory managment and order processing system.
 
-Backend: Headless Drupal | Front end: a React app.
+Back end: Decoupled Drupal | Front end: a React app.
 
 Developed in partnership with the [House of Omeed](https://houseofomeed.ca/) during #HACKVAN2021.
 
