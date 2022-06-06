@@ -1,6 +1,6 @@
 # Screenshots of the Front End
 
-## Login & Home Page
+## Login & Home Pages
 
 <table width="700">
   <tr>
@@ -10,7 +10,7 @@
 </table>
 
 
-## Product Page
+## Product Pages
 
 <table width="700">
   <tr>
@@ -19,7 +19,7 @@
   </tr>
 </table>
 
-## Cart Page
+## Cart Pages
 
 <table width="700">
   <tr>

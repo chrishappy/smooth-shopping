@@ -2,9 +2,9 @@
 
 *Empowering Food Bank Clients with the Dignity of Choice*
 
-Smooth Shopping enables food banks to allow their clients to shop for goods online using an monthly credit system. In the backend, Smooth Shopping provides a customer management, inventory managment and order processing system.
+Smooth Shopping enables food banks to allow their clients to shop for goods online using an monthly credit system. In the backend, Smooth Shopping provides an inventory and order processing system.
 
-Back end: Decoupled Drupal | Front end: a React app.
+Backend: Headless Drupal | Front end: a React app.
 
 Developed in partnership with the [House of Omeed](https://houseofomeed.ca/) during #HACKVAN2021.
 
@@ -12,11 +12,32 @@ Please contact one of the code maintainers to learn more about the project and h
 
 ### Helpful Links:
 
- - [Project Summary](https://docs.google.com/document/d/1LxVs9HN2t5Jb89hmm6zHcytscBZFc2H0bvgCVIMljg4/edit#) (as of October 2021)
+ - [Project Summary](https://docs.google.com/document/d/1LxVs9HN2t5Jb89hmm6zHcytscBZFc2H0bvgCVIMljg4/edit#) (for October 2021 hackathon #HACKVAN2021)
  - [Figma Prototype](https://www.figma.com/file/FPKouXVU4xjwu1OcGjgSuv/Smooth-Shopping?node-id=0%3A1) and [Case Study](https://www.jennyobrecht.com/works/smooth-shopping) by [Jenny Obrecht](https://www.linkedin.com/in/jennyobrecht)
- - [Frontend Screenshots](frontend/docs/FrontendScreenshots.md) and [Backend Screenshots](backend/docs/BackendScreenshots.md)
+ - App Screenshots of the [Frontend](frontend/docs/FrontendScreenshots.md) and the [Backend](backend/docs/BackendScreenshots.md)
 
-## What the App Needs to Do
+## App Screenshots
+
+
+<table width="">
+  <tr>
+    <td><img src="frontend/docs/images/1-login-page.png" alt="Image of Smooth Shopping's Login page" width="230"/></td>
+    <td><img src="frontend/docs/images/2-home-page.png" alt="Image of Smooth Shopping's Home page" width="230"/></td>
+  </tr>
+</table>
+
+***Figure 1-2**: The login (left) & home (right) pages on the frontend. See more [frontend screenshots](frontend/docs/FrontendScreenshots.md).*
+
+<br>
+
+[![The Backend Products Page for Smooth Shopping](backend/docs/images/products-page.jpg)](backend/docs/images/products-page.jpg)
+
+***Figure 3**: The product overview page on the backend. See more [backend screenshots](backend/docs/BackendScreenshots.md).*
+
+
+## Usage Stories
+
+Outlines the basic functionality of the app.
 
 ### Family - Ordering Groceries
 1. (Family receives a shopping credit that is topped up each month)
