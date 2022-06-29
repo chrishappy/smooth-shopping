@@ -22,6 +22,7 @@ import './App.css';
 import { restoreCartItems, storeCartItems } from './helpers/cartHelper';
 import SearchProducts from './pages/SearchPage';
 import PastOrders from './pages/PastOrders';
+import LogoutPage from './pages/Logout';
 
 const App = () => {
   const [client, setClient] = React.useState();
@@ -44,18 +45,9 @@ const App = () => {
     init().catch(console.error);
   }, []);
 
-  // const clearCache = useCallback(() => {
-  //   if (!persistor) {
-  //     return;
-  //   }
-  //   persistor.purge();
-  // }, [persistor]);
-
   if (!client) {
     return (
-      // <div className='page'>
         <p style={{textAlign: 'center'}}>Loading...</p>
-      // </div>
     );
   }
 
@@ -65,6 +57,9 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Layout />}> {/* Wrapper element */}
             <Route index element={<LoginPage />} />
+          </Route>
+          <Route path="/logout" element={<Layout />}> {/* Wrapper element */}
+            <Route index element={<LogoutPage />} />
           </Route>
           <Route path="/" element={<Layout />}> {/* Wrapper element */}
             <Route element={<RequireAuth />}>  {/* Authentication guard */}
