@@ -11,6 +11,7 @@ import MainContentLoader from "../components/MainContentLoader";
 import FormattedAddress from "../components/FormattedAddress";
 import FormattedPhoneNumber from "../components/FormattedPhoneNumber";
 import { format } from "date-fns";
+import { hasExistentProperty } from "../helpers/genericHelper";
 
 const Account = () => {
 
@@ -42,6 +43,16 @@ const Account = () => {
   }
 
   if (!error) {
+    // Ensure that the address is properly set
+    // TODO: is there a better way?
+    if (!hasExistentProperty(data.currentUser.address, 'addressLine1') ||
+        !hasExistentProperty(data.currentUser.address, 'addressLine2') ||
+        !hasExistentProperty(data.currentUser.address, 'province') ||
+        !hasExistentProperty(data.currentUser.address, 'city') ||
+        !hasExistentProperty(data.currentUser.address, 'postalCode')) {
+      data.currentUser.address = userData.address;
+    }
+
     userData = data.currentUser;
   }
 
