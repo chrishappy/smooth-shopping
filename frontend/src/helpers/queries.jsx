@@ -12,6 +12,8 @@ query GetUserStats($userUuid: String!) {
   currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {      
     id,
     familyName: fieldSsFamilyName
+    accountHolderFirstName: fieldSsAccountFirstName
+    accountHolderLastName: fieldSsAccountLastName
     creditsRemaining: fieldSsCurrentCredit
     totalCredits: fieldSsMonthlyCredit
     familySize: fieldSsPersonCount

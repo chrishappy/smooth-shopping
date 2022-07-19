@@ -2,7 +2,7 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import { Typography, Button, Box } from '@mui/material';
 import Seo from "../components/Seo"
-import { getUserUuid, logoutCurrentUser } from "../helpers/loginHelper";
+import { getUserUuid } from "../helpers/loginHelper";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useQuery } from '@apollo/client';
@@ -23,6 +23,8 @@ const Account = () => {
 
   let userData = {
     familyName: 'ERROR',
+    accountHolderFirstName: '',
+    accountHolderLastName: '',
     familySize: -1.0,
     totalCredits: -1.0,
     creditsRemaining: -1.0,
@@ -43,16 +45,6 @@ const Account = () => {
   }
 
   if (!error) {
-    // Ensure that the address is properly set
-    // TODO: is there a better way?
-    if (!hasExistentProperty(data.currentUser.address, 'addressLine1') ||
-        !hasExistentProperty(data.currentUser.address, 'addressLine2') ||
-        !hasExistentProperty(data.currentUser.address, 'province') ||
-        !hasExistentProperty(data.currentUser.address, 'city') ||
-        !hasExistentProperty(data.currentUser.address, 'postalCode')) {
-      data.currentUser.address = userData.address;
-    }
-
     userData = data.currentUser;
   }
 
@@ -87,24 +79,30 @@ const Account = () => {
     return result;
   }
 
-  const formFields = {
-    first_name: '',
-    last_name: '',
-
-    address: userData.address.addressLine1,
-    address2: userData.address.addressLine2,
-    city: userData.address.city,
-    province: provinces[userData.address.province],
-    postal_code: userData.address.postalCode,
+  let formFields = {
+    first_name: userData.accountHolderFirstName,
+    last_name: userData.accountHolderLastName,
 
     family_size: `${userData.familySize}, $${getCreditBasedOnFamilySize(userData.familySize)} CAD`,
 
     phone: userData.phone, 
     date: format(new Date(), 'LL/dd/yyyy'), // Format: mm/dd/yyyy
   }
+
+  if (hasExistentProperty(userData, 'address')) {
+    formFields = {
+      ...formFields,
+      address: userData.address.addressLine1,
+      address2: userData.address.addressLine2,
+      city: userData.address.city,
+      province: provinces[userData.address.province],
+      postal_code: userData.address.postalCode,
+    }
+  }
+
   const formLink = Object.entries(formFields).reduce(
     (prev, curr) => `${prev}&${curr[0]}=${encodeURIComponent(curr[1])}`,
-    'https://houseofomeed.ca/get-involved/food-pantry-forms/?'
+    process.env.REACT_APP_URL_TO_SEND_USER_INFO
   );
 
   return (
@@ -146,15 +144,17 @@ const Account = () => {
 
           <h3>Food Pantry Receipt</h3>
 
-          <p><strong>First Name</strong>: _______ </p>
-          <p><strong>Last Name</strong>: _______ </p>
+          <p><strong>First Name</strong>: {userData.accountHolderFirstName}</p>
+          <p><strong>Last Name</strong>: {userData.accountHolderLastName}</p>
 
-          <p><strong>Family Size</strong>: {userData.familySize} people</p>
+          { hasExistentProperty(userData, 'familySize')
+            ? <p><strong>Family Size</strong>: {userData.familySize} people</p>
+            : '' }
 
-          { userData.phone.length > 0
+          { hasExistentProperty(userData, 'phone') && userData.phone.length > 0
             ? <p><strong>Phone</strong>: <FormattedPhoneNumber phone={userData.phone} /></p>
               : '' }
-          { userData.address.addressLine1.length > 0
+          { hasExistentProperty(userData, 'address') && hasExistentProperty(userData.address, 'addressLine1')
             ? <p>
                 <strong>Address</strong>: <br /> 
                 <FormattedAddress address={userData.address} />
@@ -174,12 +174,11 @@ const Account = () => {
           <hr></hr>
 
           <Box sx={{ margin: '2rem 0 2rem' }}>
-            <Button variant="outlined" component={Link} to="/"
+            <Button variant="outlined"
+              component={Link}
+              to="/logout"
               color="primary"
-              endIcon={<LogoutIcon />}
-              onClick={() => {
-                logoutCurrentUser();
-              }}>Log out</Button>
+              endIcon={<LogoutIcon />}>Log out</Button>
           </Box>
         </Typography>
       </Box>
@@ -188,8 +187,3 @@ const Account = () => {
 }
 
 export default Account;
-// export default connect(state => ({
-//   appState: state
-// }), dispatch => ({
-//   storeDispatch: dispatch
-// }))(Account)
