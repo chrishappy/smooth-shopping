@@ -42,7 +42,7 @@ export const debuggingIsOn = () => {
  */
 export const formatFloat = (number) => {
   const float = parseFloat(number);
-  // Source: https://stackoverflow.com/a/661569/5771750
+  // Source: https://stackoverflow.com/a/661569
   // Author: kkyy <https://stackoverflow.com/users/64503/kkyy>
   const roundedNumber = Math.round(float*100)/100;
   // End source

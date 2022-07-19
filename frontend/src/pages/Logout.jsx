@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
-import { logoutCurrentUser } from "../helpers/loginHelper";
+import { logoutCurrentUserPrep } from "../helpers/loginHelper";
 
 const LogoutPage = () => {
 
-  logoutCurrentUser();
+  logoutCurrentUserPrep();
 
   return <Navigate to="/" />;
 }

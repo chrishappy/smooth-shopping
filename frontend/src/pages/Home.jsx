@@ -19,7 +19,6 @@ const HomePage = () => {
       <Seo title="Home" />
       <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
       <div className="categories-wrap">
-        {/* <h2>Categories</h2> */}
         <Categories/>
       </div>
       <div>

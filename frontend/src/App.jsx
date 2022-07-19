@@ -58,8 +58,7 @@ const App = () => {
           <Route path="/login" element={<Layout />}> {/* Wrapper element */}
             <Route index element={<LoginPage />} />
           </Route>
-          <Route path="/logout" element={<Layout />}> {/* Wrapper element */}
-            <Route index element={<LogoutPage />} />
+          <Route path="/logout" element={<LogoutPage />}> {/* Wrapper element */}
           </Route>
           <Route path="/" element={<Layout />}> {/* Wrapper element */}
             <Route element={<RequireAuth />}>  {/* Authentication guard */}

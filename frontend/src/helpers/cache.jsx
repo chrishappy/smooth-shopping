@@ -10,7 +10,7 @@ import { camelize, pascalize } from 'humps';
 
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
-import { getJwtString, logoutCurrentUser } from './loginHelper';
+import { getJwtString, logoutCurrentUserPrep } from './loginHelper';
 import { clearCart } from './cartHelper';
 import { debuggingIsOn } from './genericHelper';
 
@@ -100,7 +100,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   const token = getJwtString();
 
   if (debuggingIsOn() && !token) {
-    console.error(`The JWT string is somehow null or empty. Value: ${JSON.stringify(token)}`)
+    console.warn(`The JWT string is somehow null or empty. Value: ${JSON.stringify(token)}`)
   }
 
   // Add the authorization to the headers
@@ -119,14 +119,14 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 // https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-response-logic
 const logoutLink = onError((err) => {
   if (err.hasOwnProperty('networkError')) {
-    const statusCode = err.networkError.statusCode;
+    const statusCode = parseInt(err.networkError.statusCode);
     if (statusCode === 401 || statusCode === 403) {
-      logoutCurrentUser();
+      logoutCurrentUserPrep();
     }
   }
   else if (err.hasOwnProperty('graphQLErrors')) {
     // TODO: Show an alert popup
-    console.error(err);
+    console.warn(err);
   }
 })
 
@@ -147,13 +147,10 @@ export const clearApolloCache = async (refetchQueries = false) => {
   // Promises to run
   const promisesToRun = [
     // Clear the memory
-    apolloClient && apolloClient.resetStore(),
+    !refetchQueries && apolloClient && apolloClient.clearStore(),
 
     // Refetch Queries
-    // @see https://www.apollographql.com/docs/react/data/refetching/
-    refetchQueries && apolloClient && apolloClient.refetchQueries({
-      include: 'all',
-    }),
+    refetchQueries && apolloClient && apolloClient.resetStore(),
     
     // Clear the persist cache
     apolloCachePersistor && apolloCachePersistor.purge(),

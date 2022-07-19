@@ -65,7 +65,7 @@ export const loginAsync = async (username, password) => {
  * @returns boolean
  */
 export const checkUserUuidAsync = async () => {
-  if (getUserUuid() === null) {
+  if (!getUserUuid()) {
     // Get User ID
     const userUuid = await fetchUserUuid();
     if (userUuid) {
@@ -119,9 +119,10 @@ const fetchUserUuid = async () => {
 }
 
 /**
- * Log out user
+ * Performs the preparation to log out the user
+ * In the app, navigate the user to '/logout' to logout the user
  */
-export const logoutCurrentUser = () => {
+export const logoutCurrentUserPrep = () => {
   // Clear all local storage keys
   Object.keys(LOCAL_STORAGE_USER_KEYS).forEach((key) => {
     localStorage.removeItem(LOCAL_STORAGE_USER_KEYS[key]);

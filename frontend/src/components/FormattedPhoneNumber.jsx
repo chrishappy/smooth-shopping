@@ -5,7 +5,7 @@
 const FormattedPhoneNumber = ({phone}) => {
   const formattedPhone = formatPhoneNumber(phone);
 
-  return <span class="formatted-phone-number">
+  return <span className="formatted-phone-number">
     {formattedPhone}
   </span>
 

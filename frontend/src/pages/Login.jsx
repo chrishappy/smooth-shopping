@@ -36,10 +36,12 @@ const LoginPage = () => {
         console.log("Login");
       }
       await loginAsync(username, password)
-        .then(async (loggedInSuccessfully) => {
+        .then((loggedInSuccessfully) => {
           if (loggedInSuccessfully) {
-            await previousOrderQuanitiesUpdater();
-            navigate('/');
+
+            // Must use .then() to avoid navigating while updating the store items
+            return previousOrderQuanitiesUpdater()
+              .then(() => navigate('/'));
           }
           else {
             snackbarOpenVar(true);
@@ -108,6 +110,7 @@ const LoginPage = () => {
               variant="contained" 
               loading={isLoading}
               component={Button}
+              className="login__loading-button"
               sx={{
                 backgroundColor: '#75F348',
                 color: 'black',
