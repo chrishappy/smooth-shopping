@@ -4,6 +4,7 @@ import CurrentCreditStatus from "./CurrentCreditStatus";
 import IconButton from '@mui/material/IconButton';
 import CustomSearchIcon from "./SearchIcon";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { orderingSystemIsOpenToday, orderingSystemMessageForToday } from "../helpers/orderSystemStatus";
 
 const Header = () => {
   const pathname = useLocation().pathname;
@@ -19,7 +20,7 @@ const Header = () => {
     }}
     >
     <div style={{
-      padding: '1rem 1rem 1.4rem',
+      padding: '1rem',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -32,6 +33,9 @@ const Header = () => {
       </IconButton>
       <CurrentCreditStatus />
       <CustomSearchIcon />
+    </div>
+    <div className={`header-order-status header-order-status--${orderingSystemIsOpenToday() ? 'open' : 'closed'}`}>
+      {orderingSystemMessageForToday()}
     </div>
   </header>
 )

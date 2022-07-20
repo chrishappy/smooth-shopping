@@ -8,6 +8,7 @@ import { Box } from "@mui/system";
 import { useReactiveVar } from "@apollo/client";
 import { cartItemsVar } from "../helpers/cartHelper";
 import { useNavigate } from "react-router-dom";
+import { orderingSystemIsOpenToday } from "../helpers/orderSystemStatus";
 
 const GoToCartButton = () => {
 
@@ -42,7 +43,7 @@ const GoToCartButton = () => {
           aria-label="Checkout your items"
           sx={{
             color: '#000',
-            backgroundColor: '#75F348',
+            backgroundColor: orderingSystemIsOpenToday() ? '#75F348' : '#ccc',
             position: 'absolute',
             bottom: '1.5em',
             right: '1em',

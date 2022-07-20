@@ -10,9 +10,37 @@
 }
 
 /**
+ * Header
+ */
+
+.header-order-status {
+  font-size: 0.8em;
+  text-align: center;
+  padding: 0.3em 0.5em;
+}
+
+.header-order-status--open {
+  background: #008000;
+}
+
+.header-order-status--closed {
+  background: #333;
+}
+
+/**
+ * Footer
+ */
+ .footer-wrap a,
+ .footer-wrap a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/**
  * Login Page
  */
-.login__loading-button .MuiLoadingButton-loadingIndicator {
+ .login__loading-button .MuiLoadingButton-loadingIndicator {
   color: #fff;
 }
 
@@ -30,9 +58,9 @@
   white-space: normal;
 }
 
-/*=========================================
-   The Cart
---=========================================*/
+/**
+ * The Cart
+ */
 .cart-items {
   padding-bottom: 9em;
 }
@@ -57,13 +85,4 @@
 .cart-item__title {
   font-size: 1.1rem;
   margin: 0 0 0.5em;
-}
-
-/**
- * Footer
- */
- .footer-wrap a,
- .footer-wrap a:visited {
-  color: inherit;
-  text-decoration: none;
 }
