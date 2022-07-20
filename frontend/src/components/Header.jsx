@@ -8,7 +8,9 @@ import { orderingSystemIsOpenToday, orderingSystemMessageForToday } from "../hel
 
 const Header = () => {
   const pathname = useLocation().pathname;
-  const isHome = pathname.replace(/\/$/, '') === '';
+  const pathnameTrimmed = pathname.replace(/\/$/, '');
+  const isHome = pathnameTrimmed === '';
+  const isCart = pathnameTrimmed === '/cart';
 
   const navigate = useNavigate();
 
@@ -34,9 +36,10 @@ const Header = () => {
       <CurrentCreditStatus />
       <CustomSearchIcon />
     </div>
-    <div className={`header-order-status header-order-status--${orderingSystemIsOpenToday() ? 'open' : 'closed'}`}>
-      {orderingSystemMessageForToday()}
-    </div>
+    { (isCart || isHome) &&
+      <div className={`header-order-status header-order-status--${orderingSystemIsOpenToday() ? 'open' : 'closed'}`}>
+        {orderingSystemMessageForToday()}
+      </div>}
   </header>
 )
 }

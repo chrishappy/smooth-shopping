@@ -71,7 +71,7 @@ export const isOrderOpenOnDay = (dayOfWeek) => {
  */
 export const orderingSystemIsOpenToday = () => {
   const zonedNow = zonedTimeToUtc(new Date(), 'America/Vancouver');
-  const dayOfTheWeek = 4; //getDay(zonedNow);
+  const dayOfTheWeek = getDay(zonedNow);
 
   return isOrderOpenOnDay(dayOfTheWeek);
 }
@@ -83,7 +83,7 @@ export const orderingSystemIsOpenToday = () => {
  */
 export const orderingSystemMessageForToday = () => {
   const zonedNow = zonedTimeToUtc(new Date(), 'America/Vancouver');
-  const dayOfTheWeek = 4; //getDay(zonedNow);
+  const dayOfTheWeek = getDay(zonedNow);
 
   return getOrderMessageOfDay(dayOfTheWeek);
 }
