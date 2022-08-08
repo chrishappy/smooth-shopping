@@ -36,6 +36,7 @@ const CartPage = () => {
   }
 
   const totalCredits = loading ? 0 : parseFloat(data.currentUser.creditsRemaining);
+  const orderName = loading ? '' : `${data.currentUser.familyName} Order`;
   const cartItems = loading ? [] : data.products;
 
 
@@ -141,7 +142,7 @@ const CartPage = () => {
               disabledData={disabledData}
               orderData={{
                 uid: userUuid,
-                title: `App Order`, // - ${format(new Date(), 'yyyy-MM-dd')} TODO: Set timezone
+                title: orderName,
                 orderItems: cartIdsAndQuantities,
               }}/>
           </Box>

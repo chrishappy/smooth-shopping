@@ -15,8 +15,9 @@ import { debuggingIsOn } from "../helpers/genericHelper";
 import { orderingSystemIsOpenToday } from "../helpers/orderSystemStatus";
 
 export const CartCheckoutButton = ({disabledData, orderData}) => {
-  // TODO: Display old orders somewhere
+
   const [createOrder, {loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
+  
   let {isDisabled, notEnoughCredits, noItemsInCart} = disabledData;
   const orderIsOpen = orderingSystemIsOpenToday();
 
