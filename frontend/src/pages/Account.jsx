@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import { Typography, Button, Box } from '@mui/material';
 import Seo from "../components/Seo"
 import { getUserUuid } from "../helpers/loginHelper";
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/MainContentLoader";
 import FormattedAddress from "../components/FormattedAddress";
 import FormattedPhoneNumber from "../components/FormattedPhoneNumber";
-import { format } from "date-fns";
 import { hasExistentProperty } from "../helpers/genericHelper";
 
 const Account = () => {
@@ -47,63 +45,6 @@ const Account = () => {
   if (!error) {
     userData = data.currentUser;
   }
-
-  // TODO: Move to a separate function
-  const provinces = {
-    AB: 'Alberta',
-    BC: 'British Columbia',
-    MB: 'Manitoba',
-    NB: 'New Brunswick',
-    NL: 'Newfoundland and Labrador',
-    NT: 'Northwest Territories',
-    NS: 'Nova Scotia',
-    NU: 'Nunavut',
-    ON: 'Ontario',
-    PE: 'Prince Edward Island',
-    QC: 'Quebec',
-    SK: 'Saskatchewan',
-    YT: 'Yukon',
-  };
-
-  const getCreditBasedOnFamilySize = (familySize) => {
-    let result;
-    if (familySize <= 2) {
-      result = 100.0;
-    }
-    else if (familySize <= 4) {
-      result = 125.0;
-    }
-    else {
-      result = 150.0;
-    }
-    return result;
-  }
-
-  let formFields = {
-    first_name: userData.accountHolderFirstName,
-    last_name: userData.accountHolderLastName,
-
-    family_size: `${userData.familySize}, $${getCreditBasedOnFamilySize(userData.familySize)} CAD`,
-
-    phone: userData.phone, 
-    date: format(new Date(), 'LL/dd/yyyy'), // Format: mm/dd/yyyy
-  }
-
-  if (hasExistentProperty(userData, 'address')) {
-    formFields = {
-      ...formFields,
-      address: userData.address.addressLine1,
-      address2: userData.address.addressLine2,
-      city: userData.address.city,
-      province: provinces[userData.address.province],
-      postal_code: userData.address.postalCode,
-    }
-  }
-
-  const formLink = Object.entries(formFields).reduce(
-    (prev, curr) => `${prev}&${curr[0]}=${encodeURIComponent(curr[1])}`,
-    process.env.REACT_APP_URL_TO_SEND_USER_INFO
-  );
 
   return (
     <>
@@ -160,16 +101,6 @@ const Account = () => {
                 <FormattedAddress address={userData.address} />
               </p>
             : '' }
-
-          <Box sx={{ margin: '0 0 2rem' }}>
-            <Button variant="contained" 
-              href={formLink}
-              target="_blank"
-              color="primary"
-              startIcon={<AssignmentTurnedInIcon />}
-              sx={{
-              }}>Fill out Receipt</Button>
-          </Box>
       
           <hr></hr>
 
