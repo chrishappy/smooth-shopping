@@ -35,7 +35,7 @@ const CustomSearchIcon = () => {
                 setOpen(false);
               }}
               sx={{ background: '#fff', mb: '2rem', width: '100%' }} 
-              onInput={(e) => setKeys(e.target.value)}/>
+              onInput={(e) => setKeys(e.target.value.trim())}/>
             : <></>
           }
         </Box>
