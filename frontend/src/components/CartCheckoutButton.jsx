@@ -68,7 +68,7 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
       ]);
     }).then(() => true)
     .catch((err) => {
-      console.err(`Can't clear cache: ${err}`);
+      console.error(`Can't clear cache: ${err}`);
       return false;
     });
   };

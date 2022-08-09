@@ -1,4 +1,8 @@
-.math-button-style {
+.product-button {
+  text-align: center;
+}
+
+.product-button__icon {
   border: 2px solid rgba(0, 0, 0, 0.7) !important;
   /* color: black; */
   font-weight: bold;
@@ -6,11 +10,17 @@
   border-radius: 50%;
 }
 
-.math-button-style[disabled] {
+.product-button__icon[disabled] {
   border-color: rgba(0, 0, 0, 0.3)  !important;
 }
 
-.math-button-style--small {
-  width: 1.1em;
-  height: 1.1em;
+.product-button__icon--small {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.modal-product-count {
+  padding: 0.4em 0.5em;
+  min-width: 2.1em;
+  text-align: center;
 }

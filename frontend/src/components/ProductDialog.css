@@ -1,20 +1,20 @@
- .product-dialog {
-  height: 100%;
-  padding-bottom: 8.3rem;
+.product-dialog-wrapper {
+  min-width: 20rem;
+  max-width: 97vw;
+  height: 95vh;
 }
 
-.product-dialog__img,
+
 .product-dialog__img img {
-  height: 100%;
-  width: auto;
-  text-align: center;
-  /*
+  height: calc(95vh - 12.3rem);
+  max-width: 100%;
   -o-object-fit: cover;
-     object-fit: cover; */
+     object-fit: cover; 
+   
 }
 
 .product-dialog__content {
-  padding: 0.4rem 0 1.5rem;
+  padding: 0.4rem 1rem 1.5rem;
 }
 
 /*

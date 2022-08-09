@@ -113,7 +113,8 @@ const CartPage = () => {
                   <Box sx={{  display: 'flex', flex: '0 0 auto', textAlign: 'center', margin: '0 0.7rem 0 0' }}>
                     <ProductAddRemoveButtons 
                       selectedProduct={cartItem}
-                      currentQuantity={cartIdsAndQuantities.get(cartItem.nid)} />
+                      currentQuantity={cartIdsAndQuantities.get(cartItem.nid)}
+                      switchToTotalMode={true} />
                   </Box>
                 </Box>
               </Card>))

@@ -5,7 +5,11 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import './ProductAddRemoveButtons.css'
 
-
+/**
+ * 
+ * @param {object} options 
+ * @returns 
+ */
 const ProductAddRemoveButtons = ({
   selectedProduct,
   currentQuantity,
@@ -17,8 +21,9 @@ const ProductAddRemoveButtons = ({
   onAddOrderItemClick = (maxQuantity) => {
     AddOrderItem(selectedProduct, 1, maxQuantity);
   },
-  enableMinQuantityCheck = false,
-  showZeroIfMaxQuantityIsZero = false,
+  enableMinQuantityCheck = false, // Only for product dialog
+  showZeroIfMaxQuantityIsZero = false, // Only for product dialog
+  switchToTotalMode = false, // Only for carts
 }) => {
   
   // Max and min quantities
@@ -29,34 +34,39 @@ const ProductAddRemoveButtons = ({
     currentQuantity = 0.0;
   }
 
-  console.log(maxQuantity);
+  // i
+
+  const buttonClasses = 'product-button__icon' + (direction === 'row' ? '' : ' math-button-style--small');
+
+  console.log(`The max maxQuantity is ${maxQuantity}`);
   return (
     <Stack direction={direction} justifyContent={'center'} alignContent={'center'}>
-      <IconButton
-        sx={{ order: direction === 'row' ? 1 : null }}
-        className='math-button-style'
-        onClick={() => {
-          onAddOrderItemClick(maxQuantity);
-        }}
-        disabled={currentQuantity >= maxQuantity}>
-        <AddIcon sx={{ fontSize: iconFontSize, }} />
-      </IconButton>
-      <Box 
-        className="modal-product-count" 
-        sx={{ margin: '0.4em 0.5em' }}
-        >
+      <Box className="product-button"
+          sx={{ order: direction === 'row' ? 1 : null }}>
+        <IconButton
+          className={buttonClasses}
+          onClick={() => {
+            onAddOrderItemClick(maxQuantity);
+          }}
+          disabled={switchToTotalMode ? maxQuantity <= 0 : currentQuantity >= maxQuantity}>
+          <AddIcon sx={{ fontSize: iconFontSize, }} />
+        </IconButton>
+      </Box>
+      <Box className="modal-product-count">
         <span>{ currentQuantity }</span>
       </Box>
-      <IconButton
-        className='math-button-style'
-        sx={{ order: direction === 'row' ? -1 : null }}
-        onClick={() => {
-          onMinusOrderItemClick(minQuantity);
-        }}
-        disabled={enableMinQuantityCheck 
-          && currentQuantity <= minQuantity}>
-        <RemoveIcon sx={{ fontSize: iconFontSize, }} />
-      </IconButton>
+      <Box className="product-button"
+          sx={{ order: direction === 'row' ? -1 : null }}>
+        <IconButton
+          className={buttonClasses}
+          onClick={() => {
+            onMinusOrderItemClick(minQuantity);
+          }}
+          disabled={enableMinQuantityCheck 
+            && currentQuantity <= minQuantity}>
+          <RemoveIcon sx={{ fontSize: iconFontSize, }} />
+        </IconButton>
+      </Box>
     </Stack>
   )
 }
