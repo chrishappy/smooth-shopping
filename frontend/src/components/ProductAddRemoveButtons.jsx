@@ -4,6 +4,7 @@ import { AddOrderItem, MinusOrderItem, useMaxAndMinQuantitiesForProduct } from "
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import './ProductAddRemoveButtons.css'
+import { debuggingIsOn } from "../helpers/genericHelper";
 
 /**
  * 
@@ -34,11 +35,12 @@ const ProductAddRemoveButtons = ({
     currentQuantity = 0.0;
   }
 
-  // i
-
   const buttonClasses = 'product-button__icon' + (direction === 'row' ? '' : ' math-button-style--small');
 
-  console.log(`The max maxQuantity is ${maxQuantity}`);
+  if (debuggingIsOn()) {
+    console.log(`The max maxQuantity is ${maxQuantity}`);
+  }
+
   return (
     <Stack direction={direction} justifyContent={'center'} alignContent={'center'}>
       <Box className="product-button"
