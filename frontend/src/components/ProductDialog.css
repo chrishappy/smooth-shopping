@@ -4,15 +4,6 @@
   height: 95vh;
 }
 
-
-.product-dialog__img img {
-  height: calc(95vh - 12.3rem);
-  max-width: 100%;
-  -o-object-fit: cover;
-     object-fit: cover; 
-   
-}
-
 .product-dialog__content {
   padding: 0.4rem 1rem 1.5rem;
 }
