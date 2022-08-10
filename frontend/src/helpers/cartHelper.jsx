@@ -29,7 +29,7 @@ export const previousOrderQuantitiesVar = makeVar(new Map());
  * 
  * @returns object same features of useQuery
  */
-export const usePreviousOrderQuantitiesUpdater = () => {
+export const usePastOrderQuantitiesUpdater = (apolloClient = undefined) => {
   // created dates are stored in UTC, thus need UTC
   // TODO: Ensure that the timezone is implemented correctly
   const firstDayOfCurrentMonthInUTC = zonedTimeToUtc(startOfMonth(new Date()), 'America/Vancouver');
@@ -38,37 +38,38 @@ export const usePreviousOrderQuantitiesUpdater = () => {
   const [getPastQuantities] = useLazyQuery(GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH, {
     variables: {
       firstDayOfCurrentMonthTimestamp
-    }
+    },
+    client: apolloClient
   });
 
   // Return a function that can be called later
-  return async () => getPastQuantities()
-    .then(({data}) => {
-      // Loop over and set the values of previous orders within this month
-      let pastOrderQuantities = new Map();
-      data.pastQuantities.forEach((order) => {
-        order.fieldOrderItems.forEach((curr) => {
-          addToOrCreateMapEntry(
-            pastOrderQuantities,
-            curr.fieldProduct.meta.nid,
-            parseFloat(curr.fieldQuantity));
-        });
+  return getPastQuantities;
+}
+
+/**
+ * Using data from the , update the quantities
+ */
+export const updatePastQuantitiesData = (dataFromPastQuantitiesQuery) => {
+  if (dataFromPastQuantitiesQuery) {
+    let pastOrderQuantities = new Map();
+    dataFromPastQuantitiesQuery.pastQuantities.forEach((order) => {
+      order.fieldOrderItems.forEach((curr) => {
+        addToOrCreateMapEntry(
+          pastOrderQuantities,
+          curr.fieldProduct.meta.nid,
+          parseFloat(curr.fieldQuantity));
       });
+    });
+  
+    if (debuggingIsOn()) {
+      console.log({pastOrderQuantities});
+    }
+  
+    // Update previous quantities
+    previousOrderQuantitiesVar(pastOrderQuantities);
+  }
 
-      if (debuggingIsOn()) {
-        console.log(pastOrderQuantities);
-      }
-
-      // Update previous quantities
-      previousOrderQuantitiesVar(pastOrderQuantities);
-
-      return true;
-    })
-    .catch(({error}) => {
-      console.error(`Error getting past quantities: ${JSON.stringify(error)}`)
-
-      return false;
-    })
+  return true;
 }
 
 /**
@@ -206,8 +207,14 @@ export const restoreCartItems = () => {
 
 /**
  * Store the cache
+ * 
+ * TODO: This function is not running
  */
 export const storeCartItems = () => {
+  if (debuggingIsOn()) {
+    console.log("Storing cart items");
+  }
+  
   const cartItems = JSON.stringify(Array.from(cartItemsVar()));
   window.localStorage.setItem(LOCAL_STORAGE_CART_ITEMS_VAR, cartItems);
   

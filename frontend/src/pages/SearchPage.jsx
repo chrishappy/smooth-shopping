@@ -6,7 +6,6 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import CachedIcon from '@mui/icons-material/Cached';
 
-import "./categories/Category"
 import { SEARCH_FOR_PRODUCT } from "../helpers/queries";
 import ProductListInfinityScroll from "../components/ProductListInfiniteScroll";
 

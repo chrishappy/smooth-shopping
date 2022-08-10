@@ -10,7 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { LoadingButton } from "@mui/lab";
 import { clearApolloCache } from "../helpers/cache";
-import { usePreviousOrderQuantitiesUpdater } from "../helpers/cartHelper";
+import { usePastOrderQuantitiesUpdater } from "../helpers/cartHelper";
 import { debuggingIsOn } from "../helpers/genericHelper";
 import { orderingSystemIsOpenToday } from "../helpers/orderSystemStatus";
 
@@ -37,19 +37,15 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
   const [open, setOpen] = React.useState(false);
 
   // Update previous order quanities for limit per product per client
-  const previousOrderQuantitiesUpdator = usePreviousOrderQuantitiesUpdater();
+  const pastOrderQuantitiesUpdator = usePastOrderQuantitiesUpdater();
   
   // Create Order Handler
   const createOrderHandlerAsync = async () => {
     setOpen(true);
     
-    // TODO: Validate the order before submitting
-    // Create a new function in cartHelper
-    // 1. use the promise in usePreviousOrderQuantitiesUpdater(), then
-    // 2. loop over all the products in the cart and check that the quantity
-    //      that is not greater than the maximum
-    // 3. if it is, make the color red and disable the button
-
+    // TODO: Validate the order server side
+    // If the quantities are too great, notify the clients how their
+    // order changed
     await createOrder({
       variables: {
         order: {
@@ -62,11 +58,9 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
         console.log("Clearing cache");
       }
 
-      return new Promise.all([
-        clearApolloCache(true),
-        previousOrderQuantitiesUpdator(),
-      ]);
-    }).then(() => true)
+      return clearApolloCache(true)
+        .then(() => pastOrderQuantitiesUpdator());
+    })
     .catch((err) => {
       console.error(`Can't clear cache: ${err}`);
       return false;

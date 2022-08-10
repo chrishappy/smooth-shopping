@@ -207,6 +207,12 @@ export const GET_USERS_ORDERS = gql`
 `;
 
 /**
+ * Name of the query used to identify GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH
+ * in hooks
+ */
+export const GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH__NAME = 'GetPastOrdersQuantitiesThisMonth';
+
+/**
  * Get orders of current user, sorted by created date descending (most recent first),
  * and filtered by >= firstDayOfCurrentMonth
  * 
@@ -215,7 +221,7 @@ export const GET_USERS_ORDERS = gql`
  * Note: Backend restricts users to only view their own orders.
  */
 export const GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH = gql`
-  query GetPastOrdersQuantities($firstDayOfCurrentMonthTimestamp: Int!, $offset: Int) {
+  query ${GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH__NAME}($firstDayOfCurrentMonthTimestamp: Int!, $offset: Int) {
     pastQuantities(firstDay: $firstDayOfCurrentMonthTimestamp, offset: $offset) @jsonapi(path: "node/order/?filter[status]=1&filter[recent][condition][path]=created&filter[recent][condition][operator]=%3E%3D&filter[recent][condition][value]={args.firstDay}&include=field_order_items&sort=id") {
       id
       created

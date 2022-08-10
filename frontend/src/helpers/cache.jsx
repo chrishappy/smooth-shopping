@@ -11,8 +11,9 @@ import { camelize, pascalize } from 'humps';
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';
 import { onError } from '@apollo/client/link/error';
 import { getJwtString, logoutCurrentUserPrep } from './loginHelper';
-import { clearCart } from './cartHelper';
+import { clearCart, updatePastQuantitiesData } from './cartHelper';
 import { debuggingIsOn } from './genericHelper';
+import { GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH__NAME } from './queries';
 
 
 
@@ -55,24 +56,6 @@ const cache = new InMemoryCache({
         }
       }
     }
-  //   Query: {
-  //     fields: {
-  //       cartItems: {
-  //         read() {
-  //           return cartItemsVar();
-  //         }
-  //       },
-  //     }
-  //   },
-    // NodeProduct: {
-    //   fields: {
-    //     localQuantity: {
-    //       read(data, options) {
-            
-    //       }
-    //     }
-    //   }
-    // }
   }
 });
 
@@ -114,6 +97,18 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
   return forward(operation);
 })
+
+// Update the limit quantities
+const processUserLimits = new ApolloLink((operation, forward) => {
+  if (operation.operationName === GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH__NAME) {
+    return forward(operation).map((response) => {
+      updatePastQuantitiesData(response.data || null);
+      return response;
+    });
+  }
+  
+  return forward(operation);
+});
 
 // Logout if we get a 401 or 403
 // https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-response-logic
@@ -169,6 +164,7 @@ export const apolloClient = new ApolloClient({
   link: ApolloLink.from([
     authMiddleware,
     logoutLink,
+    processUserLimits,
     restLink,
     jsonApiLink,
     httpLink,

@@ -5,7 +5,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Seo from "../components/Seo"
 import { isLoggedIn, loginAsync } from "../helpers/loginHelper";
 import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/Snackbar";
-import { usePreviousOrderQuantitiesUpdater } from "../helpers/cartHelper";
+import { usePastOrderQuantitiesUpdater } from "../helpers/cartHelper";
 import { debuggingIsOn } from "../helpers/genericHelper";
 
 const LoginPage = () => {
@@ -20,7 +20,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Load the previous quantity updator
-  const previousOrderQuanitiesUpdater = usePreviousOrderQuantitiesUpdater();
+  const previousOrderQuanitiesUpdater = usePastOrderQuantitiesUpdater();
   
   const submitLoginForm = async (e) => {
     e.preventDefault();

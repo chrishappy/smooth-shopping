@@ -5,8 +5,16 @@
  * @param {string} prop the property we want to check for
  * @returns bool
  */
-export const hasExistentProperty = (obj, prop) => {
-  return obj.hasOwnProperty(prop) && (obj[prop] !== undefined) && (obj[prop] !== null);
+export const hasExistentProperty = (obj, ...props) => {
+  let result = true;
+
+  props.forEach((prop) => {
+    if (!obj.hasOwnProperty(prop) || obj[prop] === undefined || obj[prop] === null) {
+      result = false;
+    }
+  })
+
+  return result;
 }
 
 /**

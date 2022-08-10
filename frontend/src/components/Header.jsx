@@ -6,9 +6,7 @@ import CustomSearchIcon from "./SearchIcon";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { orderingSystemIsOpenToday, orderingSystemMessageForToday } from "../helpers/orderSystemStatus";
 
-const Header = () => {
-
-  
+const Header = () => {  
   
   const pathname = useLocation().pathname;
   const pathnameTrimmed = pathname.replace(/\/$/, '');

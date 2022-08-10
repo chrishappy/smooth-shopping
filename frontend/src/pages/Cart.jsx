@@ -5,7 +5,6 @@ import Seo from "../components/Seo"
 import { Button, Box, Typography, Card, CardContent, CardMedia, Stack, Link } from "@mui/material";
 import { CartCheckoutButton } from "../components/CartCheckoutButton";
 
-import './categories/Category'; // for math-button-style
 import MainContentLoader from '../components/MainContentLoader';
 import { getUserUuid } from '../helpers/loginHelper';
 import ProductAddRemoveButtons from '../components/ProductAddRemoveButtons';

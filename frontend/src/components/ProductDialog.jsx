@@ -30,7 +30,7 @@ export const ProductDialog = ({reactOpen, selectedProduct}) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">
-      <DialogContent class="product-dialog-wrapper">
+      <DialogContent className="product-dialog-wrapper">
         <Stack
           className="product-dialog">
           <Box className="product-dialog__img">

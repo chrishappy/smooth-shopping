@@ -15,35 +15,48 @@ import {
   ApolloProvider,
 } from "@apollo/client"; // See: https://www.apollographql.com/docs/react/get-started/
 import { apolloClient, apolloCachePersistor } from './helpers/cache';
-import Category from './pages/categories/Category';
+import Category from './pages/Category';
 import RequireAuth from './components/RequireAuth';
 import HomePage from './pages/Home';
 import './App.css';
-import { restoreCartItems, storeCartItems } from './helpers/cartHelper';
+import { restoreCartItems, storeCartItems, usePastOrderQuantitiesUpdater } from './helpers/cartHelper';
 import SearchProducts from './pages/SearchPage';
 import PastOrders from './pages/PastOrders';
 import LogoutPage from './pages/Logout';
+import { isLoggedIn } from './helpers/loginHelper';
 
 const App = () => {
   const [client, setClient] = React.useState();
+
+  const updatePastQuantities = usePastOrderQuantitiesUpdater(apolloClient);
 
   React.useEffect(() => {
     async function init() {
       // Restore the cartItems if not present
       restoreCartItems();
 
-      // Set client + restore persistor
+      // Restore persistor 
       await apolloCachePersistor.restore();
+
+      // Set the client to manage the queries
       setClient(apolloClient);
 
-      // Store cart items before unloading
-      window.addEventListener('beforeunload', () => {
-        storeCartItems();
-      });
+      // Run the product quantities from past orders to 
+      // enforce limits per user/month
+      if (isLoggedIn() ) {
+        updatePastQuantities();
+      }
+
     }
 
     init().catch(console.error);
-  }, []);
+
+    // Store cart items before unloading
+    return () => {
+      storeCartItems();
+    };
+
+  }, [updatePastQuantities]);
 
   if (!client) {
     return (
@@ -66,6 +79,7 @@ const App = () => {
               <Route path="cart" element={<CartPage />} />
               <Route path="account" element={<AccountPage />} />
               <Route path="categories">
+                {/* Uses state to identify the category: must be accessed only from Homepage */}
                 <Route path=":categorySlug" element={<Category />} />
               </Route>
               <Route path="search" element={<SearchProducts />} />
