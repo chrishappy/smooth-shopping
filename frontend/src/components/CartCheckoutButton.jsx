@@ -12,14 +12,14 @@ import { LoadingButton } from "@mui/lab";
 import { clearApolloCache } from "../helpers/cache";
 import { usePastOrderQuantitiesUpdater } from "../helpers/cartHelper";
 import { debuggingIsOn } from "../helpers/genericHelper";
-import { orderingSystemIsOpenToday } from "../helpers/orderSystemStatus";
+import { isOrderingSystemIsOpenToday } from "../helpers/orderSystemStatus";
 
 export const CartCheckoutButton = ({disabledData, orderData}) => {
 
   const [createOrder, {loading, error}] = useMutation(CREATE_AND_UPDATE_ORDER);
   
   let {isDisabled, notEnoughCredits, noItemsInCart} = disabledData;
-  const orderIsOpen = orderingSystemIsOpenToday();
+  const orderIsOpen = isOrderingSystemIsOpenToday();
 
   let buttonText = 'Confirm Order';
   if (!orderIsOpen) {
@@ -53,7 +53,8 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
           orderItems: getOrderItemsFormatted(orderData.orderItems),
         }
       }
-    }).then(async () => {
+    })
+    .then(async () => {
       if (debuggingIsOn()) {
         console.log("Clearing cache");
       }

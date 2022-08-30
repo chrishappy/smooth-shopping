@@ -7,11 +7,9 @@ import { hasExistentProperty } from "./genericHelper";
 // Order times and messages
 const openTimesAndMessages = {
   '0': { // Sunday
-    open: false,
     message: 'Closed until Tues.',
   },
   '1': { // Monday
-    open: false,
     message: 'Closed until Tues. Updating the menu.',
   },
   '2': { // Tuesday
@@ -23,53 +21,74 @@ const openTimesAndMessages = {
     message: 'Open! Last day to place your order!',
   },
   '4': { // Thursday
-    open: false,
-    message: 'Closed until Tues. Processing orders for tomorrow!',
+    message: 'Closed until Tues. Preparing orders for tomorrow!',
   },
   '5': { // Friday
-    open: false,
+    showOrderIds: true,
     message: 'Closed until Tues. Come pick up your order!',
   },
   '6': { // Saturday
-    open: false,
     message: 'Closed until Tues.',
   },
 }
 
 /**
  * Get order message of day
+ * @param dayOfWeek int 0 for Sunday, 6 for Saturday
+ * @returns string
  */
-export const getOrderMessageOfDay = (dayOfWeek) => {
+const getOrderMessageOfDay = (dayOfWeek) => {
   dayOfWeek = dayOfWeek + ''; // Convert to string
 
-  if (hasExistentProperty(openTimesAndMessages, dayOfWeek)) {
+  if (hasExistentProperty(openTimesAndMessages, dayOfWeek) &&
+      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'message')) {
     return openTimesAndMessages[dayOfWeek].message;
   }
   else {
-    return null;
+    return '';
   }
 }
 
 /**
  * Get whether a day is open
+ * @param dayOfWeek int 0 for Sunday, 6 for Saturday
+ * @returns boolean
  */
-export const isOrderOpenOnDay = (dayOfWeek) => {
+const isOrderOpenOnDay = (dayOfWeek) => {
   dayOfWeek = dayOfWeek + ''; // Convert to string
 
-  if (hasExistentProperty(openTimesAndMessages, dayOfWeek)) {
-    return openTimesAndMessages[dayOfWeek].open;
+  if (hasExistentProperty(openTimesAndMessages, dayOfWeek) &&
+      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'showOrderIds')) {
+    return openTimesAndMessages[dayOfWeek].showOrderIds;
   }
   else {
-    return null;
+    return false;
   }
 }
 
 /**
- * Store whether the ordering system is open or not
+ * Get whether a day is pickup day
+ * @param dayOfWeek int 0 for Sunday, 6 for Saturday
+ * @returns boolean
+ */
+const isPickUpOrderDay = (dayOfWeek) => {
+  dayOfWeek = dayOfWeek + ''; // Convert to string
+
+  if (hasExistentProperty(openTimesAndMessages, dayOfWeek) &&
+      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'open')) {
+    return openTimesAndMessages[dayOfWeek].open;
+  }
+  else {
+    return false;
+  }
+}
+
+/**
+ * Returns whether the ordering system is open or not
  * 
  * @returns boolean
  */
-export const orderingSystemIsOpenToday = () => {
+export const isOrderingSystemIsOpenToday = () => {
   const zonedNow = zonedTimeToUtc(new Date(), 'America/Vancouver');
   const dayOfTheWeek = getDay(zonedNow);
 
@@ -77,7 +96,7 @@ export const orderingSystemIsOpenToday = () => {
 }
 
 /**
- * Store whether the ordering system is open or not
+ * Returns the Order Message of Today
  * 
  * @returns boolean
  */
@@ -86,4 +105,16 @@ export const orderingSystemMessageForToday = () => {
   const dayOfTheWeek = getDay(zonedNow);
 
   return getOrderMessageOfDay(dayOfTheWeek);
+}
+
+/**
+ * Returns whether to pick up orders today
+ * 
+ * @returns boolean
+ */
+export const isPickUpOrdersToday = () => {
+  const zonedNow = zonedTimeToUtc(new Date(), 'America/Vancouver');
+  const dayOfTheWeek = getDay(zonedNow);
+
+  return isPickUpOrderDay(dayOfTheWeek);
 }

@@ -28,6 +28,23 @@
 }
 
 /**
+ * Main
+ */
+
+/* Show the Order Number */
+.order-number {
+  text-align: center;
+  font-size: 0.9em;
+  padding: 1.5rem 1rem 2rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.order-number__ids {
+  font-size: 3rem;
+  line-height: 1.4;
+}
+
+/**
  * Footer
  */
  .footer-wrap a,

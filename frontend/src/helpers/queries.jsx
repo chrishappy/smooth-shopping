@@ -241,6 +241,17 @@ export const GET_PAST_ORDER_QUANTITIES_OF_THIS_MONTH = gql`
 `;
 
 /**
+ * Get order ids from this past week
+ */
+export const GET_ORDER_IDS_OF_PAST_WEEK = gql`
+query GET_ORDER_IDS_OF_PAST_WEEK($sevenDaysAgoTimestamp: Int!, $offset: Int) {
+  getPastOrderIds(firstDay: $sevenDaysAgoTimestamp, offset: $offset) @jsonapi(path: "node/order/?filter[status]=1&filter[recent][condition][path]=created&filter[recent][condition][operator]=%3E%3D&filter[recent][condition][value]={args.firstDay}&sort=id") {
+    nid: drupalInternalNid
+  }
+}
+`;
+
+/**
  * Create and Update an Order
  * 
  * Types Schema
