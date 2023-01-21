@@ -68,10 +68,14 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
     });
   };
 
+  // FIXME: See https://github.com/apollographql/apollo-client/issues/9560
+  // Once issue is fixed, should just be `loading`.
+  const doneLoadingOrError = !loading || error;
+
   return (
     <>
       <LoadingButton
-        loading={loading}
+        loading={!doneLoadingOrError}
         component={Button} 
         variant="contained" 
         sx={{
@@ -87,7 +91,7 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
       </LoadingButton>
 
       <Dialog
-        open={open && !loading}
+        open={open && doneLoadingOrError}
         onClose={() => {setOpen(false)}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">

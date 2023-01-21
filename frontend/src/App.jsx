@@ -47,13 +47,15 @@ const App = () => {
         updatePastQuantities();
       }
 
+      window.addEventListener('beforeunload', storeCartItems);
+
     }
 
     init().catch(console.error);
 
     // Store cart items before unloading
     return () => {
-      storeCartItems();
+      window.removeEventListener('beforeunload', storeCartItems);
     };
 
   }, [updatePastQuantities]);

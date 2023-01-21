@@ -236,6 +236,6 @@ export const clearCart = () => {
   // Clear the Apollo cache
   apolloCachePersistor.purge();
 
-  // Clear local storage
+  // Clear local storage with empty cart
   storeCartItems();
 }
