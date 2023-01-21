@@ -13,22 +13,22 @@ const openTimesAndMessages = {
     message: 'Closed until Tues. Updating the menu.',
   },
   '2': { // Tuesday
-    open: true,
+    isOpen: true,
     message: 'Open! Now accepting new orders until Wed.',
   },
   '3': { // Wednesday
-    open: true,
+    isOpen: true,
     message: 'Open! Last day to place your order!',
   },
   '4': { // Thursday
     message: 'Closed until Tues. Preparing orders for tomorrow!',
   },
   '5': { // Friday
-    showOrderIds: true,
+    isPickUpDay: true,
     message: 'Closed until Tues. Come pick up your order!',
   },
   '6': { // Saturday
-    message: 'Closed until Tues.',
+    message: 'Closed until Tues. :)',
   },
 }
 
@@ -58,8 +58,8 @@ const isOrderOpenOnDay = (dayOfWeek) => {
   dayOfWeek = dayOfWeek + ''; // Convert to string
 
   if (hasExistentProperty(openTimesAndMessages, dayOfWeek) &&
-      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'showOrderIds')) {
-    return openTimesAndMessages[dayOfWeek].showOrderIds;
+      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'isOpen')) {
+    return openTimesAndMessages[dayOfWeek].isOpen;
   }
   else {
     return false;
@@ -75,8 +75,8 @@ const isPickUpOrderDay = (dayOfWeek) => {
   dayOfWeek = dayOfWeek + ''; // Convert to string
 
   if (hasExistentProperty(openTimesAndMessages, dayOfWeek) &&
-      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'open')) {
-    return openTimesAndMessages[dayOfWeek].open;
+      hasExistentProperty(openTimesAndMessages[dayOfWeek], 'isPickUpDay')) {
+    return openTimesAndMessages[dayOfWeek].isPickUpDay;
   }
   else {
     return false;
