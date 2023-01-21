@@ -28,7 +28,7 @@ const openTimesAndMessages = {
     message: 'Closed until Tues. Come pick up your order!',
   },
   '6': { // Saturday
-    message: 'Closed until Tues. :)',
+    message: 'Closed until Tues.',
   },
 }
 
