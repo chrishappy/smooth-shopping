@@ -120,7 +120,7 @@ export const staticMaxAndMinQuantitiesForProduct = ({
 /**
  * Increase the quantity of a product in the cart
  * 
- * @param {float} product the product to add to the cart. Require the fields:
+ * @param {NodeProduct} product the product to add to the cart. Require the fields:
  *  - id
  *  - fieldCredit
  *  - fieldQuantity
@@ -149,7 +149,7 @@ export const AddOrderItem = (product, addQuantity) => {
 /**
  * Reduce the quantity of a product in the cart
  * 
- * @param {float} product the product to minus from the cart. Require 
+ * @param {NodeProduct} product the product to minus from the cart. Require 
  *                        `id` and `fieldCredit` fields
  * @param {float|int} minusQuantity the amount to minus from product
  * @returns {object} the cart items
@@ -172,6 +172,11 @@ export const MinusOrderItem = (product, minusQuantity) => {
   return currItems;
 }
 
+/**
+ * Whether a product has any more quantity or not
+ * @param {NodeProduct} product The product entity type
+ * @returns boolean
+ */
 export const hasNoMoreQuantity = (product) => {
   return (product.fieldQuantity <= 0.0);
 }

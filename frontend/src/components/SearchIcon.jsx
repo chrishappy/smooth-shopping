@@ -13,8 +13,31 @@ const CustomSearchIcon = () => {
 
   const navigator = useNavigate();
 
+  React.useEffect(() => {
+
+    const closeSearchIfClickOutside = (e) => {
+      if (e.target.closest('#global-site-search') === null) {
+        setOpen(false);
+      }
+    };
+    
+    async function init() {
+      document.addEventListener('click', closeSearchIfClickOutside);
+    }
+      
+    init();
+
+    // Store cart items before unloading
+    return () => {
+      window.removeEventListener('beforeunload', closeSearchIfClickOutside);
+    };
+
+  }, [setOpen]);
+
+
   return (
     <Box
+      id="global-site-search"
       component="form"
       className="search-form"
       sx={{
@@ -23,7 +46,7 @@ const CustomSearchIcon = () => {
       }}>
       <Box
         className="search-form__inner">
-        <Box className={open ? "search-form__keys search-form__keys--open" : "search-form__keys"}>
+        <Box className={"search-form__keys " + (open ? "search-form__keys--open" : "")}>
           {open 
             ? <TextField 
               id="search__keys" 
@@ -31,9 +54,6 @@ const CustomSearchIcon = () => {
               variant="filled" 
               label="Search..."
               inputRef={input => input && input.focus()}
-              onBlur={() => {
-                setOpen(false);
-              }}
               sx={{ background: '#fff', mb: '2rem', width: '100%' }} 
               onInput={(e) => setKeys(e.target.value.trim())}/>
             : <></>
@@ -51,6 +71,9 @@ const CustomSearchIcon = () => {
             if (open) {
               if (keys.length > 0) {
                 navigator(`/search?keys=${encodeURIComponent(keys)}`);
+              }
+              else {
+                // TODO: target text box
               }
             } 
             else {

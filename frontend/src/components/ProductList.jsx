@@ -30,8 +30,8 @@ export const ProductList = ({ setProduct, setOpen, data }) => {
           underline="none"
           key={product.id}
           className="product-listing"
-          disabled={hasNoMoreQuantity(product) ? true : false}
-          tabIndex={hasNoMoreQuantity(product) <= 0.0 ? -1 : null}
+          disabled={hasNoMoreQuantity(product)} // TODO: Use useMaxAndMinQuantitiesForProduct at some point
+          tabIndex={hasNoMoreQuantity(product)? -1 : null}
           onClick={(e) => {
             e.preventDefault();
             setProduct(product);

@@ -54,8 +54,14 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
         }
       }
     })
-    .then(async () => {
+    .catch((err) => {
+      console.error(`Apollo Error: ${err}`);
+      throw new Error('Apolloe Errro: Don\'t clear the cache');
+    })
+    .then(async (response) => {
       if (debuggingIsOn()) {
+        console.log(`The response after saving order is: ${JSON.stringify(response, null, 2)}`);
+        console.log(`The response data after saving order is: ${JSON.stringify(response.data, null, 2)}`);
         console.log("Clearing cache");
       }
 
@@ -64,18 +70,13 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
     })
     .catch((err) => {
       console.error(`Can't clear cache: ${err}`);
-      return false;
     });
   };
-
-  // FIXME: See https://github.com/apollographql/apollo-client/issues/9560
-  // Once issue is fixed, should just be `loading`.
-  const doneLoadingOrError = !loading || error;
 
   return (
     <>
       <LoadingButton
-        loading={!doneLoadingOrError}
+        loading={loading}
         component={Button} 
         variant="contained" 
         sx={{
@@ -91,7 +92,7 @@ export const CartCheckoutButton = ({disabledData, orderData}) => {
       </LoadingButton>
 
       <Dialog
-        open={open && doneLoadingOrError}
+        open={open && !loading}
         onClose={() => {setOpen(false)}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
