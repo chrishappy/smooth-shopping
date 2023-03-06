@@ -24,6 +24,7 @@ import SearchProducts from './pages/SearchPage';
 import PastOrders from './pages/PastOrders';
 import LogoutPage from './pages/Logout';
 import { isLoggedIn } from './helpers/loginHelper';
+import AmeliaBookAppointment from './ameliaBooking/AmeliaBookAppointment';
 
 const App = () => {
   const [client, setClient] = React.useState();
@@ -86,6 +87,7 @@ const App = () => {
               </Route>
               <Route path="search" element={<SearchProducts />} />
               <Route path="history" element={<PastOrders />} />
+              <Route path="book-appointment" element={<AmeliaBookAppointment />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>
