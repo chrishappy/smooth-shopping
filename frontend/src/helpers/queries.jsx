@@ -11,6 +11,7 @@ export const GET_USER_STATS = gql`
 query GetUserStats($userUuid: String!) {
   currentUser(userUuid: $userUuid) @jsonapi(path: "user/user/{args.userUuid}") {      
     id,
+    email: mail
     familyName: fieldSsFamilyName
     accountHolderFirstName: fieldSsAccountFirstName
     accountHolderLastName: fieldSsAccountLastName

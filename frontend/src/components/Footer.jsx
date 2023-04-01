@@ -2,17 +2,17 @@ import * as React from "react"
 import { Link } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
+// import Stack from '@mui/material/Stack';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HelpIcon from '@mui/icons-material/Help';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import CallIcon from '@mui/icons-material/Call';
-import EmailIcon from '@mui/icons-material/Email';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+// import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+// import CallIcon from '@mui/icons-material/Call';
+// import EmailIcon from '@mui/icons-material/Email';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
+// import Button from '@mui/material/Button';
+// import Dialog from '@mui/material/Dialog';
+// import DialogContent from '@mui/material/DialogContent';
 
 
 const toolbarLinkStyle = { //TODO
@@ -20,20 +20,20 @@ const toolbarLinkStyle = { //TODO
   textDecoration: 'none',
 };
 
-const helpButtonStyle = {
-  backgroundColor: '#00497F',
-  color: 'white',
-  borderRadius: '20px',
-  fontWeight: 'bold',
-  padding: '0.6em 1.5em',
-  margin: '0.5em 0',
-};
+// const helpButtonStyle = {
+//   backgroundColor: '#00497F',
+//   color: 'white',
+//   borderRadius: '20px',
+//   fontWeight: 'bold',
+//   padding: '0.6em 1.5em',
+//   margin: '0.5em 0',
+// };
 
 const Footer = () => {
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const [open, setOpen] = React.useState(false);
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   return (
   <footer
@@ -76,52 +76,14 @@ const Footer = () => {
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Link to="#" sx={{...toolbarLinkStyle}} onClick={() => {
-              setOpen(true);
-            }}>
-              <HelpIcon />
-              <p>Help</p>
+            <Link to="/book-appointment" sx={{...toolbarLinkStyle}}>
+              <EventAvailableIcon />
+              <p>Book Appt.</p>
             </Link>
           </Grid>
         </Grid>
       </Box>
     </Typography>
-
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <DialogContent>
-      <Stack sx={{
-        direction: 'column',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        spacing: '5'
-      }}>
-        <LiveHelpIcon fontSize="large" />
-        <Typography id="modal-product-title" variant="h6" component="h2" sx={{ mb: 1, margin: '1em' }}>
-          Need Help?
-        </Typography>
-        <Button variant="contained"
-          href="tel:1-604-565-4464"
-          target="_blank"
-          style={helpButtonStyle}
-          sx={{ mb: 1 }}
-          onClick={() => {
-            handleClose();
-          }}><CallIcon sx={{marginRight: '0.3em'}} />Call (604) 565-4464</Button>
-        <Button variant="contained"
-          href="mailto:office@houseofomeed.ca"
-          target="_blank"
-          style={helpButtonStyle}
-          onClick={() => {
-            handleClose();
-          }}><EmailIcon sx={{marginRight: '0.3em'}}/>Send Request</Button>
-      </Stack>
-      </DialogContent>
-    </Dialog>
   </footer>
   )
 }

@@ -23,6 +23,7 @@ const Account = () => {
     familyName: 'ERROR',
     accountHolderFirstName: '',
     accountHolderLastName: '',
+    email: '',
     familySize: -1.0,
     totalCredits: -1.0,
     creditsRemaining: -1.0,
@@ -87,6 +88,8 @@ const Account = () => {
 
           <p><strong>First Name</strong>: {userData.accountHolderFirstName}</p>
           <p><strong>Last Name</strong>: {userData.accountHolderLastName}</p>
+          
+          <p><strong>Email</strong>: {userData.email}</p>
 
           { hasExistentProperty(userData, 'familySize')
             ? <p><strong>Family Size</strong>: {userData.familySize} people</p>
