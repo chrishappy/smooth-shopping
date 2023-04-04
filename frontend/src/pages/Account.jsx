@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useQuery } from '@apollo/client';
 import { GET_USER_STATS } from "../helpers/queries";
 import MainContentLoader from "../components/MainContentLoader";
-import FormattedAddress from "../components/FormattedAddress";
+// import FormattedAddress from "../components/FormattedAddress";
 import FormattedPhoneNumber from "../components/FormattedPhoneNumber";
 import { hasExistentProperty } from "../helpers/genericHelper";
 
@@ -98,12 +98,13 @@ const Account = () => {
           { hasExistentProperty(userData, 'phone') && userData.phone.length > 0
             ? <p><strong>Phone</strong>: <FormattedPhoneNumber phone={userData.phone} /></p>
               : '' }
-          { hasExistentProperty(userData, 'address') && hasExistentProperty(userData.address, 'addressLine1')
+          {/*  // Removed for security purposes
+          { hasExistentProperty(userData, 'address') && hasExistentProperty(userData.address, 'addressLine1') 
             ? <p>
                 <strong>Address</strong>: <br /> 
                 <FormattedAddress address={userData.address} />
               </p>
-            : '' }
+            : '' } */}
       
           <hr></hr>
 

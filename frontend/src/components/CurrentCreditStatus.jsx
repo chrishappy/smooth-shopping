@@ -35,7 +35,7 @@ const CurrentCredits = () => {
     userData = data.currentUser;
   }
 
-  const currentCredits = parseFloat(userData.creditsRemaining) - cartTotalReactive;
+  const currentCredits = userData.creditsRemaining ? parseFloat(userData.creditsRemaining) - cartTotalReactive : 0.0;
 
   return (
     <Link
@@ -63,7 +63,7 @@ const CurrentCredits = () => {
           fontSize: '0.8em',
           lineHeight: 1,
           marginLeft: '0.5em'
-        }}>/${parseFloat(userData.totalCredits)}<br/>credits</div>
+        }}>/${parseFloat(userData.totalCredits ? userData.totalCredits : 0.0)}<br/>credits</div>
       </div>
     </Link>
   );

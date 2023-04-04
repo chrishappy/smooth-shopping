@@ -78,7 +78,7 @@ const App = () => {
           </Route>
           <Route path="/" element={<Layout />}> {/* Wrapper element */}
             <Route element={<RequireAuth />}>  {/* Authentication guard */}
-              <Route index element={<HomePage />} />
+              <Route /* index */ path="home" element={<HomePage />} />
               <Route path="cart" element={<CartPage />} />
               <Route path="account" element={<AccountPage />} />
               <Route path="categories">
@@ -87,7 +87,10 @@ const App = () => {
               </Route>
               <Route path="search" element={<SearchProducts />} />
               <Route path="history" element={<PastOrders />} />
-              <Route path="book-appointment" element={<AmeliaBookAppointment />} />
+              <Route
+                // path="book-appointment" 
+                index // TODO: Replace with homepage again
+                element={<AmeliaBookAppointment />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>

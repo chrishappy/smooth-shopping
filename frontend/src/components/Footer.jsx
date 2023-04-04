@@ -64,19 +64,26 @@ const Footer = () => {
         }}>
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <Link to="/" sx={{...toolbarLinkStyle}}>
+            <Link to="/" style={{
+              ...toolbarLinkStyle,
+              pointerEvents: 'none',
+              opacity: 0.1, }}
+              >
               <StorefrontIcon />
               <p>Home</p>
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Link to="/account" sx={{...toolbarLinkStyle}}>
+            <Link to="/account" style={{...toolbarLinkStyle}}>
               <AccountCircleIcon />
               <p>Account</p>
             </Link>
           </Grid>
           <Grid item xs={4}>
-            <Link to="/book-appointment" sx={{...toolbarLinkStyle}}>
+            <Link 
+              to="/"
+              // to="/book-appointment"
+              style={{...toolbarLinkStyle}}>
               <EventAvailableIcon />
               <p>Book Appt.</p>
             </Link>

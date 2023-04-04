@@ -21,6 +21,7 @@ export const GET_MOST_RECENT_AMELIA_EVENT = gql`
       email: mail
       accountHolderFirstName: fieldSsAccountFirstName
       accountHolderLastName: fieldSsAccountLastName
+      phone: fieldSsPhone
     }
   }
 `;

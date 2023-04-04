@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+// TODO: Remove after renabling shopping
+
 import * as React from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 import CurrentCreditStatus from "./CurrentCreditStatus";
@@ -32,26 +35,32 @@ const Header = () => {
           color: 'white',
         }}
         >
-        <div style={{
-          padding: '1rem',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between' }}>
-          <IconButton
-            style={{ color: 'white', visibility: isHome ? 'hidden' : undefined }}
-            aria-label={'back'}
-            onClick={() => navigate(-1) } >
-              <ArrowBackIosNewIcon fontSize="medium" />
-          </IconButton>
-          <CurrentCreditStatus />
-          <CustomSearchIcon />
-        </div>
-        <div className="header-order-system-info">
-          { (isCart || isHome) && <SystemMessageStatus />}
-        </div>
+          <div style={{
+            opacity: 0.2,
+            pointerEvents: 'none',
+          }}>
+            <div style={{
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between' }}>
+              <IconButton
+                style={{ color: 'white', visibility: isHome ? 'hidden' : undefined }}
+                aria-label={'back'}
+                onClick={() => navigate(-1) } >
+                  <ArrowBackIosNewIcon fontSize="medium" />
+              </IconButton>
+              <CurrentCreditStatus />
+              <CustomSearchIcon/>
+            </div>
+            {/* <div className="header-order-system-info"> // TODO: Reenable later on
+              { (isCart || isHome) && <SystemMessageStatus />}
+            </div> */}
+          </div>  
       </header>
-      { (isHome && isPickUpDay) && <SystemMessageOrderIds sevenDaysAgoTimestamp={sevenDaysAgoTimestamp} />}
+      {/* // TODO: Reenable later on */}
+      {/* { (isHome && isPickUpDay) && <SystemMessageOrderIds sevenDaysAgoTimestamp={sevenDaysAgoTimestamp} />} */}
   </>)
 }
 

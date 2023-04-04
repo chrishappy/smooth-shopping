@@ -75,12 +75,11 @@ const LoginPage = () => {
           // width={300}
           quality={100}
           formats={["auto", "webp", "avif"]}
-          alt="House of Omeed"
-          style={{ marginBottom: `1.45rem` }}
-          sx={{ mt: '3rem'}}
+          alt="The House of Omeed Logo"
+          sx={{ mt: '3rem', mb: `1.5rem` }}
         />
         <h2 
-          style={{ marginTop: '3rem'}}>Access code</h2>
+          style={{ marginTop: '3rem'}}>Food Bank Login</h2>
         <Box
           component="form"
           noValidate>
@@ -122,6 +121,13 @@ const LoginPage = () => {
             >
               SUBMIT
             </LoadingButton>
+          </Box>
+          <Box sx={{ marginTop: '3rem', fontSize: '0.8em', lineHeight: '1.3', fontStyle: 'italic' }}>
+            To register for an account or reset your password, <br />
+            please call&nbsp;
+            <strong>
+              <a href="tel:16045654464" target="_blank" rel="noreferrer" style={{ color: '#fff' }}>604 565 4464</a>
+            </strong>
           </Box>
         </Box>
       </Stack>
