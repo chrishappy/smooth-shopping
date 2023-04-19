@@ -91,6 +91,10 @@ const App = () => {
                 // path="book-appointment" 
                 index // TODO: Replace with homepage again
                 element={<AmeliaBookAppointment />} />
+                
+              <Route
+                path="book-appointment" 
+                element={<AmeliaBookAppointment />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>

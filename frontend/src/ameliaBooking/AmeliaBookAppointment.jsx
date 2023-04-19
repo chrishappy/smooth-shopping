@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from "@apollo/client";
+import { useSearchParams } from "react-router-dom";
 import MainContentLoader from "../components/MainContentLoader";
 import { Button } from "@mui/material"
 import { format, parseISO } from 'date-fns';
@@ -11,6 +12,7 @@ import CachedIcon from '@mui/icons-material/Cached';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import PhoneIcon from '@mui/icons-material/Phone';
 import "./AmeliaBookAppointment.css";
+import { useState } from 'react';
 
 const AmeliaBookAppointment = () => {
   const {loading, error, data, refetch} = useQuery(GET_MOST_RECENT_AMELIA_EVENT, {
@@ -19,6 +21,16 @@ const AmeliaBookAppointment = () => {
       userUuid: getUserUuid(),
     },
   });
+
+  const [searchParams] = useSearchParams();
+  const [processParams, setProcessParams] = useState(false);
+
+  console.log(`Success is ${searchParams.get("success")}`);
+  
+  if (!processParams && searchParams.get("success") !== null) {
+    setProcessParams(true);
+    refetch();
+  }
 
   if (error) {
     return (
@@ -130,9 +142,10 @@ const AmeliaBookAppointment = () => {
                 <p>To change your appointment, cancel it below then rebook it:</p>
 
                 <p>
+                  {/* TODO: Load this in an iframe */}
                   <Button variant="contained"
                       // component={Link}
-                      target="_blank"
+                      // target="_blank"
                       // disabled={true}
                       color='error'
                       startIcon={<EventBusyIcon />}
