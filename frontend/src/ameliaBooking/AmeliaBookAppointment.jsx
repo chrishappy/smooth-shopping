@@ -13,6 +13,7 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import PhoneIcon from '@mui/icons-material/Phone';
 import "./AmeliaBookAppointment.css";
 import { useState } from 'react';
+import { SnackbarType, snackbarMsgVar, snackbarOpenVar, snackbarTypeVar } from '../components/Snackbar';
 
 const AmeliaBookAppointment = () => {
   const {loading, error, data, refetch} = useQuery(GET_MOST_RECENT_AMELIA_EVENT, {
@@ -24,12 +25,39 @@ const AmeliaBookAppointment = () => {
 
   const [searchParams] = useSearchParams();
   const [processParams, setProcessParams] = useState(false);
+  const [cancelEvent, setCancelEvent] = useState(false);
 
-  console.log(`Success is ${searchParams.get("success")}`);
+  const resetPage = () => {
+    setProcessParams(true);
+    setCancelEvent(false);
+    refetch();
+  }
+
+  const reloadIfSameOrigin = (e) => {
+    if (e.target.contentDocument !== null) {
+      resetPage();
+    }
+  }
+
+  window.addEventListener('message', e => {
+
+    const { data, origin } = e;
+
+    if (origin !== 'https://houseofomeed.ca') {  return;  }
+
+    if (data === 'thefbapp--amelia--cancelled-event') {
+      console.log(e);
+
+      snackbarOpenVar(true);
+      snackbarTypeVar(SnackbarType.success);
+      snackbarMsgVar("Appointment Cancelled");
+
+      resetPage();
+    }
+  }, false);
   
   if (!processParams && searchParams.get("success") !== null) {
-    setProcessParams(true);
-    refetch();
+    resetPage();
   }
 
   if (error) {
@@ -38,7 +66,8 @@ const AmeliaBookAppointment = () => {
     );
   }
 
-  
+  console.log("Cancel Event is " + JSON.stringify(cancelEvent));
+
   let appointment = {
     endDate: null,
     startDate: null,
@@ -46,18 +75,16 @@ const AmeliaBookAppointment = () => {
 
   // TODO: Use to autofill the form
   let user = {
-
   };
 
   let queryParams = '?'
 
+  // Handle Apollo data processing
   if (!loading) {
     console.log(data);
 
     appointment = data.appointment[0];
     user = data.currentUser;
-
-    console.log(user);
 
     const queryParamsObj = {
       email: user.email || '',
@@ -71,9 +98,8 @@ const AmeliaBookAppointment = () => {
 
   let endDateInThePast = true;
   let startDate = '';
-  
-  console.log(appointment);
 
+  // Handle end date processing
   if (appointment && appointment.hasOwnProperty('endDate') && appointment.endDate != null) {
     const endDate = parseISO(appointment.endDate);
     startDate = parseISO(appointment.startDate);
@@ -100,60 +126,77 @@ const AmeliaBookAppointment = () => {
           </IconButton>
         </div>
       </Stack>
-      {loading ? (
+      {loading &&  (<MainContentLoader />)}
+        
+      {(!loading && endDateInThePast) && (
+        // <iframe src="https://houseofomeed.ca/thegoodchoice-app-appointment-page/"
+        <div className="appointment__wrapper">
+          <iframe
+            src={`https://houseofomeed.ca/testing-thegoodchoice-app-appointment-page/${queryParams}`}
+            title="Book your appointment with the House of Omeed" 
+            width="100%" height="800"
+            style={{ border: 'none' }}
+            className="appointment__iframe"
+            onLoad={reloadIfSameOrigin}></iframe>
+
+          <div className="appointment__loader">
+            <MainContentLoader />
+          </div>
+          
+        </div>
+      )}
+            
+      {(!loading && !endDateInThePast && !cancelEvent) && (
+        <>
+          <p>Hi {user.accountHolderFirstName},</p>
+
+          <p>
+            Your next appointment is: <br />
+            <strong>{format(startDate, 'PPPP p')}</strong>
+          </p>
+
+          <p> If you have any questions, please call the House of Omeed at:</p>
+
+          <p>
+            <Button variant="contained"
+                target="_blank"
+                color='primary'
+                startIcon={<PhoneIcon />}
+                href={`tel:16045654464`}>604 565 4464</Button>
+          </p>
+
+          <p>&nbsp;</p>
+
+          <p>&nbsp;</p>
+
+          <p>To change your appointment, cancel it below then rebook it:</p>
+
+          <p>
+            <Button variant="contained"
+                // component={Link}
+                // target="_blank"
+                // disabled={true}
+                color='error'
+                startIcon={<EventBusyIcon />}
+                onClick={() => {
+                  setCancelEvent(true);
+                }}>Cancel Appointment</Button>
+            {/* <a href={appointment.cancelUrl.uri} target="_blank" rel="noreferrer">Cancel Appointment</a> */}
+          </p>
+        </>
+      )}
+            
+      {(!loading && !endDateInThePast && cancelEvent) && (
+        <>
           <MainContentLoader />
-        ) : endDateInThePast ? (
-              // <iframe src="https://houseofomeed.ca/thegoodchoice-app-appointment-page/"
-              <div className="appointment__wrapper">
-                <iframe src={`https://houseofomeed.ca/testing-thegoodchoice-app-appointment-page/${queryParams}`}
-                  title="Book your appointment with the House of Omeed" 
-                  width="100%" height="800"
-                  style={{ border: 'none' }}
-                  className="appointment__iframe"></iframe>
-
-                <div className="appointment__loader">
-                  <MainContentLoader />
-                </div>
-                
-              </div>
-            ): (
-              <>
-                <p>Hi {user.accountHolderFirstName},</p>
-
-                <p>
-                  Your next appointment is: <br />
-                  <strong>{format(startDate, 'PPPP p')}</strong>
-                </p>
-
-                <p> If you have any questions, please call the House of Omeed at:</p>
-
-                <p>
-                  <Button variant="contained"
-                      target="_blank"
-                      color='primary'
-                      startIcon={<PhoneIcon />}
-                      href={`tel:16045654464`}>604 565 4464</Button>
-                </p>
-
-                <p>&nbsp;</p>
-
-                <p>&nbsp;</p>
-
-                <p>To change your appointment, cancel it below then rebook it:</p>
-
-                <p>
-                  {/* TODO: Load this in an iframe */}
-                  <Button variant="contained"
-                      // component={Link}
-                      // target="_blank"
-                      // disabled={true}
-                      color='error'
-                      startIcon={<EventBusyIcon />}
-                      href={ appointment.cancelUrl.uri }>Cancel Appointment</Button>
-                  {/* <a href={appointment.cancelUrl.uri} target="_blank" rel="noreferrer">Cancel Appointment</a> */}
-                </p>
-              </>
-            )}
+          <iframe src={appointment.cancelUrl.uri}
+            title="Cancel your appointment" 
+            width="100%" height="300"
+            style={{ border: 'none' }}
+            className="appointment__iframe"
+            onLoad={reloadIfSameOrigin}></iframe>
+        </>
+      )}
     </div>
   )
 }

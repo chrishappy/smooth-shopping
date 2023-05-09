@@ -38,7 +38,6 @@ const LoginPage = () => {
       await loginAsync(username, password)
         .then((loggedInSuccessfully) => {
           if (loggedInSuccessfully) {
-
             // Must use .then() to avoid navigating while updating the store items
             return previousOrderQuanitiesUpdater()
               .then(() => navigate('/'));
@@ -47,8 +46,15 @@ const LoginPage = () => {
             snackbarOpenVar(true);
             snackbarTypeVar(SnackbarType.warning);
             snackbarMsgVar("Your username or password is incorrect.");
-            setIsLoading(false);
           }
+        })
+        .catch(() => {
+          snackbarOpenVar(true);
+          snackbarTypeVar(SnackbarType.error);
+          snackbarMsgVar("There was an error logging in. Please try again later.");
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
     
