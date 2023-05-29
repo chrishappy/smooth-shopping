@@ -10,7 +10,6 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import CachedIcon from '@mui/icons-material/Cached';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
-import PhoneIcon from '@mui/icons-material/Phone';
 import "./AmeliaBookAppointment.css";
 import { useState } from 'react';
 import { SnackbarType, snackbarMsgVar, snackbarOpenVar, snackbarTypeVar } from '../components/Snackbar';
@@ -131,8 +130,13 @@ const AmeliaBookAppointment = () => {
       {(!loading && endDateInThePast) && (
         // <iframe src="https://houseofomeed.ca/thegoodchoice-app-appointment-page/"
         <div className="appointment__wrapper">
+
+          <p>To book your appointment, please choose the day and time you wish to come.</p>
+
+          <p dir="rtl">برای گرفتن نوبت، لطفا تاریخ و ساعت مورد نظر را از اینجا انتخاب کنید.</p>
+
           <iframe
-            src={`https://houseofomeed.ca/testing-thegoodchoice-app-appointment-page/${queryParams}`}
+            src={`https://houseofomeed.ca/testing-appointment-page-thefoodbank-app/${queryParams}`}
             title="Book your appointment with the House of Omeed" 
             width="100%" height="800"
             style={{ border: 'none' }}
@@ -148,14 +152,14 @@ const AmeliaBookAppointment = () => {
             
       {(!loading && !endDateInThePast && !cancelEvent) && (
         <>
-          <p>Hi {user.accountHolderFirstName},</p>
+          <p>Hi {user.accountHolderFirstName} {user.accountHolderLastName},</p>
 
           <p>
             Your next appointment is: <br />
             <strong>{format(startDate, 'PPPP p')}</strong>
           </p>
 
-          <p> If you have any questions, please call the House of Omeed at:</p>
+          {/* <p> If you have any questions, please call the House of Omeed at:</p>
 
           <p>
             <Button variant="contained"
@@ -163,13 +167,26 @@ const AmeliaBookAppointment = () => {
                 color='primary'
                 startIcon={<PhoneIcon />}
                 href={`tel:16045654464`}>604 565 4464</Button>
-          </p>
+          </p> */}
 
           <p>&nbsp;</p>
+
+          <p><hr /></p>
 
           <p>&nbsp;</p>
 
           <p>To change your appointment, cancel it below then rebook it:</p>
+
+          <p dir="rtl">
+          سلام، 
+
+          </p>
+
+          <p dir="rtl">
+          اپوینتمنت شما در بالا ذکر شده. اگر نیاز به تغییر نوبتتان دارید، اول نوبت فعلی را از طریق دکمه زیر کنسل کنید و بعد نوبت بعدی را که تمایل دارید انتخاب کنید.
+          </p>
+
+          <p>&nbsp;</p>
 
           <p>
             <Button variant="contained"
@@ -183,6 +200,7 @@ const AmeliaBookAppointment = () => {
                 }}>Cancel Appointment</Button>
             {/* <a href={appointment.cancelUrl.uri} target="_blank" rel="noreferrer">Cancel Appointment</a> */}
           </p>
+
         </>
       )}
             

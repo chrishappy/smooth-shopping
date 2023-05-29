@@ -7,6 +7,7 @@ import { isLoggedIn, loginAsync } from "../helpers/loginHelper";
 import { snackbarMsgVar, snackbarOpenVar, SnackbarType, snackbarTypeVar } from "../components/Snackbar";
 import { usePastOrderQuantitiesUpdater } from "../helpers/cartHelper";
 import { debuggingIsOn } from "../helpers/genericHelper";
+window.Buffer = window.Buffer || require("buffer").Buffer; 
 
 const LoginPage = () => {
 
@@ -48,10 +49,11 @@ const LoginPage = () => {
             snackbarMsgVar("Your username or password is incorrect.");
           }
         })
-        .catch(() => {
+        .catch((e) => {
           snackbarOpenVar(true);
           snackbarTypeVar(SnackbarType.error);
           snackbarMsgVar("There was an error logging in. Please try again later.");
+          console.error(e)
         })
         .finally(() => {
           setIsLoading(false);
@@ -85,16 +87,24 @@ const LoginPage = () => {
           sx={{ mt: '3rem', mb: `1.5rem` }}
         />
         <h2 
-          style={{ marginTop: '3rem'}}>Food Bank Login</h2>
+          style={{ marginTop: '3rem'}}>Food Distribution Login</h2>
         <Box
           component="form"
           noValidate>
-          <Box
+
+          <Box sx={{ lineHeight: '1.3', padding: '1rem', background: 'green', borderRadius: '0.5rem', margin: '0 0 2rem' }}>
+            Note: The New System will Open on <strong>Monday, May 29th at 3 pm</strong>. <br /><br />
+            We will send you an email at 3 pm with your username and password. <br /><br />
+            If you have already received an email, please use the password in the new email.
+          </Box>
+
+          {/* <Box
             component="div">
             <TextField 
               id="login__username" 
               variant="filled"
               label="Username"
+              disabled={true}
               sx={{ background: '#fff', mb: '2rem' }}
               onInput={(e) => setUsername(e.target.value)} />
           </Box>
@@ -105,6 +115,7 @@ const LoginPage = () => {
               type="password"
               variant="filled" 
               label="Password"
+              disabled={true}
               sx={{ background: '#fff', mb: '2rem' }} 
               onInput={(e) => setPassword(e.target.value)}/>
           </Box>
@@ -115,6 +126,7 @@ const LoginPage = () => {
               variant="contained" 
               loading={isLoading}
               component={Button}
+              disabled={true}
               className="login__loading-button"
               sx={{
                 backgroundColor: '#75F348',
@@ -127,13 +139,12 @@ const LoginPage = () => {
             >
               SUBMIT
             </LoadingButton>
-          </Box>
+          </Box> */}
           <Box sx={{ marginTop: '3rem', fontSize: '0.8em', lineHeight: '1.3', fontStyle: 'italic' }}>
-            To register for an account or reset your password, <br />
-            please call&nbsp;
+            If you have any questions, please call&nbsp;
             <strong>
               <a href="tel:16045654464" target="_blank" rel="noreferrer" style={{ color: '#fff' }}>604 565 4464</a>
-            </strong>
+            </strong>.
           </Box>
         </Box>
       </Stack>
