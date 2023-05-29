@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { useSearchParams } from "react-router-dom";
 import MainContentLoader from "../components/MainContentLoader";
 import { Button } from "@mui/material"
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, set } from 'date-fns';
 import { GET_MOST_RECENT_AMELIA_EVENT } from './queries';
 import { getUserUuid } from '../helpers/loginHelper';
 import Stack from '@mui/material/Stack';
@@ -15,20 +15,22 @@ import { useState } from 'react';
 import { SnackbarType, snackbarMsgVar, snackbarOpenVar, snackbarTypeVar } from '../components/Snackbar';
 
 const AmeliaBookAppointment = () => {
-  const {loading, error, data, refetch} = useQuery(GET_MOST_RECENT_AMELIA_EVENT, {
+  const {loading, error, data, refetch, startPolling, stopPolling} = useQuery(GET_MOST_RECENT_AMELIA_EVENT, {
     fetchPolicy: 'cache-and-network',
     variables: {
       userUuid: getUserUuid(),
     },
   });
-
+  
   const [searchParams] = useSearchParams();
   const [processParams, setProcessParams] = useState(false);
   const [cancelEvent, setCancelEvent] = useState(false);
+  const [expectNewAppointment, setExpectNewAppointment] = useState(false);
 
   const resetPage = () => {
     setProcessParams(true);
     setCancelEvent(false);
+    setExpectNewAppointment(false);
     refetch();
   }
 
@@ -107,6 +109,63 @@ const AmeliaBookAppointment = () => {
     endDateInThePast = endDate < now;
   }
 
+  // Check if the appointments have been booked or not:
+  const checkIfAppointmentHasBeenBooked = (e) => {
+    if (e.target.contentDocument !== null) { // If is of the same origin
+      const searchParms = new URLSearchParams(e.target.contentWindow.location.search);
+      if (searchParms.get('success') !== null) {
+        
+        snackbarOpenVar(true);
+        snackbarTypeVar(SnackbarType.success);
+        snackbarMsgVar("You have booked your appointment.");
+
+        setExpectNewAppointment(true);
+        refetch();
+      }
+    }
+  }
+
+  if (expectNewAppointment) {
+    if (endDateInThePast) {
+      if (!loading) {
+        setTimeout(() => {
+          refetch();
+        }, 5000);
+      }
+
+      return (
+        <div>
+          <Stack 
+            direction="row" 
+            sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
+            <h1>Book Your Next Appointment</h1>
+            <div>
+              <IconButton
+                color="primary"
+                aria-label={'Refresh page'}
+                onClick={() => {
+                  refetch();
+                }} >
+                <CachedIcon />
+              </IconButton>
+            </div>
+          </Stack>
+
+          <p>Please wait while we update our system with your appointment information.</p>
+
+          <MainContentLoader />
+        </div>
+      )
+    }
+    else {
+      setExpectNewAppointment(false);
+    }
+  }
+
+  // Different iframes for testing or not
+  const bookAppointmentURL = process.env.NODE_ENV === 'development' 
+    ? process.env.REACT_APP_TESTING_BOOKING_URL
+    : process.env.REACT_APP_PRODUCTION_BOOKING_URL;
 
   return (
     <div>
@@ -136,12 +195,12 @@ const AmeliaBookAppointment = () => {
           <p dir="rtl">برای گرفتن نوبت، لطفا تاریخ و ساعت مورد نظر را از اینجا انتخاب کنید.</p>
 
           <iframe
-            src={`https://houseofomeed.ca/testing-appointment-page-thefoodbank-app/${queryParams}`}
+            src={`${bookAppointmentURL}/${queryParams}`}
             title="Book your appointment with the House of Omeed" 
             width="100%" height="800"
             style={{ border: 'none' }}
             className="appointment__iframe"
-            onLoad={reloadIfSameOrigin}></iframe>
+            onLoad={checkIfAppointmentHasBeenBooked}></iframe>
 
           <div className="appointment__loader">
             <MainContentLoader />
@@ -171,7 +230,7 @@ const AmeliaBookAppointment = () => {
 
           <p>&nbsp;</p>
 
-          <p><hr /></p>
+          <hr />
 
           <p>&nbsp;</p>
 

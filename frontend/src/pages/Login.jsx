@@ -92,19 +92,18 @@ const LoginPage = () => {
           component="form"
           noValidate>
 
-          <Box sx={{ lineHeight: '1.3', padding: '1rem', background: 'green', borderRadius: '0.5rem', margin: '0 0 2rem' }}>
+          {/* <Box sx={{ lineHeight: '1.3', padding: '1rem', background: 'green', borderRadius: '0.5rem', margin: '0 0 2rem' }}>
             Note: The New System will Open on <strong>Monday, May 29th at 3 pm</strong>. <br /><br />
             We will send you an email at 3 pm with your username and password. <br /><br />
             If you have already received an email, please use the password in the new email.
-          </Box>
+          </Box> */}
 
-          {/* <Box
+          <Box
             component="div">
             <TextField 
               id="login__username" 
               variant="filled"
               label="Username"
-              disabled={true}
               sx={{ background: '#fff', mb: '2rem' }}
               onInput={(e) => setUsername(e.target.value)} />
           </Box>
@@ -115,7 +114,6 @@ const LoginPage = () => {
               type="password"
               variant="filled" 
               label="Password"
-              disabled={true}
               sx={{ background: '#fff', mb: '2rem' }} 
               onInput={(e) => setPassword(e.target.value)}/>
           </Box>
@@ -126,7 +124,6 @@ const LoginPage = () => {
               variant="contained" 
               loading={isLoading}
               component={Button}
-              disabled={true}
               className="login__loading-button"
               sx={{
                 backgroundColor: '#75F348',
@@ -139,7 +136,7 @@ const LoginPage = () => {
             >
               SUBMIT
             </LoadingButton>
-          </Box> */}
+          </Box>
           <Box sx={{ marginTop: '3rem', fontSize: '0.8em', lineHeight: '1.3', fontStyle: 'italic' }}>
             If you have any questions, please call&nbsp;
             <strong>
