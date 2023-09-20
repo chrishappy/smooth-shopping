@@ -13,6 +13,7 @@ export const SnackbarType = {
 export const snackbarOpenVar = makeVar(false);
 export const snackbarTypeVar = makeVar(SnackbarType.info);
 export const snackbarMsgVar = makeVar("Default snackbar message!?");
+export const snackbarDurationVar = makeVar(3000);
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -22,6 +23,7 @@ const CustomizedSnackbar = () => {
   const snackbarOpen = useReactiveVar(snackbarOpenVar);
   const snackbarType = useReactiveVar(snackbarTypeVar);
   const snackbarMsg = useReactiveVar(snackbarMsgVar);
+  const snackbarDuration = useReactiveVar(snackbarDurationVar);
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -32,7 +34,7 @@ const CustomizedSnackbar = () => {
   return (
     <Snackbar
       open={snackbarOpen}
-      autoHideDuration={3000}
+      autoHideDuration={snackbarDuration}
       onClose={handleClose}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
       <Alert
