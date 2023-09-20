@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { useSearchParams } from "react-router-dom";
 import MainContentLoader from "../components/MainContentLoader";
 import { Button } from "@mui/material"
-import { format, parseISO, set } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { GET_MOST_RECENT_AMELIA_EVENT } from './queries';
 import { getUserUuid } from '../helpers/loginHelper';
 import Stack from '@mui/material/Stack';
@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { SnackbarType, snackbarMsgVar, snackbarOpenVar, snackbarTypeVar } from '../components/Snackbar';
 
 const AmeliaBookAppointment = () => {
-  const {loading, error, data, refetch, startPolling, stopPolling} = useQuery(GET_MOST_RECENT_AMELIA_EVENT, {
+  const {loading, error, data, refetch} = useQuery(GET_MOST_RECENT_AMELIA_EVENT, {
     fetchPolicy: 'cache-and-network',
     variables: {
       userUuid: getUserUuid(),
@@ -87,6 +87,33 @@ const AmeliaBookAppointment = () => {
     appointment = data.appointment[0];
     user = data.currentUser;
 
+    // Min email is 6 letters: a@a.ca
+    if (!(user.email && user.email.length >= 6)) {
+      return (
+        <div>
+          <Stack 
+            direction="row" 
+            sx={{ alignContent: 'center', justifyContent: 'space-between' }}>
+            <h1>Book Your Next Appointment</h1>
+            <div>
+              <IconButton
+                color="primary"
+                aria-label={'Refresh page'}
+                onClick={() => {
+                  refetch();
+                }} >
+                <CachedIcon />
+              </IconButton>
+            </div>
+          </Stack>
+
+          <p>You can not book appointments because your account does not have an email attached to it.</p>
+
+          <p>Please contact the administration for more details</p>
+        </div>
+      )
+    }
+
     const queryParamsObj = {
       email: user.email || '',
       'given-name': user.accountHolderFirstName || '',
@@ -121,6 +148,17 @@ const AmeliaBookAppointment = () => {
 
         setExpectNewAppointment(true);
         refetch();
+
+        // If the page doesn't work after 30 seconds
+        setTimeout(() => {
+          if (expectNewAppointment === true) {
+            setExpectNewAppointment(false);
+        
+            snackbarOpenVar(true);
+            snackbarTypeVar(SnackbarType.error);
+            snackbarMsgVar("There was an error booking your appointment. Please contact administration.");
+          }
+        }, 30 * 1000);
       }
     }
   }
@@ -130,7 +168,7 @@ const AmeliaBookAppointment = () => {
       if (!loading) {
         setTimeout(() => {
           refetch();
-        }, 5000);
+        }, 2000);
       }
 
       return (
