@@ -129,7 +129,8 @@ export const GET_ALL_PRODUCTS = gql`
 &filter[st1][condition][value]={args.st1}
 &filter[st1][condition][memberOf]=search-terms
  */
-export const SEARCH_FOR_PRODUCT = gql`  query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String, $offset: Int) {
+export const SEARCH_FOR_PRODUCT = gql`  
+  query SearchByWord($searchTerm1:String, $searchTerm2:String, $searchTerm3:String, $offset: Int = 0) {
     products(st1: $searchTerm1, st2: $searchTerm2, st3: $searchTerm3, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&include=field_image&filter[search-terms][group][conjunction]=OR&filter[st1][condition][path]=title&filter[st1][condition][operator]=CONTAINS&filter[st1][condition][value]={args.st1}&filter[st1][condition][memberOf]=search-terms&filter[st2][condition][path]=title&filter[st2][condition][operator]=CONTAINS&filter[st2][condition][value]={args.st2}&filter[st2][condition][memberOf]=search-terms&filter[st3][condition][path]=title&filter[st3][condition][operator]=CONTAINS&filter[st3][condition][value]={args.st3}&filter[st3][condition][memberOf]=search-terms&page[offset]={args.offset}&sort=title,id") {
       ...CoreProductFields
     }
@@ -144,7 +145,7 @@ export const SEARCH_FOR_PRODUCT = gql`  query SearchByWord($searchTerm1:String, 
  */ 
 export const GET_PRODUCTS_OF_CATEGORY = gql`  
   # Get the products in a category
-  query GetCategoryProducts($categoryId: Int!, $offset: Int) {
+  query GetCategoryProducts($categoryId: Int!, $offset: Int = 0) {
     products(categoryId: $categoryId, offset: $offset) @jsonapi(path: "node/product/?filter[status]=1&filter[field_categories.id]={args.categoryId}&include=field_image&page[offset]={args.offset}&sort=title,id") {
       ...CoreProductFields
     }

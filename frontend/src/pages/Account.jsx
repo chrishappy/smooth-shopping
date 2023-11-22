@@ -53,7 +53,7 @@ const Account = () => {
 
         <h1 style={{ marginBottom: '1em' }}>Your Account</h1>
 
-        <h3>{ userData.familyName }</h3>
+        <h3>{ userData?.familyName || '' }</h3>
 
         <Typography component="div" variant="body1">
 

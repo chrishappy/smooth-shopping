@@ -19,7 +19,7 @@ const HomePage = () => {
       <Seo title="Home" />
       <h1 style={{ textAlign: 'center' }}>Start Shopping</h1>
       <div className="categories-wrap">
-        <Categories/>
+        <Categories />
       </div>
       <div>
         <AllProductsInfiniteScroll />
@@ -42,6 +42,8 @@ function Categories() {
   }
 
   const { categories } = data;
+
+  console.log(categories);
 
   return <ImageList>
     {categories.map((category) => (

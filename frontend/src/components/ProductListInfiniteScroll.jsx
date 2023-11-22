@@ -9,6 +9,7 @@ const ProductListInfinityScroll = (
   { queryInfo: {loading, error, data, fetchMore},
   showCheckoutButton = true, // Currently not used
 }) => {
+  console.log(data);
 
   // For Dialog Product
   const [selectedProduct, setProduct] = React.useState({});
